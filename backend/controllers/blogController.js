@@ -27,8 +27,8 @@ export const getAllBlog = async (req, res) => {
 export const createBlog = async (req, res) => {
 	try {
 		const { title, description } = req.body;
-		// const image = req.file.path;
-		console.log(image);
+		const image = req.file.path;
+		// console.log(image);
 		await blogModel.create({ title, description, image });
 		res.status(200).json({
 			success: true,
