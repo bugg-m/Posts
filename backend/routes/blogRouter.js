@@ -1,20 +1,20 @@
 import { Router } from "express";
 import {
-	createBlog,
-	deleteBlog,
-	getAllBlog,
-	getBlog,
-	updateBlog,
+  createBlog,
+  deleteBlog,
+  getAllBlog,
+  getBlogDetails,
+  updateBlog,
 } from "../controllers/blogController.js";
 import { imageUpload } from "../middlewares/image-upload.middleware.js";
 
 const blogRouter = Router();
 
 blogRouter.get("/", (req, res) => {
-	res.send("hello");
+  res.send("hello");
 });
 blogRouter.get("/getAllBlog", getAllBlog);
-blogRouter.get("/getBlog/:id", getBlog);
+blogRouter.get("/getBlogDetails/:id", getBlogDetails);
 blogRouter.post("/createBlog", imageUpload.single("image"), createBlog);
 blogRouter.put("/updateBlog/:id", updateBlog);
 blogRouter.delete("/deleteBlog/:id", deleteBlog);
