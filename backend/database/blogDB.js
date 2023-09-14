@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const URI = process.env.MONGO_URI;
 
 export const blogDatabase = () => {
-  console.log(URI);
   mongoose
     .connect(URI, {})
     .then(() => {
