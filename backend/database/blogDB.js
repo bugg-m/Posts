@@ -1,12 +1,14 @@
 import mongoose from "mongoose";
 
+const URI = process.env.MONGO_URI;
+
 export const blogDatabase = () => {
-	mongoose
-		.connect("mongodb://127.0.0.1:27017/cnBlogs", {})
-		.then(() => {
-			console.log("Database Connected");
-		})
-		.catch((err) => {
-			console.error(err);
-		});
+  mongoose
+    .connect(URI, {})
+    .then(() => {
+      console.log("Database Connected");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };

@@ -1,69 +1,87 @@
 import { blogModel } from "../models/blogModel.js";
+import ErrorHandler from "../utils/errorHandler.js";
 
-export const getBlog = async (req, res) => {
-	try {
-		const { id } = req.params;
-		// console.log(id);
-		const blogData = await blogModel.findById(id);
-		res.status(200).json({
-			success: true,
-			blogData,
-		});
-	} catch (error) {
-		console.error(error);
-	}
+export const getBlogDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const blogData = await blogModel.findById(id);
+    if (!blogData) return next(new ErrorHandler("Blog not Found", 404));
+
+    res.status(200).json({
+      success: true,
+      blogData,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
-export const getAllBlog = async (req, res) => {
-	try {
-		const blogData = await blogModel.find();
-		res.status(200).json({
-			success: true,
-			message: blogData,
-		});
-	} catch (error) {
-		console.error(error);
-	}
+export const getUserBlogs = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const blogData = await blogModel.findById({ user: userId });
+    if (!blogData) return next(new ErrorHandler("Blog not Found", 404));
+    res.status(200).json({
+      success: true,
+      blogData,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
-export const createBlog = async (req, res) => {
-	try {
-		const { title, description } = req.body;
-		const image = req.file.path;
-		// console.log(image);
-		await blogModel.create({ title, description, image });
-		res.status(200).json({
-			success: true,
-			message: "Blog Created",
-		});
-	} catch (error) {
-		console.error(error);
-	}
+
+export const getAllBlog = async (req, res, next) => {
+  try {
+    const blogData = await blogModel.find();
+    res.status(200).json({
+      success: true,
+      blogData,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const createBlog = async (req, res, next) => {
+  try {
+    const { title, description } = req.body;
+    const image = req.file.path;
+    // console.log(image);
+    await blogModel.create({ title, description, image, user: req.user });
+    res.status(200).json({
+      success: true,
+      message: "Blog Created Successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 export const updateBlog = async (req, res) => {
-	try {
-		const { id } = req.params;
-		// console.log(id);
-		const { title, description } = req.body;
-		const blogData = await blogModel.findByIdAndUpdate(id, {
-			$set: { title, description },
-		});
-		res.status(200).json({
-			success: true,
-			message: "Blog updated",
-		});
-	} catch (error) {
-		console.error(error);
-	}
+  try {
+    const { id } = req.params;
+    const blogData = await taskModel.findById({ id });
+    if (!blogData) return next(new ErrorHandler("Blog not Found", 404));
+    const { title, description, image } = req.body;
+    await blogModel.findByIdAndUpdate(id, {
+      $set: { title, description, image },
+    });
+    res.status(200).json({
+      success: true,
+      message: "Blog updated Successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 export const deleteBlog = async (req, res) => {
-	try {
-		const { id } = req.params;
-		// console.log(id);
-		const blogData = await blogModel.findByIdAndDelete(id);
-		res.status(200).json({
-			success: true,
-			message: "Blog Deleted",
-		});
-	} catch (error) {
-		console.error(error);
-	}
+  try {
+    const { id } = req.params;
+    const blogData = await taskModel.findById({ id });
+    if (!blogData) return next(new ErrorHandler("Blog not Found", 404));
+    await blogModel.findByIdAndDelete(id);
+    res.status(200).json({
+      success: true,
+      message: "Blog Deleted Successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
 };
