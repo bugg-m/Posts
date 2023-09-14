@@ -1,15 +1,15 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Navbar } from "./common/components/navbar";
-import BlogMain from "./pages/blogs";
+import { Route, Routes } from "react-router-dom";
+import BlogMain from "../blogs";
 import toast, { Toaster } from "react-hot-toast";
-import Login from "./common/components/login/Login";
-import Register from "./common/components/register-page/Register";
-import { createContext, useEffect, useState } from "react";
+import Register from "../../common/components/register-page";
+import { Suspense, createContext, useEffect, useState } from "react";
 import axios from "axios";
-import { baseUrl } from "./main";
+import Profile from "../../common/components/profile";
+import Loader from "../../common/components/loader";
 export const TodoContext = createContext({});
+export const baseUrl = "http://localhost:4000";
 
-const App = () => {
+const Home = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState([]);
@@ -45,21 +45,25 @@ const App = () => {
         setIsAuthenticated,
       }}
     >
-      <BrowserRouter>
-        <div className="fixed w-full">
-          <Navbar />
-        </div>
-        <Routes>
-          <Route path="/" element={<BlogMain />} />
-          <Route path="/login" element={<Login />} />
-          {/* <Route path="/profile" element={<Profile />} /> */}
-          {/* <Route path="/task" element={<ToDoList />} /> */}
-          <Route path="/register" element={<Register />} />
-        </Routes>
-        <Toaster />
-      </BrowserRouter>
+      <div className={`${loading ? "opacity-60" : ""} relative`}>
+        {loading && (
+          <div className="absolute">
+            <Loader />
+          </div>
+        )}
+
+        <Suspense fallback="">
+          <Routes>
+            <Route path="/" element={<BlogMain />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/create_blog" element={<Profile />} />
+          </Routes>
+          <Toaster />
+        </Suspense>
+      </div>
     </TodoContext.Provider>
   );
 };
 
-export default App;
+export default Home;

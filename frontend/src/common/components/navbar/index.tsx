@@ -4,13 +4,17 @@ import { FaBlog } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { baseUrl } from "../../../main";
-import { TodoContext } from "../../../App";
+import { TodoContext, baseUrl } from "../../../pages/home";
+import { useDispatch } from "react-redux";
+import CreateBlog from "../../../pages/blogs/create-blog";
+import { setShowCreateBlog } from "../../redux-utils/utils-slice/utilsSlice";
 
 export const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const { isAuthenticated, setIsAuthenticated, loading, setLoading }: any =
     useContext(TodoContext);
+
+  const dispatch = useDispatch();
   const handleLogout = async () => {
     setLoading(true);
     try {
@@ -24,9 +28,13 @@ export const Navbar = () => {
       setLoading(false);
     }
   };
+  const handleClose = () => {};
   return (
     <>
-      <nav className="bg-white h-[70px] border-gray-200 dark:bg-gray-800">
+      <nav
+        onClick={handleClose}
+        className="bg-white h-[70px] border-gray-200 dark:bg-gray-800"
+      >
         <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
           <a href="/" className="flex items-center">
             <FaBlog className="h-8 mx-3 text-3xl text-white logo-icon" />
@@ -43,12 +51,17 @@ export const Navbar = () => {
                 >
                   Home
                 </Link>
-                {/* <Link
-									to={"/task"}
-									className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-								>
-									Tasks
-								</Link> */}
+                <li
+                  onClick={() => dispatch(setShowCreateBlog(true))}
+                  className="block relative py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >
+                  Create
+                  {loading && (
+                    <div className="absolute top-10">
+                      <CreateBlog />
+                    </div>
+                  )}
+                </li>
                 {isAuthenticated && (
                   <Link
                     to={"/profile"}
