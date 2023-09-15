@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   showInputBar: false,
   showCreateBlog: false,
+  showSignInPage: false,
+  showSignUpPage: false,
 };
 
 const utilsSlice = createSlice({
@@ -14,8 +16,19 @@ const utilsSlice = createSlice({
     setShowCreateBlog: (state, action) => {
       state.showCreateBlog = action.payload;
     },
+    setShowSignInPage: (state, action) => {
+      state.showSignInPage = action.payload;
+    },
+    setShowSignUpPage: (state, action) => {
+      state.showSignUpPage = action.payload;
+    },
   },
 });
 
-export const { setShowInputBar, setShowCreateBlog } = utilsSlice.actions;
+export const {
+  setShowInputBar,
+  setShowCreateBlog,
+  setShowSignInPage,
+  setShowSignUpPage,
+} = utilsSlice.actions;
 export default utilsSlice.reducer;

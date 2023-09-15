@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { getBlogs } from "../../common/apis/todoServices";
 import BlogListItems from "./blog-list-items/BlogListItems";
+import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 const BlogMain = () => {
   const [blogList, setBlogList] = useState([]);
+
+  const showSignInPage = useSelector((state: any) => state.showSignInPage);
+  const showCreateBlog = useSelector((state: any) => state.showCreateBlog);
 
   useEffect(() => {
     getBlog();
@@ -14,28 +19,29 @@ const BlogMain = () => {
       getBlogs()
         .then((res: any) => {
           console.log(res);
-          const { success, tasks } = res;
+          const { success, blogData } = res;
           if (success) {
-            setBlogList(tasks);
+            setBlogList(blogData);
+          } else {
+            toast.error(res.message);
           }
         })
         .catch((err: any) => {
-          console.log(err);
+          toast.error(err.message);
         });
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 
   return (
-    <div className="min-w-full pt-10 min-h-screen dark:bg-gray-900 gap-10">
-      <div className="flex flex-col gap-10 items-center justify-center py-20">
-        <div className="w-40 h-10 px-3 py-2.5 dark:bg-gray-800 rounded border border-gray-700 flex items-center justify-center cursor-pointer">
-          <div className="text-white font-semibold">
-            <span>BLOGS</span>
-          </div>
-        </div>
-        <div className="px-10 w-2/3 flex flex-col gap-5">
+    <div
+      className={`min-w-full ${
+        showSignInPage || showCreateBlog ? "opacity-60 bg-gray-300" : ""
+      } pt-10 min-h-screen bg-gray-50 gap-10`}
+    >
+      <div className="flex justify-center items-center">
+        <div className="grid grid-cols-2 gap-20 items-center justify-center py-20">
           {blogList?.map((item, index) => {
             return (
               <div key={index}>

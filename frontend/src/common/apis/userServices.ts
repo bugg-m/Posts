@@ -1,5 +1,5 @@
 import axios from "axios";
-import { baseUrl } from "../../root.component";
+import { baseUrl } from "../../pages/home";
 
 export const logoutUser = async () => {
   const url = `${baseUrl}/users/me`;
