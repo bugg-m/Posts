@@ -3,8 +3,8 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import { TodoContext, baseUrl } from "../../../pages/home";
 import { CgClose } from "react-icons/cg";
-import { setShowSignInPage } from "../../redux-utils/utils-slice/utilsSlice";
 import { useDispatch } from "react-redux";
+import { setShowSignInPage } from "../../redux-utils/utils-slice/utilsSlice";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -12,7 +12,6 @@ const SignIn = () => {
   const { setIsAuthenticated, loading, setLoading }: any =
     useContext(TodoContext);
   const dispatch = useDispatch();
-
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
@@ -36,7 +35,10 @@ const SignIn = () => {
   };
 
   return (
-    <div className="p-6 w-96 dark:bg-gray-800 border rounded-md dark:border-gray-700 space-y-4 md:space-y-6 sm:p-8">
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="p-6 w-96 dark:bg-gray-800 border rounded-md dark:border-gray-700 space-y-4 md:space-y-6 sm:p-8"
+    >
       <div className="flex justify-between">
         <div className="text-lg font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
           Sign In

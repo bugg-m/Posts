@@ -34,14 +34,9 @@ export const Navbar = () => {
     }
   };
 
-  console.log("sign", showSignInPage, "create", showCreateBlog);
-
   return (
     <>
-      <nav
-        onClick={(e) => e.stopPropagation()}
-        className="h-16 border-gray-300 dark:bg-gray-200"
-      >
+      <nav className="h-16 border-gray-300 dark:bg-gray-200">
         <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
           <a href="/" className="flex items-center">
             <FaBlog className="h-8 mx-3 text-3xl text-gray-700 logo-icon" />
@@ -54,8 +49,8 @@ export const Navbar = () => {
               <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-gray-50 dark:bg-gray-300 md:dark:bg-gray-200 dark:border-gray-300">
                 <li
                   onClick={() => {
-                    dispatch(setShowCreateBlog(false)),
-                      dispatch(setShowSignInPage(false));
+                    dispatch(setShowCreateBlog(false));
+                    dispatch(setShowSignInPage(false));
                   }}
                   className="block cursor-pointer dark:hover:text-gray-800 py-2 pl-3 pr-4 text-gray-700  rounded md:bg-transparent md:p-0 dark:text-gray-700"
                 >
@@ -72,10 +67,7 @@ export const Navbar = () => {
                 >
                   Create
                   {showCreateBlog && (
-                    <div
-                      onClick={() => dispatch(setShowCreateBlog(false))}
-                      className="absolute w-full z-20 h-screen left-0 top-16 flex items-center justify-center"
-                    >
+                    <div className="absolute w-full h-screen left-0 top-16 flex items-center justify-center">
                       <CreateBlog />
                     </div>
                   )}
@@ -105,11 +97,8 @@ export const Navbar = () => {
                   >
                     SignIn
                     {showSignInPage && (
-                      <div
-                        onClick={() => dispatch(setShowSignInPage(false))}
-                        className="absolute w-full z-20 h-screen left-0 top-16 flex items-center justify-center"
-                      >
-                        <SignIn />{" "}
+                      <div className="absolute w-full h-screen left-0 top-16 flex items-center justify-center">
+                        <SignIn />
                       </div>
                     )}
                   </li>

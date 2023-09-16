@@ -7,22 +7,21 @@ const CreateBlog = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const dispatch = useDispatch();
-
   const handleSubmit = (e: any) => {
     e.stopPropagation();
   };
 
   return (
-    <div className="p-6 w-96 dark:bg-gray-800 border rounded-md dark:border-gray-700 space-y-4 md:space-y-6 sm:p-8">
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="p-6 w-96 dark:bg-gray-800 border rounded-md dark:border-gray-700 space-y-4 md:space-y-6 sm:p-8"
+    >
       <div className="flex justify-between">
         <div className="text-lg font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
           CREATE
         </div>
         <div
-          onClick={() => {
-            console.log("className");
-            dispatch(setShowCreateBlog(false));
-          }}
+          onClick={() => dispatch(setShowCreateBlog(false))}
           className="text-xl text-white"
         >
           <CgClose />
