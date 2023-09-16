@@ -8,6 +8,9 @@
     "dev": "nodemon server.js",
     "start": "node server.js"
   },
+  "engines": {
+    "node": ">=18 <20"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cyborgM1002/Blogs.git"
