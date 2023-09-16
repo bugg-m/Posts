@@ -1,7 +1,7 @@
 import { blogModel } from "../models/blogModel.js";
 import ErrorHandler from "../utils/errorHandler.js";
 
-export const getBlogDetails = async (req, res) => {
+export const getBlogDetails = async ({ req, res, next }) => {
   try {
     const { id } = req.params;
     const blogData = await blogModel.findById(id);
@@ -15,7 +15,7 @@ export const getBlogDetails = async (req, res) => {
     next(error);
   }
 };
-export const getUserBlogs = async (req, res) => {
+export const getUserBlogs = async ({ req, res, next }) => {
   try {
     const userId = req.user.id;
     const blogData = await blogModel.findById({ user: userId });
@@ -29,7 +29,7 @@ export const getUserBlogs = async (req, res) => {
   }
 };
 
-export const getAllBlog = async (req, res, next) => {
+export const getAllBlog = async ({ req, res, next }) => {
   try {
     const blogData = await blogModel.find();
     res.status(200).json({
@@ -40,7 +40,7 @@ export const getAllBlog = async (req, res, next) => {
     next(error);
   }
 };
-export const createBlog = async (req, res, next) => {
+export const createBlog = async ({ req, res, next }) => {
   try {
     const { title, description } = req.body;
     const image = req.file.path;
@@ -54,10 +54,10 @@ export const createBlog = async (req, res, next) => {
     next(error);
   }
 };
-export const updateBlog = async (req, res) => {
+export const updateBlog = async ({ req, res, next }) => {
   try {
     const { id } = req.params;
-    const blogData = await taskModel.findById({ id });
+    const blogData = await blogModel.findById({ id });
     if (!blogData) return next(new ErrorHandler("Blog not Found", 404));
     const { title, description, image } = req.body;
     await blogModel.findByIdAndUpdate(id, {
@@ -71,10 +71,10 @@ export const updateBlog = async (req, res) => {
     next(error);
   }
 };
-export const deleteBlog = async (req, res) => {
+export const deleteBlog = async ({ req, res, next }) => {
   try {
     const { id } = req.params;
-    const blogData = await taskModel.findById({ id });
+    const blogData = await blogModel.findById({ id });
     if (!blogData) return next(new ErrorHandler("Blog not Found", 404));
     await blogModel.findByIdAndDelete(id);
     res.status(200).json({

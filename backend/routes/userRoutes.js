@@ -1,17 +1,18 @@
 import express from "express";
 import {
-  getData,
-  login,
-  logout,
+  getAllUserData,
+  signIn,
+  signOut,
   myProfile,
-  register,
+  signUp,
 } from "../controllers/userControllers.js";
 import { isAuthenticated } from "../middlewares/auth.js";
 
 const userRouter = express.Router();
 
-userRouter.get("/logout", logout);
-userRouter.post("/new", register);
-userRouter.get("/me", isAuthenticated, myProfile);
-userRouter.get("/get", getData);
+userRouter.get("/sign-out", signOut);
+userRouter.post("/sign-out", signIn);
+userRouter.post("/sign-up", signUp);
+userRouter.get("/profile", isAuthenticated, myProfile);
+userRouter.get("/get-all-users", isAuthenticated, getAllUserData);
 export default userRouter;
