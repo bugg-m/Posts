@@ -1,16 +1,25 @@
 import { CgMenu, CgClose } from "react-icons/cg";
 import { useContext, useState } from "react";
 import { FaBlog } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { baseUrl } from "../../../main";
-import { TodoContext } from "../../../App";
+import { TodoContext, baseUrl } from "../../../pages/home";
+import { useDispatch, useSelector } from "react-redux";
+import CreateBlog from "../../../pages/blogs/create-blog";
+import {
+  setShowCreateBlog,
+  setShowSignInPage,
+} from "../../redux-utils/utils-slice/utilsSlice";
+import SignIn from "../sign-in";
 
 export const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const { isAuthenticated, setIsAuthenticated, loading, setLoading }: any =
     useContext(TodoContext);
+  const showSignInPage = useSelector((state: any) => state.showSignInPage);
+  const showCreateBlog = useSelector((state: any) => state.showCreateBlog);
+  const dispatch = useDispatch();
+
   const handleLogout = async () => {
     setLoading(true);
     try {
@@ -24,68 +33,89 @@ export const Navbar = () => {
       setLoading(false);
     }
   };
+
   return (
     <>
-      <nav className="bg-white h-[70px] border-gray-200 dark:bg-gray-800">
+      <nav className="h-16 border-gray-300 dark:bg-gray-200">
         <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
           <a href="/" className="flex items-center">
-            <FaBlog className="h-8 mx-3 text-3xl text-white logo-icon" />
-            <span className="self-center text-3xl font-bold whitespace-nowrap dark:text-white">
+            <FaBlog className="h-8 mx-3 text-3xl text-gray-700 logo-icon" />
+            <span className="self-center text-3xl font-bold whitespace-nowrap dark:text-gray-700">
               Blogs
             </span>
           </a>
           <div>
-            <div className="hidden w-full md:block md:w-auto">
-              <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-800 dark:border-gray-700">
-                <Link
-                  to={"/"}
-                  className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500"
+            <div className="hidden w-full md:block cursor-pointer md:w-auto">
+              <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-gray-50 dark:bg-gray-300 md:dark:bg-gray-200 dark:border-gray-300">
+                <li
+                  onClick={() => {
+                    dispatch(setShowCreateBlog(false));
+                    dispatch(setShowSignInPage(false));
+                  }}
+                  className="block cursor-pointer dark:hover:text-gray-800 py-2 pl-3 pr-4 text-gray-700  rounded md:bg-transparent md:p-0 dark:text-gray-700"
                 >
                   Home
-                </Link>
-                {/* <Link
-									to={"/task"}
-									className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-								>
-									Tasks
-								</Link> */}
+                </li>
+                <li
+                  onClick={() => {
+                    if (showSignInPage) {
+                      dispatch(setShowSignInPage(false));
+                    }
+                    dispatch(setShowCreateBlog(true));
+                  }}
+                  className="block cursor-pointer py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:bg-gray-400 dark:hover:text-gray-800 md:dark:hover:bg-transparent"
+                >
+                  Create
+                  {showCreateBlog && (
+                    <div className="absolute w-full h-screen left-0 top-16 flex items-center justify-center">
+                      <CreateBlog />
+                    </div>
+                  )}
+                </li>
                 {isAuthenticated && (
-                  <Link
-                    to={"/profile"}
-                    className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                  >
+                  <li className="block cursor-pointer py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:bg-gray-400 dark:hover:text-gray-800 md:dark:hover:bg-transparent">
                     Profile
-                  </Link>
+                  </li>
                 )}
                 {isAuthenticated ? (
                   <button
-                    className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                    className="block cursor-pointer py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:bg-gray-400 dark:hover:text-gray-800 md:dark:hover:bg-transparent"
                     disabled={loading}
                     onClick={handleLogout}
                   >
-                    Logout
+                    SignOut
                   </button>
                 ) : (
-                  <Link
-                    to={"/login"}
-                    className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  <li
+                    onClick={() => {
+                      if (showCreateBlog) {
+                        dispatch(setShowCreateBlog(false));
+                      }
+                      dispatch(setShowSignInPage(true));
+                    }}
+                    className="block cursor-pointer py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:bg-gray-400 dark:hover:text-gray-800 md:dark:hover:bg-transparent"
                   >
-                    Login
-                  </Link>
+                    SignIn
+                    {showSignInPage && (
+                      <div className="absolute w-full h-screen left-0 top-16 flex items-center justify-center">
+                        <SignIn />
+                      </div>
+                    )}
+                  </li>
                 )}
               </ul>
             </div>
             <div>
               {openMenu ? (
                 <CgClose
-                  className="md:hidden block text-white text-[2.5rem] pr-4 z-50 duration-200"
+                  className="md:hidden block cursor-pointer text-gray-700 text-4xl pr-4 z-50 duration-200"
                   onClick={() => {
                     setOpenMenu(!openMenu);
                   }}
                 />
               ) : (
                 <CgMenu
-                  className="md:hidden block text-white text-[2.5rem] pr-4 z-50 duration-200"
+                  className="md:hidden block cursor-pointer text-gray-700 text-4xl pr-4 z-50 duration-200"
                   onClick={() => {
                     setOpenMenu(!openMenu);
                   }}
@@ -93,47 +123,43 @@ export const Navbar = () => {
               )}
 
               <ul
-                className={`md:hidden flex flex-col text-white mt-3 pt-[50px] dark:bg-gray-800 h-screen w-1/2 p-4 text-xl fixed ${
+                className={`md:hidden flex flex-col text-gray-700 mt-3 pt-[50px] dark:bg-gray-800 h-screen w-1/2 p-4 text-xl fixed ${
                   openMenu ? "left-[0]" : "left-[-100%]"
                 } duration-500`}
               >
-                <Link
-                  to={"/"}
-                  className="block my-2 py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500"
-                >
+                <li className="block cursor-pointer my-2 py-2 pl-3 pr-4 text-gray-700 rounded md:bg-transparent md:p-0 dark:text-gray-700 ">
                   Home
-                </Link>
-                <Link
-                  to={"/task"}
-                  className="block my-2 py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >
+                </li>
+                <li className="block cursor-pointer my-2 py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:text-gray-800 md:dark:hover:bg-transparent">
                   Tasks
-                </Link>
+                </li>
                 {isAuthenticated ? (
-                  <Link
-                    to={"/profile"}
-                    className="block my-2 py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                  >
+                  <li className="block cursor-pointer my-2 py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:text-gray-800 md:dark:hover:bg-transparent">
                     Profile
-                  </Link>
+                  </li>
                 ) : (
                   ""
                 )}
                 {isAuthenticated ? (
                   <button
-                    className="block my-2 py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                    className="block cursor-pointer my-2 py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:text-gray-800 md:dark:hover:bg-transparent"
                     disabled={loading}
                     onClick={handleLogout}
                   >
-                    Logout
+                    SignOut
                   </button>
                 ) : (
-                  <Link
-                    to={"/login"}
-                    className="block my-2 py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  <li
+                    onClick={() => {
+                      if (showCreateBlog) {
+                        dispatch(setShowCreateBlog(false));
+                      }
+                      dispatch(setShowSignInPage(true));
+                    }}
+                    className="block cursor-pointer my-2 py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:text-gray-800 md:dark:hover:bg-transparent"
                   >
-                    Login
-                  </Link>
+                    SignIn
+                  </li>
                 )}
               </ul>
             </div>
