@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { sendCookie } from "../utils/features.js";
 import ErrorHandler from "../utils/errorHandler.js";
 
-export const login = async (req, res, next) => {
+export const signIn = async ({ req, res, next }) => {
   try {
     const { email, password } = req.body;
     const user = await userModel.findOne({ email }).select("+password");
@@ -16,7 +16,7 @@ export const login = async (req, res, next) => {
   }
 };
 
-export const logout = (req, res) => {
+export const signOut = ({ req, res, next }) => {
   res
     .status(200)
     .cookie("token", "", {
@@ -30,7 +30,7 @@ export const logout = (req, res) => {
     });
 };
 
-export const register = async (req, res, next) => {
+export const signUp = async ({ req, res, next }) => {
   try {
     const { name, email, password } = req.body;
     let user = await userModel.findOne({ email });
@@ -54,13 +54,18 @@ export const myProfile = (req, res, next) => {
   }
 };
 
-export const getData = async (req, res, next) => {
+export const getAllUserData = async (req, res, next) => {
   try {
     const user = await userModel.find();
-    res.json({
-      success: true,
-      user,
-    });
+
+    if (user?.role === "admin") {
+      res.json({
+        success: true,
+        user,
+      });
+    } else {
+      next("You don't have admin access!");
+    }
   } catch (err) {
     next(err);
   }

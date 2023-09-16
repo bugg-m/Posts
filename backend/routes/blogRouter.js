@@ -12,7 +12,7 @@ import { isAuthenticated } from "../middlewares/auth.js";
 
 const blogRouter = Router();
 
-blogRouter.get("/", (req, res) => {
+blogRouter.get("/", ({ req, res }) => {
   res.send("hello");
 });
 blogRouter.get("/getAllBlog", getAllBlog);
