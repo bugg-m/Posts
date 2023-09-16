@@ -1,5 +1,6 @@
 export const errorMiddleware = ({ err, req, res, next }) => {
-  err.message = err.message || "Internal server error";
-  err.statusCode = err.statusCode || 500;
-  res.status(err.statusCode).json({ success: false, message: err.message });
+  const { message, statusCode } = err;
+  message = message || "Internal server error";
+  statusCode = statusCode || 500;
+  res.status(statusCode).json({ success: false, message: message });
 };

@@ -5,7 +5,10 @@ export const getBlogDetails = async ({ req, res, next }) => {
   try {
     const { id } = req.params;
     const blogData = await blogModel.findById(id);
-    if (!blogData) return next(new ErrorHandler("Blog not Found", 404));
+    if (!blogData)
+      return next(
+        new ErrorHandler({ message: "Blog not Found", statusCode: 404 })
+      );
 
     res.status(200).json({
       success: true,
@@ -19,7 +22,10 @@ export const getUserBlogs = async ({ req, res, next }) => {
   try {
     const userId = req.user.id;
     const blogData = await blogModel.findById({ user: userId });
-    if (!blogData) return next(new ErrorHandler("Blog not Found", 404));
+    if (!blogData)
+      return next(
+        new ErrorHandler({ message: "Blog not Found", statusCode: 404 })
+      );
     res.status(200).json({
       success: true,
       blogData,
@@ -58,7 +64,10 @@ export const updateBlog = async ({ req, res, next }) => {
   try {
     const { id } = req.params;
     const blogData = await blogModel.findById({ id });
-    if (!blogData) return next(new ErrorHandler("Blog not Found", 404));
+    if (!blogData)
+      return next(
+        new ErrorHandler({ message: "Blog not Found", statusCode: 404 })
+      );
     const { title, description, image } = req.body;
     await blogModel.findByIdAndUpdate(id, {
       $set: { title, description, image },
@@ -75,7 +84,10 @@ export const deleteBlog = async ({ req, res, next }) => {
   try {
     const { id } = req.params;
     const blogData = await blogModel.findById({ id });
-    if (!blogData) return next(new ErrorHandler("Blog not Found", 404));
+    if (!blogData)
+      return next(
+        new ErrorHandler({ message: "Blog not Found", statusCode: 404 })
+      );
     await blogModel.findByIdAndDelete(id);
     res.status(200).json({
       success: true,

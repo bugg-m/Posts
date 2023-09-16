@@ -7,7 +7,10 @@ export const signIn = async ({ req, res, next }) => {
   try {
     const { email, password } = req.body;
     const user = await userModel.findOne({ email }).select("+password");
-    if (!user) return next(new ErrorHandler("Invalid Email", 400));
+    if (!user)
+      return next(
+        new ErrorHandler({ message: "Invalid Email", statusCode: 400 })
+      );
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return next(new ErrorHandler("Invalid Password", 400));
     sendCookie(user, res, `Welcome back, ${user.name}`, 200);
@@ -34,7 +37,10 @@ export const signUp = async ({ req, res, next }) => {
   try {
     const { name, email, password } = req.body;
     let user = await userModel.findOne({ email });
-    if (user) return next(new ErrorHandler("User already exists", 400));
+    if (user)
+      return next(
+        new ErrorHandler({ message: "User already exists", statusCode: 400 })
+      );
     const hashedPass = await bcrypt.hash(password, 10);
     user = await userModel.create({ name, email, password: hashedPass });
     sendCookie(user, res, "Registered successfully", 201);
@@ -64,7 +70,12 @@ export const getAllUserData = async (req, res, next) => {
         user,
       });
     } else {
-      next("You don't have admin access!");
+      next(
+        new ErrorHandler({
+          message: "You don't have admin access!",
+          statusCode: 200,
+        })
+      );
     }
   } catch (err) {
     next(err);
