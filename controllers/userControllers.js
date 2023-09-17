@@ -2,15 +2,13 @@ import { userModel } from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import { sendCookie } from "../utils/features.js";
 import ErrorHandler from "../utils/errorHandler.js";
+import jwt from "jsonwebtoken";
 
-export const signIn = async ({ req, res, next }) => {
+export const signIn = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await userModel.findOne({ email }).select("+password");
-    if (!user)
-      return next(
-        new ErrorHandler({ message: "Invalid Email", statusCode: 400 })
-      );
+    if (!user) return next(new ErrorHandler("Invalid Email", 400));
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return next(new ErrorHandler("Invalid Password", 400));
     sendCookie(user, res, `Welcome back, ${user.name}`, 200);
@@ -19,7 +17,7 @@ export const signIn = async ({ req, res, next }) => {
   }
 };
 
-export const signOut = ({ req, res, next }) => {
+export const signOut = (req, res, next) => {
   res
     .status(200)
     .cookie("token", "", {
@@ -33,16 +31,13 @@ export const signOut = ({ req, res, next }) => {
     });
 };
 
-export const signUp = async ({ req, res, next }) => {
+export const signUp = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
     let user = await userModel.findOne({ email });
-    if (user)
-      return next(
-        new ErrorHandler({ message: "User already exists", statusCode: 400 })
-      );
+    if (user) return next(new ErrorHandler("User already exists", 400));
     const hashedPass = await bcrypt.hash(password, 10);
-    user = await userModel.create({ name, email, password: hashedPass });
+    user = await userModel.create({ name, email, password: hashedPass, role });
     sendCookie(user, res, "Registered successfully", 201);
   } catch (err) {
     next(err);
@@ -62,20 +57,18 @@ export const myProfile = (req, res, next) => {
 
 export const getAllUserData = async (req, res, next) => {
   try {
-    const user = await userModel.find();
-
-    if (user?.role === "admin") {
+    const { token } = req.cookies;
+    if (!token) return next(new ErrorHandler("SignIn first", 400));
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await userModel.findById(decoded._id);
+    const allUsers = await userModel.find();
+    if (user.role === "admin") {
       res.json({
         success: true,
-        user,
+        allUsers,
       });
     } else {
-      next(
-        new ErrorHandler({
-          message: "You don't have admin access!",
-          statusCode: 200,
-        })
-      );
+      next(new ErrorHandler("Access Denied", 400));
     }
   } catch (err) {
     next(err);

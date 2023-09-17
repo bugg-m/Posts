@@ -18,7 +18,6 @@ const BlogMain = () => {
     try {
       getBlogs()
         .then((res: any) => {
-          console.log(res);
           const { success, blogData } = res;
           if (success) {
             setBlogList(blogData);

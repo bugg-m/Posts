@@ -1,7 +1,7 @@
 import { blogModel } from "../models/blogModel.js";
 import ErrorHandler from "../utils/errorHandler.js";
 
-export const getBlogDetails = async ({ req, res, next }) => {
+export const getBlogDetails = async (req, res, next) => {
   try {
     const { id } = req.params;
     const blogData = await blogModel.findById(id);
@@ -15,7 +15,7 @@ export const getBlogDetails = async ({ req, res, next }) => {
     next(error);
   }
 };
-export const getUserBlogs = async ({ req, res, next }) => {
+export const getUserBlogs = async (req, res, next) => {
   try {
     const userId = req.user.id;
     const blogData = await blogModel.findById({ user: userId });
@@ -29,7 +29,7 @@ export const getUserBlogs = async ({ req, res, next }) => {
   }
 };
 
-export const getAllBlog = async ({ req, res, next }) => {
+export const getAllBlog = async (req, res, next) => {
   try {
     const blogData = await blogModel.find();
     res.status(200).json({
@@ -40,10 +40,11 @@ export const getAllBlog = async ({ req, res, next }) => {
     next(error);
   }
 };
-export const createBlog = async ({ req, res, next }) => {
+
+export const createBlog = async (req, res, next) => {
   try {
     const { title, description } = req.body;
-    const image = req.file.path;
+    const image = req.file.filename;
     // console.log(image);
     await blogModel.create({ title, description, image, user: req.user });
     res.status(200).json({
@@ -54,7 +55,8 @@ export const createBlog = async ({ req, res, next }) => {
     next(error);
   }
 };
-export const updateBlog = async ({ req, res, next }) => {
+
+export const updateBlog = async (req, res, next) => {
   try {
     const { id } = req.params;
     const blogData = await blogModel.findById({ id });
@@ -71,7 +73,7 @@ export const updateBlog = async ({ req, res, next }) => {
     next(error);
   }
 };
-export const deleteBlog = async ({ req, res, next }) => {
+export const deleteBlog = async (req, res, next) => {
   try {
     const { id } = req.params;
     const blogData = await blogModel.findById({ id });
