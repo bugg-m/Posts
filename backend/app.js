@@ -11,7 +11,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: ["https://main--post-ers.netlify.app/"],
+    origin: [
+      process?.env?.NODE_ENV === "Development"
+        ? process?.env?.FRONTEND_URI_DEVELOPMENT
+        : process?.env?.FRONTEND_URI_PRODUCTION,
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
