@@ -1,7 +1,7 @@
-import { userModel } from "../../models/userModel.js";
+import { userModel } from "../../src/models/userModel.js";
 import bcrypt from "bcrypt";
-import { sendCookie } from "../../utils/features.js";
-import ErrorHandler from "../../utils/errorHandler.js";
+import { sendCookie } from "../../src/utils/features.js";
+import ErrorHandler from "../../src/utils/errorHandler.js";
 import jwt from "jsonwebtoken";
 
 export const signIn = async (req, res, next) => {

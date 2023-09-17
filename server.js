@@ -1,5 +1,5 @@
 import app from "./app.js";
-import { blogDatabase } from "./database/blogDB.js";
+import { blogDatabase } from "./src/database/blogDB.js";
 const PORT = process.env.PORT || 4000;
 
 blogDatabase();

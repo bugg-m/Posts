@@ -1,8 +1,8 @@
 import express from "express";
-import blogRouter from "./routes/blogRouter.js";
-import userRouter from "./routes/userRoutes.js";
+import blogRouter from "./src/routes/blogRouter.js";
+import userRouter from "./src/routes/userRoutes.js";
 import cookieParser from "cookie-parser";
-import { errorMiddleware } from "./middlewares/error.js";
+import { errorMiddleware } from "./src/middlewares/error.js";
 import { config } from "dotenv";
 import cors from "cors";
 config({
