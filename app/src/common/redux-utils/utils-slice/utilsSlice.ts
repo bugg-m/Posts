@@ -4,6 +4,9 @@ const initialState = {
   showCreateBlog: false,
   showSignInPage: false,
   showSignUpPage: false,
+  showLoader: false,
+  isAuthenticated: false,
+  user: [{}],
 };
 
 const utilsSlice = createSlice({
@@ -22,11 +25,23 @@ const utilsSlice = createSlice({
     setShowSignUpPage: (state, action) => {
       state.showSignUpPage = action.payload;
     },
+    setShowLoader: (state, action) => {
+      state.showLoader = action.payload;
+    },
+    setIsAuthenticated: (state, action) => {
+      state.isAuthenticated = action.payload;
+    },
+    setUser: (state, action) => {
+      state.user.push(action.payload);
+    },
   },
 });
 
 export const {
   setShowInputBar,
+  setIsAuthenticated,
+  setShowLoader,
+  setUser,
   setShowCreateBlog,
   setShowSignInPage,
   setShowSignUpPage,

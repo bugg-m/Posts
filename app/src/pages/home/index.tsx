@@ -1,15 +1,13 @@
 import BlogMain from "../blogs";
 import { Toaster } from "react-hot-toast";
-import { Suspense, createContext, useState } from "react";
+import { Suspense } from "react";
 // import axios from "axios";
 import Loader from "../../common/components/loader";
-export const TodoContext = createContext({});
+import { useSelector } from "react-redux";
 export const baseUrl = "http://localhost:4000";
 
 const Home = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState([]);
+  const showLoader = useSelector((state: any) => state.showLoader);
 
   // useEffect(() => {
   //   setLoading(true);
@@ -32,28 +30,17 @@ const Home = () => {
   // }, []);
 
   return (
-    <TodoContext.Provider
-      value={{
-        isAuthenticated,
-        loading,
-        user,
-        setUser,
-        setLoading,
-        setIsAuthenticated,
-      }}
-    >
-      <div className={`${loading ? "opacity-60 bg-gray-600" : ""} relative`}>
-        {loading && (
-          <div className="absolute w-full h-screen left-0 top-16 flex items-center justify-center ">
-            <Loader />
-          </div>
-        )}
-        <Suspense fallback="">
-          <BlogMain />
-          <Toaster />
-        </Suspense>
-      </div>
-    </TodoContext.Provider>
+    <div className={`${showLoader ? "opacity-60 bg-gray-600" : ""} relative`}>
+      {showLoader && (
+        <div className="absolute w-full h-screen left-0 top-16 flex items-center justify-center ">
+          <Loader />
+        </div>
+      )}
+      <Suspense fallback="">
+        <BlogMain />
+        <Toaster />
+      </Suspense>
+    </div>
   );
 };
 

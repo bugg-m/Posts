@@ -35,12 +35,12 @@ const BlogMain = () => {
 
   return (
     <div
-      className={`min-w-full ${
-        showSignInPage || showCreateBlog ? "opacity-60 bg-gray-300" : ""
-      } pt-10 min-h-screen bg-gray-50 gap-10`}
+      className={`w-full ${
+        showSignInPage || showCreateBlog ? "opacity-10" : ""
+      } pt-20 min-h-screen bg-gray-50`}
     >
-      <div className="flex justify-center items-center">
-        <div className="grid grid-cols-2 gap-20 items-center justify-center py-20">
+      <div className="flex p-5 justify-center items-center">
+        <div className="grid w-4/5 grid-cols-2 gap-20 py-5">
           {blogList?.map((item, index) => {
             return (
               <div key={index}>

@@ -1,36 +1,39 @@
 import { CgMenu, CgClose } from "react-icons/cg";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { FaBlog } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { TodoContext, baseUrl } from "../../../pages/home";
+import { baseUrl } from "../../../pages/home";
 import { useDispatch, useSelector } from "react-redux";
 import CreateBlog from "../../../pages/blogs/create-blog";
 import {
+  setIsAuthenticated,
   setShowCreateBlog,
+  setShowLoader,
   setShowSignInPage,
 } from "../../redux-utils/utils-slice/utilsSlice";
 import SignIn from "../sign-in";
 
 export const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
-  const { isAuthenticated, setIsAuthenticated, loading, setLoading }: any =
-    useContext(TodoContext);
+
   const showSignInPage = useSelector((state: any) => state.showSignInPage);
   const showCreateBlog = useSelector((state: any) => state.showCreateBlog);
+  const showLoader = useSelector((state: any) => state.showLoader);
+  const isAuthenticated = useSelector((state: any) => state.isAuthenticated);
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
-    setLoading(true);
+    dispatch(setShowLoader(true));
     try {
       await axios.get(`${baseUrl}/users/logout`, { withCredentials: true });
       toast.success("Logged Out Successfully");
-      setIsAuthenticated(false);
-      setLoading(false);
+      dispatch(setIsAuthenticated(false));
+      dispatch(setShowLoader(false));
     } catch (err) {
       // toast.error(err?.response?.data.message);
-      setIsAuthenticated(true);
-      setLoading(false);
+      dispatch(setIsAuthenticated(true));
+      dispatch(setShowLoader(false));
     }
   };
 
@@ -80,7 +83,7 @@ export const Navbar = () => {
                 {isAuthenticated ? (
                   <button
                     className="block cursor-pointer py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:bg-gray-400 dark:hover:text-gray-800 md:dark:hover:bg-transparent"
-                    disabled={loading}
+                    disabled={showLoader}
                     onClick={handleLogout}
                   >
                     SignOut
@@ -143,7 +146,7 @@ export const Navbar = () => {
                 {isAuthenticated ? (
                   <button
                     className="block cursor-pointer my-2 py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:text-gray-800 md:dark:hover:bg-transparent"
-                    disabled={loading}
+                    disabled={showLoader}
                     onClick={handleLogout}
                   >
                     SignOut

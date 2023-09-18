@@ -1,23 +1,26 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
-import { TodoContext, baseUrl } from "../../../pages/home";
+import { baseUrl } from "../../../pages/home";
 import { CgClose } from "react-icons/cg";
-import { useDispatch } from "react-redux";
-import { setShowSignInPage } from "../../redux-utils/utils-slice/utilsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setIsAuthenticated,
+  setShowLoader,
+  setShowSignInPage,
+} from "../../redux-utils/utils-slice/utilsSlice";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setIsAuthenticated, loading, setLoading }: any =
-    useContext(TodoContext);
+  const showLoader = useSelector((state: any) => state.showLoader);
   const dispatch = useDispatch();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    setLoading(true);
+    dispatch(setShowLoader(true));
     try {
       const { data } = await axios.post(
-        `${baseUrl}/users/login`,
+        `${baseUrl}/users/sign-in`,
         { email, password },
         {
           headers: { "Content-Type": "application/json" },
@@ -25,12 +28,12 @@ const SignIn = () => {
         }
       );
       toast.success(data.message);
-      setIsAuthenticated(true);
-      setLoading(false);
-    } catch (err) {
-      // toast.error(err.response.data.message);
-      setIsAuthenticated(false);
-      setLoading(false);
+      dispatch(setIsAuthenticated(true));
+      dispatch(setShowLoader(false));
+    } catch (err: any) {
+      toast.error(err.response.data.message);
+      dispatch(setIsAuthenticated(false));
+      dispatch(setShowLoader(false));
     }
   };
 
@@ -107,7 +110,7 @@ const SignIn = () => {
           </a>
         </div>
         <button
-          disabled={loading}
+          disabled={showLoader}
           type="submit"
           className="w-full border border-gray-700 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
         >
