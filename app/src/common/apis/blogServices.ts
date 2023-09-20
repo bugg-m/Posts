@@ -1,11 +1,22 @@
 import axios from "axios";
 import { baseUrl } from "../../pages/home";
 
-export const getBlogs = () => {
+export const getAllBlogs = async () => {
   const url = `${baseUrl}/blogs/getAllBlog`;
-  return axios.get(url).then((response) => {
+  return await axios.get(url, { withCredentials: true }).then((response) => {
     return response.data;
   });
+};
+export const addBlog = async ({ payload }: any) => {
+  const url = `${baseUrl}/blogs/createblog`;
+  return await axios
+    .post(url, payload, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    })
+    .then((response) => {
+      return response.data;
+    });
 };
 
 // useEffect(() => {
@@ -46,28 +57,5 @@ export const getBlogs = () => {
 //     toast.success(data.message);
 //   } catch (error) {
 //     toast.error(error.response.data.message);
-//   }
-// };
-
-// const handleAddTask = async (e) => {
-//   e.preventDefault();
-//   setLoading(true);
-//   try {
-//     const { data } = await axios.post(
-//       `${nodeServer}/task/add`,
-//       { title, description },
-//       {
-//         headers: { "Content-Type": "application/json" },
-//         withCredentials: true,
-//       }
-//     );
-//     toast.success(data.message);
-//     setRefresh(!refresh);
-//     setTitle("");
-//     setDescription("");
-//     setLoading(false);
-//   } catch (err) {
-//     toast.error(err.response.data.message);
-//     setLoading(false);
 //   }
 // };

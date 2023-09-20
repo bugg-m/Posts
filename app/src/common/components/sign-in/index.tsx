@@ -6,14 +6,18 @@ import { CgClose } from "react-icons/cg";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setIsAuthenticated,
+  setShowCreateBlog,
   setShowLoader,
   setShowSignInPage,
+  setShowSignUpPage,
 } from "../../redux-utils/utils-slice/utilsSlice";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const showLoader = useSelector((state: any) => state.showLoader);
+  const showSignIpPage = useSelector((state: any) => state.showSignIpPage);
+  const showCreateBlog = useSelector((state: any) => state.showCreateBlog);
   const dispatch = useDispatch();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -29,10 +33,12 @@ const SignIn = () => {
       );
       toast.success(data.message);
       dispatch(setIsAuthenticated(true));
+      dispatch(setShowSignInPage(false));
       dispatch(setShowLoader(false));
     } catch (err: any) {
       toast.error(err.response.data.message);
       dispatch(setIsAuthenticated(false));
+      dispatch(setShowSignInPage(true));
       dispatch(setShowLoader(false));
     }
   };
@@ -118,7 +124,16 @@ const SignIn = () => {
         </button>
         <p className="text-sm font-light text-gray-500 dark:text-gray-400">
           Don’t have an account yet?{" "}
-          <li className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+          <li
+            onClick={() => {
+              if (showCreateBlog || showSignIpPage) {
+                dispatch(setShowCreateBlog(false));
+                dispatch(setShowSignInPage(false));
+              }
+              dispatch(setShowSignUpPage(true));
+            }}
+            className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+          >
             Sign-Up
           </li>
         </p>

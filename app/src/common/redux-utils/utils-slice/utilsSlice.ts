@@ -7,6 +7,7 @@ const initialState = {
   showLoader: false,
   isAuthenticated: false,
   user: [{}],
+  refreshBlogList: false,
 };
 
 const utilsSlice = createSlice({
@@ -34,6 +35,9 @@ const utilsSlice = createSlice({
     setUser: (state, action) => {
       state.user.push(action.payload);
     },
+    setRefreshBlogList: (state, action) => {
+      state.refreshBlogList = action.payload;
+    },
   },
 });
 
@@ -45,5 +49,6 @@ export const {
   setShowCreateBlog,
   setShowSignInPage,
   setShowSignUpPage,
+  setRefreshBlogList,
 } = utilsSlice.actions;
 export default utilsSlice.reducer;

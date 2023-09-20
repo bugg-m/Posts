@@ -1,22 +1,24 @@
 import { useEffect, useState } from "react";
-import { getBlogs } from "../../common/apis/todoServices";
+import { getAllBlogs } from "../../common/apis/blogServices";
 import BlogListItems from "./blog-list-items/BlogListItems";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 
 const BlogMain = () => {
-  const [blogList, setBlogList] = useState([]);
+  const [blogList, setBlogList] = useState([{}]);
 
   const showSignInPage = useSelector((state: any) => state.showSignInPage);
+  const showSignUpPage = useSelector((state: any) => state.showSignUpPage);
   const showCreateBlog = useSelector((state: any) => state.showCreateBlog);
+  const refreshBlogList = useSelector((state: any) => state.refreshBlogList);
 
   useEffect(() => {
-    getBlog();
-  }, []);
+    getAllBlog();
+  }, [refreshBlogList]);
 
-  const getBlog = () => {
+  const getAllBlog = () => {
     try {
-      getBlogs()
+      getAllBlogs()
         .then((res: any) => {
           const { success, blogData } = res;
           if (success) {
@@ -36,7 +38,7 @@ const BlogMain = () => {
   return (
     <div
       className={`w-full ${
-        showSignInPage || showCreateBlog ? "opacity-10" : ""
+        showSignInPage || showCreateBlog || showSignUpPage ? "opacity-10" : ""
       } pt-20 min-h-screen bg-gray-50`}
     >
       <div className="flex p-5 justify-center items-center">
@@ -44,7 +46,7 @@ const BlogMain = () => {
           {blogList?.map((item, index) => {
             return (
               <div key={index}>
-                <BlogListItems item={item} id={index + 1} />
+                <BlogListItems item={item} />
               </div>
             );
           })}

@@ -11,13 +11,15 @@ import {
   setShowCreateBlog,
   setShowLoader,
   setShowSignInPage,
+  setShowSignUpPage,
 } from "../../redux-utils/utils-slice/utilsSlice";
 import SignIn from "../sign-in";
+import SignUp from "../register-page";
 
 export const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
-
   const showSignInPage = useSelector((state: any) => state.showSignInPage);
+  const showSignUpPage = useSelector((state: any) => state.showSignUpPage);
   const showCreateBlog = useSelector((state: any) => state.showCreateBlog);
   const showLoader = useSelector((state: any) => state.showLoader);
   const isAuthenticated = useSelector((state: any) => state.isAuthenticated);
@@ -26,14 +28,26 @@ export const Navbar = () => {
   const handleLogout = async () => {
     dispatch(setShowLoader(true));
     try {
-      await axios.get(`${baseUrl}/users/logout`, { withCredentials: true });
+      await axios.get(`${baseUrl}/users/sign-out`, { withCredentials: true });
       toast.success("Logged Out Successfully");
       dispatch(setIsAuthenticated(false));
       dispatch(setShowLoader(false));
-    } catch (err) {
-      // toast.error(err?.response?.data.message);
+    } catch (err: any) {
+      toast.error(err?.response.data.message);
       dispatch(setIsAuthenticated(true));
       dispatch(setShowLoader(false));
+    }
+  };
+
+  const handleOpenCreateBlog = () => {
+    if (showSignInPage || showSignUpPage) {
+      dispatch(setShowSignUpPage(false));
+      dispatch(setShowSignInPage(false));
+    }
+    if (isAuthenticated) {
+      dispatch(setShowCreateBlog(true));
+    } else {
+      toast.error("Sign in first");
     }
   };
 
@@ -60,12 +74,7 @@ export const Navbar = () => {
                   Home
                 </li>
                 <li
-                  onClick={() => {
-                    if (showSignInPage) {
-                      dispatch(setShowSignInPage(false));
-                    }
-                    dispatch(setShowCreateBlog(true));
-                  }}
+                  onClick={handleOpenCreateBlog}
                   className="block cursor-pointer py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:bg-gray-400 dark:hover:text-gray-800 md:dark:hover:bg-transparent"
                 >
                   Create
@@ -91,8 +100,9 @@ export const Navbar = () => {
                 ) : (
                   <li
                     onClick={() => {
-                      if (showCreateBlog) {
+                      if (showCreateBlog || showSignUpPage) {
                         dispatch(setShowCreateBlog(false));
+                        dispatch(setShowSignUpPage(false));
                       }
                       dispatch(setShowSignInPage(true));
                     }}
@@ -102,6 +112,11 @@ export const Navbar = () => {
                     {showSignInPage && (
                       <div className="absolute w-full h-screen left-0 top-16 flex items-center justify-center">
                         <SignIn />
+                      </div>
+                    )}
+                    {showSignUpPage && (
+                      <div className="absolute w-full h-screen left-0 top-16 flex items-center justify-center">
+                        <SignUp />
                       </div>
                     )}
                   </li>
