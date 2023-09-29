@@ -5,8 +5,7 @@ import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 
 const BlogMain = () => {
-  const [blogList, setBlogList] = useState([{}]);
-
+  const [blogList, setBlogList] = useState([]);
   const showSignInPage = useSelector((state: any) => state.showSignInPage);
   const showSignUpPage = useSelector((state: any) => state.showSignUpPage);
   const showCreateBlog = useSelector((state: any) => state.showCreateBlog);
@@ -43,10 +42,14 @@ const BlogMain = () => {
     >
       <div className="flex p-5 justify-center items-center">
         <div className="grid w-4/5 grid-cols-2 gap-20 py-5">
-          {blogList?.map((item, index) => {
+          {blogList?.map(({ image, title, description }, index) => {
             return (
               <div key={index}>
-                <BlogListItems item={item} />
+                <BlogListItems
+                  image={image}
+                  title={title}
+                  description={description}
+                />
               </div>
             );
           })}

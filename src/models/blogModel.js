@@ -8,7 +8,12 @@ const blogSchema = new mongoose.Schema({
     type: String,
   },
   image: {
-    type: String,
+    public_id: {
+      type: String,
+    },
+    url: {
+      type: String,
+    },
   },
   createdAt: {
     type: Date,

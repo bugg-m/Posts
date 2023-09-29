@@ -21,7 +21,7 @@ blogRouter.get("/myBlogs", isAuthenticated, getUserBlogs);
 blogRouter.post(
   "/createBlog",
   isAuthenticated,
-  imageUpload.single("image"),
+  imageUpload.single("file"),
   createBlog
 );
 blogRouter.route("/:id").put(updateBlog).delete(deleteBlog);

@@ -6,7 +6,7 @@ const initialState = {
   showSignUpPage: false,
   showLoader: false,
   isAuthenticated: false,
-  user: [{}],
+  user: {},
   refreshBlogList: false,
 };
 
@@ -33,7 +33,7 @@ const utilsSlice = createSlice({
       state.isAuthenticated = action.payload;
     },
     setUser: (state, action) => {
-      state.user.push(action.payload);
+      state.user = action.payload;
     },
     setRefreshBlogList: (state, action) => {
       state.refreshBlogList = action.payload;

@@ -11,7 +11,7 @@ import { addBlog } from "../../../common/apis/blogServices";
 
 const CreateBlog = () => {
   const [title, setTitle] = useState("");
-  const [image, setImage] = useState({});
+  const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const dispatch = useDispatch();
   const refreshBlogList = useSelector((state: any) => state.refreshBlogList);
@@ -21,7 +21,7 @@ const CreateBlog = () => {
     const payload = { title, description, image };
     dispatch(setShowLoader(false));
     try {
-      addBlog({ payload })
+      addBlog(payload)
         .then((res) => {
           const { success, message } = res;
           if (success) {
@@ -30,12 +30,12 @@ const CreateBlog = () => {
             setDescription("");
             dispatch(setShowCreateBlog(false));
           } else {
-            toast.success(message);
+            toast.error(message);
           }
           dispatch(setRefreshBlogList(!refreshBlogList));
           dispatch(setShowLoader(false));
         })
-        .catch((err) => {
+        .catch((err: string) => {
           toast.success(err);
           dispatch(setRefreshBlogList(!refreshBlogList));
           dispatch(setShowLoader(false));
@@ -45,10 +45,6 @@ const CreateBlog = () => {
       dispatch(setRefreshBlogList(!refreshBlogList));
       dispatch(setShowLoader(false));
     }
-  };
-
-  const uploadImage = (e: any) => {
-    setImage(e.target.files[0]);
   };
 
   return (
@@ -67,7 +63,12 @@ const CreateBlog = () => {
           <CgClose />
         </div>
       </div>
-      <form className="space-y-4 md:space-y-6" onSubmit={handleAddBlog}>
+      <form
+        className="space-y-4 md:space-y-6"
+        encType="multipart/form-data"
+        method="POST"
+        onSubmit={handleAddBlog}
+      >
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
             Title
@@ -78,9 +79,7 @@ const CreateBlog = () => {
             name="title"
             placeholder="Add title"
             value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
+            onChange={(e) => setTitle(e.target.value)}
             required
           />
         </div>
@@ -93,9 +92,7 @@ const CreateBlog = () => {
             name="description"
             placeholder="Add description"
             value={description}
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
+            onChange={(e) => setDescription(e.target.value)}
             required
           />
         </div>
@@ -105,10 +102,10 @@ const CreateBlog = () => {
           </label>
           <input
             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            name="image"
+            name="file"
             type="file"
             placeholder="Add image"
-            onChange={uploadImage}
+            onChange={(e: any) => setImage(e.target.files[0])}
             required
           />
         </div>

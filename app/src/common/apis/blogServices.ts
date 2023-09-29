@@ -7,11 +7,11 @@ export const getAllBlogs = async () => {
     return response.data;
   });
 };
-export const addBlog = async ({ payload }: any) => {
-  const url = `${baseUrl}/blogs/createblog`;
+export const addBlog = async (payload: any) => {
+  const url = `${baseUrl}/blogs/createBlog`;
   return await axios
     .post(url, payload, {
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "multipart/form-data" },
       withCredentials: true,
     })
     .then((response) => {
