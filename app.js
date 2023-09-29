@@ -6,7 +6,7 @@ import { errorMiddleware } from "./src/middlewares/error.js";
 import { config } from "dotenv";
 import cors from "cors";
 config({
-  path: "./config.env",
+  path: "./.env",
 });
 
 const URL =
