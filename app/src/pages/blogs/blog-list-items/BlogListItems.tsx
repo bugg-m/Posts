@@ -6,8 +6,8 @@ const BlogListItems = ({ image, title, description }: any) => {
   const resImage = cld.image(image.public_id);
 
   return (
-    <div className="flex gap-5 p-5 h-80 w-full items-center bg-gray-50 border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-300 dark:bg-gray-100 dark:hover:bg-gray-200">
-      <div className="flex justify-center items-center w-2/5 h-72">
+    <div className="flex flex-col gap-5 p-5 h-[500px] w-full items-center bg-gray-50 border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-300 dark:bg-gray-100 dark:hover:bg-gray-200">
+      <div className="flex justify-center items-center w-full h-1/2">
         <AdvancedImage
           className="object-cover w-fit rounded border border-gray-300"
           cldImg={resImage}

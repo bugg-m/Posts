@@ -24,7 +24,7 @@ const SignIn = () => {
     dispatch(setShowLoader(true));
     try {
       const { data } = await axios.post(
-        `${baseUrl}/users/sign-in`,
+        `${baseUrl}/users/sign_in`,
         { email, password },
         {
           headers: { "Content-Type": "application/json" },

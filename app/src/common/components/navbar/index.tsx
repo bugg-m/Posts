@@ -28,7 +28,7 @@ export const Navbar = () => {
   const handleLogout = async () => {
     dispatch(setShowLoader(true));
     try {
-      await axios.get(`${baseUrl}/users/sign-out`, { withCredentials: true });
+      await axios.get(`${baseUrl}/users/sign_out`, { withCredentials: true });
       toast.success("Logged Out Successfully");
       dispatch(setIsAuthenticated(false));
       dispatch(setShowLoader(false));

@@ -15,6 +15,7 @@ const URL =
     : process.env.FRONTEND_URI_PRODUCTION;
 
 const app = express();
+app.use(errorMiddleware);
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -26,9 +27,7 @@ app.use(
   })
 );
 app.use(cookieParser());
-
 app.use(express.static("./app/dist"));
-app.use(errorMiddleware);
 app.use("/users", userRouter);
 app.use("/blogs", blogRouter);
 export default app;

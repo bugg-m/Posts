@@ -1,7 +1,6 @@
 import BlogMain from "../blogs";
 import toast, { Toaster } from "react-hot-toast";
 import { Suspense, useEffect } from "react";
-// import axios from "axios";
 import Loader from "../../common/components/loader";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -30,6 +29,7 @@ const Home = () => {
             dispatch(setUser(res.user));
             dispatch(setIsAuthenticated(true));
             dispatch(setShowLoader(false));
+            toast.success(message);
           } else {
             toast.error(message);
             dispatch(setIsAuthenticated(false));

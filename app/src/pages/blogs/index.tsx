@@ -41,7 +41,7 @@ const BlogMain = () => {
       } pt-20 min-h-screen bg-gray-50`}
     >
       <div className="flex p-5 justify-center items-center">
-        <div className="grid w-4/5 grid-cols-2 gap-20 py-5">
+        <div className="grid w-4/5 grid-cols-3 gap-20 py-5">
           {blogList?.map(({ image, title, description }, index) => {
             return (
               <div key={index}>

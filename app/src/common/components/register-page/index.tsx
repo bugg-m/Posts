@@ -23,7 +23,7 @@ const SignUp = () => {
     dispatch(setShowLoader(false));
     try {
       const { data } = await axios.post(
-        `${baseUrl}/users/sign-up`,
+        `${baseUrl}/users/sign_up`,
         { name, email, password, role },
         {
           headers: { "Content-Type": "application/json" },

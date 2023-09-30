@@ -12,16 +12,13 @@ import { isAuthenticated } from "../middlewares/auth.js";
 
 const blogRouter = Router();
 
-blogRouter.get("/", ({ req, res }) => {
-  res.send("hello");
-});
 blogRouter.get("/getAllBlog", getAllBlog);
 blogRouter.get("/getBlogDetails/:id", getBlogDetails);
 blogRouter.get("/myBlogs", isAuthenticated, getUserBlogs);
 blogRouter.post(
   "/createBlog",
   isAuthenticated,
-  imageUpload.single("file"),
+  imageUpload.single("image"),
   createBlog
 );
 blogRouter.route("/:id").put(updateBlog).delete(deleteBlog);
