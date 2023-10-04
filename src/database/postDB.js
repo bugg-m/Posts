@@ -5,7 +5,7 @@ const URI =
     ? process.env.MONGO_URI
     : process.env.MONGO_URI_ATLAS;
 
-export const blogDatabase = () => {
+export const postDatabase = () => {
   mongoose
     .connect(URI, {})
     .then(() => {

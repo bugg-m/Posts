@@ -1,63 +1,63 @@
-import { blogModel } from "../models/blogModel.js";
+import { postModel } from "../models/postModel.js";
 import { getDataUri } from "../utils/dataUri.js";
 import cloudinary from "cloudinary";
 
-export const getBlogDetails = async (req, res, next) => {
+export const getPostDetails = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const blogData = await blogModel.findById(id);
-    if (!blogData)
+    const postData = await postModel.findById(id);
+    if (!postData)
       return res.status(404).json({
         success: false,
-        message: "Blog not Found",
+        message: "Post not Found",
       });
     else
       return res.status(200).json({
         success: true,
-        blogData,
+        postData,
       });
   } catch (error) {
     next(error);
   }
 };
-export const getUserBlogs = async (req, res, next) => {
+export const getUserPosts = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const blogData = await blogModel.findById({ user: userId });
-    if (!blogData)
+    const postData = await postModel.findById({ user: userId });
+    if (!postData)
       return res.status(404).json({
         success: false,
-        message: "Blog not Found",
+        message: "Post not Found",
       });
     else
       return res.status(200).json({
         success: true,
-        blogData,
+        postData,
       });
   } catch (error) {
     next(error);
   }
 };
 
-export const getAllBlog = async (req, res, next) => {
+export const getAllPost = async (req, res, next) => {
   try {
-    const blogData = await blogModel.find();
+    const postData = await postModel.find();
     res.status(200).json({
       success: true,
-      blogData,
+      postData,
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const createBlog = async (req, res, next) => {
+export const createPost = async (req, res, next) => {
   try {
     const { title, description } = req.body;
     const file = req.file;
     const fileUri = getDataUri(file);
     const fileCloud = cloudinary.v2.uploader.upload(fileUri.content);
-    await blogModel.create({
+    await postModel.create({
       title,
       description,
       image: {
@@ -68,46 +68,46 @@ export const createBlog = async (req, res, next) => {
     });
     res.status(200).json({
       success: true,
-      message: "Blog Created Successfully",
+      message: "Post Created Successfully",
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const updateBlog = async (req, res, next) => {
+export const updatePost = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const blogData = await blogModel.findById({ id });
-    if (!blogData)
+    const postData = await postModel.findById({ id });
+    if (!postData)
       return res
         .status(404)
-        .json({ success: false, message: "Blog not Found" });
+        .json({ success: false, message: "Post not Found" });
 
     const { title, description, image } = req.body;
-    await blogModel.findByIdAndUpdate(id, {
+    await postModel.findByIdAndUpdate(id, {
       $set: { title, description, image },
     });
     res.status(200).json({
       success: true,
-      message: "Blog updated Successfully",
+      message: "Post updated Successfully",
     });
   } catch (error) {
     next(error);
   }
 };
-export const deleteBlog = async (req, res, next) => {
+export const deletePost = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const blogData = await blogModel.findById({ id });
-    if (!blogData)
+    const postData = await postModel.findById({ id });
+    if (!postData)
       return res
         .status(404)
-        .json({ success: false, message: "Blog not Found" });
-    await blogModel.findByIdAndDelete(id);
+        .json({ success: false, message: "Post not Found" });
+    await postModel.findByIdAndDelete(id);
     res.status(200).json({
       success: true,
-      message: "Blog Deleted Successfully",
+      message: "Post Deleted Successfully",
     });
   } catch (error) {
     next(error);

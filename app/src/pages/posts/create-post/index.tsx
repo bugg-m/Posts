@@ -2,51 +2,51 @@ import { useState } from "react";
 import { CgClose } from "react-icons/cg";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setRefreshBlogList,
-  setShowCreateBlog,
+  setRefreshPostList,
+  setShowCreatePost,
   setShowLoader,
 } from "../../../common/redux-utils/utils-slice/utilsSlice";
 import toast from "react-hot-toast";
-import { addBlog } from "../../../common/apis/blogServices";
+import { addPost } from "../../../common/apis/postServices";
 import Loader from "../../../common/components/loader";
 
-const CreateBlog = () => {
+const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const dispatch = useDispatch();
-  const refreshBlogList = useSelector((state: any) => state.refreshBlogList);
+  const refreshPostList = useSelector((state: any) => state.refreshPostList);
   const showLoader = useSelector((state: any) => state.showLoader);
 
-  const handleAddBlog = (e: any) => {
+  const handleAddPost = (e: any) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("image", "newImage");
     const payload = { title, description, image };
     dispatch(setShowLoader(true));
     try {
-      addBlog(payload)
+      addPost(payload)
         .then((res) => {
           const { success, message } = res;
           if (success) {
             toast.success(message);
             setTitle("");
             setDescription("");
-            dispatch(setShowCreateBlog(false));
+            dispatch(setShowCreatePost(false));
           } else {
             toast.error(message);
           }
-          dispatch(setRefreshBlogList(!refreshBlogList));
+          dispatch(setRefreshPostList(!refreshPostList));
           dispatch(setShowLoader(false));
         })
         .catch((err: string) => {
           toast.success(err);
-          dispatch(setRefreshBlogList(!refreshBlogList));
+          dispatch(setRefreshPostList(!refreshPostList));
           dispatch(setShowLoader(false));
         });
     } catch (err: any) {
       toast.error(err.response.data.message);
-      dispatch(setRefreshBlogList(!refreshBlogList));
+      dispatch(setRefreshPostList(!refreshPostList));
       dispatch(setShowLoader(false));
     }
   };
@@ -61,7 +61,7 @@ const CreateBlog = () => {
           CREATE
         </div>
         <div
-          onClick={() => dispatch(setShowCreateBlog(false))}
+          onClick={() => dispatch(setShowCreatePost(false))}
           className="text-xl text-white"
         >
           <CgClose />
@@ -71,7 +71,7 @@ const CreateBlog = () => {
         className="space-y-4 md:space-y-6"
         encType="multipart/form-data"
         method="POST"
-        onSubmit={handleAddBlog}
+        onSubmit={handleAddPost}
       >
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -117,7 +117,7 @@ const CreateBlog = () => {
         <div className="flex justify-end items-center w-full gap-5">
           <button
             onClick={() => {
-              dispatch(setShowCreateBlog(false));
+              dispatch(setShowCreatePost(false));
               setTitle("");
               setDescription("");
             }}
@@ -137,4 +137,4 @@ const CreateBlog = () => {
   );
 };
 
-export default CreateBlog;
+export default CreatePost;

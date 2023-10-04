@@ -1,5 +1,5 @@
 import express from "express";
-import blogRouter from "./src/routes/blogRouter.js";
+import postRouter from "./src/routes/postRouter.js";
 import userRouter from "./src/routes/userRoutes.js";
 import cookieParser from "cookie-parser";
 import { errorMiddleware } from "./src/middlewares/error.js";
@@ -14,20 +14,20 @@ const URL =
     ? process.env.FRONTEND_URI_DEVELOPMENT
     : process.env.FRONTEND_URI_PRODUCTION;
 
-const app = express();
-app.use(errorMiddleware);
-app.use(express.static("public"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(
+const server = express();
+server.use(errorMiddleware);
+server.use(express.static("public"));
+server.use(express.json());
+server.use(express.urlencoded({ extended: false }));
+server.use(
   cors({
     origin: [URL],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
-app.use(cookieParser());
-app.use(express.static("./app/dist"));
-app.use("/users", userRouter);
-app.use("/blogs", blogRouter);
-export default app;
+server.use(cookieParser());
+server.use(express.static("./server/dist"));
+server.use("/users", userRouter);
+server.use("/posts", postRouter);
+export default server;

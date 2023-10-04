@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   showInputBar: false,
-  showCreateBlog: false,
+  showCreatePost: false,
   showSignInPage: false,
   showSignUpPage: false,
   showLoader: false,
   isAuthenticated: false,
   user: {},
-  refreshBlogList: false,
+  refreshPostList: false,
 };
 
 const utilsSlice = createSlice({
@@ -17,8 +17,8 @@ const utilsSlice = createSlice({
     setShowInputBar: (state, action) => {
       state.showInputBar = action.payload;
     },
-    setShowCreateBlog: (state, action) => {
-      state.showCreateBlog = action.payload;
+    setShowCreatePost: (state, action) => {
+      state.showCreatePost = action.payload;
     },
     setShowSignInPage: (state, action) => {
       state.showSignInPage = action.payload;
@@ -35,8 +35,8 @@ const utilsSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
-    setRefreshBlogList: (state, action) => {
-      state.refreshBlogList = action.payload;
+    setRefreshPostList: (state, action) => {
+      state.refreshPostList = action.payload;
     },
   },
 });
@@ -46,9 +46,9 @@ export const {
   setIsAuthenticated,
   setShowLoader,
   setUser,
-  setShowCreateBlog,
+  setShowCreatePost,
   setShowSignInPage,
   setShowSignUpPage,
-  setRefreshBlogList,
+  setRefreshPostList,
 } = utilsSlice.actions;
 export default utilsSlice.reducer;

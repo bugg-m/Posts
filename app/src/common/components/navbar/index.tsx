@@ -5,10 +5,10 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { baseUrl } from "../../../pages/home";
 import { useDispatch, useSelector } from "react-redux";
-import CreateBlog from "../../../pages/blogs/create-blog";
+import CreatePost from "../../../pages/posts/create-post";
 import {
   setIsAuthenticated,
-  setShowCreateBlog,
+  setShowCreatePost,
   setShowLoader,
   setShowSignInPage,
   setShowSignUpPage,
@@ -20,7 +20,7 @@ export const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const showSignInPage = useSelector((state: any) => state.showSignInPage);
   const showSignUpPage = useSelector((state: any) => state.showSignUpPage);
-  const showCreateBlog = useSelector((state: any) => state.showCreateBlog);
+  const showCreatePost = useSelector((state: any) => state.showCreatePost);
   const showLoader = useSelector((state: any) => state.showLoader);
   const isAuthenticated = useSelector((state: any) => state.isAuthenticated);
   const dispatch = useDispatch();
@@ -39,13 +39,13 @@ export const Navbar = () => {
     }
   };
 
-  const handleOpenCreateBlog = () => {
+  const handleOpenCreatePost = () => {
     if (showSignInPage || showSignUpPage) {
       dispatch(setShowSignUpPage(false));
       dispatch(setShowSignInPage(false));
     }
     if (isAuthenticated) {
-      dispatch(setShowCreateBlog(true));
+      dispatch(setShowCreatePost(true));
     } else {
       toast.error("Sign in first");
     }
@@ -58,7 +58,7 @@ export const Navbar = () => {
           <a href="/" className="flex items-center">
             <FaBlog className="h-8 mx-3 text-3xl text-gray-700 logo-icon" />
             <span className="self-center text-3xl font-bold whitespace-nowrap dark:text-gray-700">
-              Blogs
+              Posts
             </span>
           </a>
           <div>
@@ -66,7 +66,7 @@ export const Navbar = () => {
               <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-gray-50 dark:bg-gray-300 md:dark:bg-gray-200 dark:border-gray-300">
                 <li
                   onClick={() => {
-                    dispatch(setShowCreateBlog(false));
+                    dispatch(setShowCreatePost(false));
                     dispatch(setShowSignInPage(false));
                   }}
                   className="block cursor-pointer dark:hover:text-gray-800 py-2 pl-3 pr-4 text-gray-700  rounded md:bg-transparent md:p-0 dark:text-gray-700"
@@ -74,13 +74,13 @@ export const Navbar = () => {
                   Home
                 </li>
                 <li
-                  onClick={handleOpenCreateBlog}
+                  onClick={handleOpenCreatePost}
                   className="block cursor-pointer py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:bg-gray-400 dark:hover:text-gray-800 md:dark:hover:bg-transparent"
                 >
                   Create
-                  {showCreateBlog && (
+                  {showCreatePost && (
                     <div className="absolute w-full h-screen left-0 top-16 flex items-center justify-center">
-                      <CreateBlog />
+                      <CreatePost />
                     </div>
                   )}
                 </li>
@@ -100,8 +100,8 @@ export const Navbar = () => {
                 ) : (
                   <li
                     onClick={() => {
-                      if (showCreateBlog || showSignUpPage) {
-                        dispatch(setShowCreateBlog(false));
+                      if (showCreatePost || showSignUpPage) {
+                        dispatch(setShowCreatePost(false));
                         dispatch(setShowSignUpPage(false));
                       }
                       dispatch(setShowSignInPage(true));
@@ -169,8 +169,8 @@ export const Navbar = () => {
                 ) : (
                   <li
                     onClick={() => {
-                      if (showCreateBlog) {
-                        dispatch(setShowCreateBlog(false));
+                      if (showCreatePost) {
+                        dispatch(setShowCreatePost(false));
                       }
                       dispatch(setShowSignInPage(true));
                     }}

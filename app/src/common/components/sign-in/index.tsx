@@ -1,46 +1,62 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import axios from "axios";
-import { baseUrl } from "../../../pages/home";
 import { CgClose } from "react-icons/cg";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setIsAuthenticated,
-  setShowCreateBlog,
+  setShowCreatePost,
   setShowLoader,
   setShowSignInPage,
   setShowSignUpPage,
 } from "../../redux-utils/utils-slice/utilsSlice";
+import Loader from "../loader";
+import { sign_in } from "../../apis/userServices";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const showLoader = useSelector((state: any) => state.showLoader);
   const showSignIpPage = useSelector((state: any) => state.showSignIpPage);
-  const showCreateBlog = useSelector((state: any) => state.showCreateBlog);
+  const showCreatePost = useSelector((state: any) => state.showCreatePost);
   const dispatch = useDispatch();
-  const handleSubmit = async (e: any) => {
+  const handleSign_In = async (e: any) => {
+    const payload = { email, password };
     e.preventDefault();
     dispatch(setShowLoader(true));
     try {
-      const { data } = await axios.post(
-        `${baseUrl}/users/sign_in`,
-        { email, password },
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-      toast.success(data.message);
-      dispatch(setIsAuthenticated(true));
-      dispatch(setShowSignInPage(false));
-      dispatch(setShowLoader(false));
+      sign_in(payload)
+        .then((res) => {
+          const { success, message } = res;
+          if (success) {
+            toast.success(message);
+            dispatch(setIsAuthenticated(true));
+            dispatch(setShowSignInPage(false));
+            dispatch(setShowLoader(false));
+            resetForm();
+          } else {
+            toast.error(message);
+            dispatch(setIsAuthenticated(false));
+            dispatch(setShowSignInPage(true));
+            dispatch(setShowLoader(true));
+          }
+        })
+        .catch((err) => {
+          toast.error(err);
+          dispatch(setIsAuthenticated(false));
+          dispatch(setShowSignInPage(true));
+          dispatch(setShowLoader(true));
+        });
     } catch (err: any) {
       toast.error(err.response.data.message);
       dispatch(setIsAuthenticated(false));
       dispatch(setShowSignInPage(true));
       dispatch(setShowLoader(false));
     }
+  };
+
+  const resetForm = () => {
+    setEmail("");
+    setPassword("");
   };
 
   return (
@@ -59,7 +75,7 @@ const SignIn = () => {
           <CgClose />
         </div>
       </div>
-      <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+      <form className="space-y-4 md:space-y-6" onSubmit={handleSign_In}>
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
             Email
@@ -115,19 +131,29 @@ const SignIn = () => {
             Forgot password?
           </a>
         </div>
-        <button
-          disabled={showLoader}
-          type="submit"
-          className="w-full border border-gray-700 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-        >
-          Sign In
-        </button>
+        <div className="flex justify-end items-center w-full gap-5">
+          <button
+            onClick={() => {
+              dispatch(setShowSignUpPage(false));
+              resetForm();
+            }}
+            className="h-10 border bg-white border-gray-700 text-grey-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="h-10 border border-gray-700 text-white bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          >
+            {showLoader ? <Loader /> : "Sign In"}
+          </button>
+        </div>
         <p className="text-sm font-light text-gray-500 dark:text-gray-400">
           Don’t have an account yet?{" "}
           <li
             onClick={() => {
-              if (showCreateBlog || showSignIpPage) {
-                dispatch(setShowCreateBlog(false));
+              if (showCreatePost || showSignIpPage) {
+                dispatch(setShowCreatePost(false));
                 dispatch(setShowSignInPage(false));
               }
               dispatch(setShowSignUpPage(true));

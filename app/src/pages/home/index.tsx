@@ -1,4 +1,4 @@
-import BlogMain from "../blogs";
+import PostMain from "../posts";
 import toast, { Toaster } from "react-hot-toast";
 import { Suspense, useEffect } from "react";
 import Loader from "../../common/components/loader";
@@ -58,7 +58,7 @@ const Home = () => {
         </div>
       )}
       <Suspense fallback="">
-        <BlogMain />
+        <PostMain />
         <Toaster />
       </Suspense>
     </div>

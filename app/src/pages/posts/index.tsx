@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
-import { getAllBlogs } from "../../common/apis/blogServices";
-import BlogListItems from "./blog-list-items/BlogListItems";
+import { getAllPosts } from "../../common/apis/postServices";
+import PostListItems from "./post-list-items";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 
-const BlogMain = () => {
-  const [blogList, setBlogList] = useState([]);
+const PostMain = () => {
+  const [postList, setPostList] = useState([]);
   const showSignInPage = useSelector((state: any) => state.showSignInPage);
   const showSignUpPage = useSelector((state: any) => state.showSignUpPage);
-  const showCreateBlog = useSelector((state: any) => state.showCreateBlog);
-  const refreshBlogList = useSelector((state: any) => state.refreshBlogList);
+  const showCreatePost = useSelector((state: any) => state.showCreatePost);
+  const refreshPostList = useSelector((state: any) => state.refreshPostList);
 
   useEffect(() => {
-    getAllBlog();
-  }, [refreshBlogList]);
+    getAllPost();
+  }, [refreshPostList]);
 
-  const getAllBlog = () => {
+  const getAllPost = () => {
     try {
-      getAllBlogs()
+      getAllPosts()
         .then((res: any) => {
-          const { success, blogData } = res;
+          const { success, postData } = res;
           if (success) {
-            setBlogList(blogData);
+            setPostList(postData);
           } else {
             toast.error(res.message);
           }
@@ -37,19 +37,15 @@ const BlogMain = () => {
   return (
     <div
       className={`w-full ${
-        showSignInPage || showCreateBlog || showSignUpPage ? "opacity-10" : ""
+        showSignInPage || showCreatePost || showSignUpPage ? "opacity-10" : ""
       } pt-20 min-h-screen bg-gray-50`}
     >
       <div className="flex p-5 justify-center items-center">
         <div className="grid w-4/5 grid-cols-3 gap-20 py-5">
-          {blogList?.map(({ image, title, description }, index) => {
+          {postList?.map((item, index) => {
             return (
               <div key={index}>
-                <BlogListItems
-                  image={image}
-                  title={title}
-                  description={description}
-                />
+                <PostListItems item={item} />
               </div>
             );
           })}
@@ -59,4 +55,4 @@ const BlogMain = () => {
   );
 };
 
-export default BlogMain;
+export default PostMain;

@@ -1,14 +1,14 @@
 import axios from "axios";
 import { baseUrl } from "../../pages/home";
 
-export const getAllBlogs = async () => {
-  const url = `${baseUrl}/blogs/getAllBlog`;
+export const getAllPosts = async () => {
+  const url = `${baseUrl}/posts/getAllPost`;
   return await axios.get(url, { withCredentials: true }).then((response) => {
     return response.data;
   });
 };
-export const addBlog = async (payload: any) => {
-  const url = `${baseUrl}/blogs/createBlog`;
+export const addPost = async (payload: any) => {
+  const url = `${baseUrl}/posts/createPost`;
   return await axios
     .post(url, payload, {
       headers: { "Content-Type": "multipart/form-data" },
