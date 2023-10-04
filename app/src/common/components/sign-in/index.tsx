@@ -131,16 +131,7 @@ const SignIn = () => {
             Forgot password?
           </a>
         </div>
-        <div className="flex justify-end items-center w-full gap-5">
-          <button
-            onClick={() => {
-              dispatch(setShowSignUpPage(false));
-              resetForm();
-            }}
-            className="h-10 border bg-white border-gray-700 text-grey-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-          >
-            Cancel
-          </button>
+        <div className="flex justify-center items-center w-full gap-5">
           <button
             type="submit"
             className="h-10 border border-gray-700 text-white bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"

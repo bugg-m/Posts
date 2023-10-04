@@ -30,9 +30,8 @@ const CreatePost = () => {
           const { success, message } = res;
           if (success) {
             toast.success(message);
-            setTitle("");
-            setDescription("");
             dispatch(setShowCreatePost(false));
+            resetForm();
           } else {
             toast.error(message);
           }
@@ -51,10 +50,16 @@ const CreatePost = () => {
     }
   };
 
+  const resetForm = () => {
+    setTitle("");
+    setImage("");
+    setDescription("");
+  };
+
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="p-6 w-96 dark:bg-gray-800 border rounded-md dark:border-gray-700 space-y-4 md:space-y-6 sm:p-8"
+      className="p-10 min-w-[400px] dark:bg-gray-800 border rounded-lg dark:border-gray-700"
     >
       <div className="flex justify-between">
         <div className="text-lg font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -118,8 +123,7 @@ const CreatePost = () => {
           <button
             onClick={() => {
               dispatch(setShowCreatePost(false));
-              setTitle("");
-              setDescription("");
+              resetForm();
             }}
             className="h-10 border bg-white border-gray-700 text-grey-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           >

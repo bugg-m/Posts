@@ -1,6 +1,3 @@
-import { CgMenu, CgClose } from "react-icons/cg";
-import { useState } from "react";
-import { FaBlog } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { baseUrl } from "../../../pages/home";
@@ -15,13 +12,14 @@ import {
 } from "../../redux-utils/utils-slice/utilsSlice";
 import SignIn from "../sign-in";
 import SignUp from "../register-page";
+import Loader from "../loader";
 
 export const Navbar = () => {
-  const [openMenu, setOpenMenu] = useState(false);
   const showSignInPage = useSelector((state: any) => state.showSignInPage);
   const showSignUpPage = useSelector((state: any) => state.showSignUpPage);
   const showCreatePost = useSelector((state: any) => state.showCreatePost);
   const showLoader = useSelector((state: any) => state.showLoader);
+  const showMenu = useSelector((state: any) => state.showMenu);
   const isAuthenticated = useSelector((state: any) => state.isAuthenticated);
   const dispatch = useDispatch();
 
@@ -53,137 +51,66 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav className="h-16 border-gray-300 dark:bg-gray-200">
-        <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
-          <a href="/" className="flex items-center">
-            <FaBlog className="h-8 mx-3 text-3xl text-gray-700 logo-icon" />
-            <span className="self-center text-3xl font-bold whitespace-nowrap dark:text-gray-700">
-              Posts
-            </span>
-          </a>
-          <div>
-            <div className="hidden w-full md:block cursor-pointer md:w-auto">
-              <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-gray-50 dark:bg-gray-300 md:dark:bg-gray-200 dark:border-gray-300">
-                <li
-                  onClick={() => {
-                    dispatch(setShowCreatePost(false));
-                    dispatch(setShowSignInPage(false));
-                  }}
-                  className="block cursor-pointer dark:hover:text-gray-800 py-2 pl-3 pr-4 text-gray-700  rounded md:bg-transparent md:p-0 dark:text-gray-700"
-                >
-                  Home
-                </li>
-                <li
-                  onClick={handleOpenCreatePost}
-                  className="block cursor-pointer py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:bg-gray-400 dark:hover:text-gray-800 md:dark:hover:bg-transparent"
-                >
-                  Create
-                  {showCreatePost && (
-                    <div className="absolute w-full h-screen left-0 top-16 flex items-center justify-center">
-                      <CreatePost />
-                    </div>
-                  )}
-                </li>
-                {isAuthenticated && (
-                  <li className="block cursor-pointer py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:bg-gray-400 dark:hover:text-gray-800 md:dark:hover:bg-transparent">
-                    Profile
-                  </li>
-                )}
-                {isAuthenticated ? (
-                  <button
-                    className="block cursor-pointer py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:bg-gray-400 dark:hover:text-gray-800 md:dark:hover:bg-transparent"
-                    disabled={showLoader}
-                    onClick={handleLogout}
-                  >
-                    SignOut
-                  </button>
-                ) : (
-                  <li
-                    onClick={() => {
-                      if (showCreatePost || showSignUpPage) {
-                        dispatch(setShowCreatePost(false));
-                        dispatch(setShowSignUpPage(false));
-                      }
-                      dispatch(setShowSignInPage(true));
-                    }}
-                    className="block cursor-pointer py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:bg-gray-400 dark:hover:text-gray-800 md:dark:hover:bg-transparent"
-                  >
-                    SignIn
-                    {showSignInPage && (
-                      <div className="absolute w-full h-screen left-0 top-16 flex items-center justify-center">
-                        <SignIn />
-                      </div>
-                    )}
-                    {showSignUpPage && (
-                      <div className="absolute w-full h-screen left-0 top-16 flex items-center justify-center">
-                        <SignUp />
-                      </div>
-                    )}
-                  </li>
-                )}
-              </ul>
-            </div>
-            <div>
-              {openMenu ? (
-                <CgClose
-                  className="md:hidden block cursor-pointer text-gray-700 text-4xl pr-4 z-50 duration-200"
-                  onClick={() => {
-                    setOpenMenu(!openMenu);
-                  }}
-                />
-              ) : (
-                <CgMenu
-                  className="md:hidden block cursor-pointer text-gray-700 text-4xl pr-4 z-50 duration-200"
-                  onClick={() => {
-                    setOpenMenu(!openMenu);
-                  }}
-                />
-              )}
-
-              <ul
-                className={`md:hidden flex flex-col text-gray-700 mt-3 pt-[50px] dark:bg-gray-800 h-screen w-1/2 p-4 text-xl fixed ${
-                  openMenu ? "left-[0]" : "left-[-100%]"
-                } duration-500`}
-              >
-                <li className="block cursor-pointer my-2 py-2 pl-3 pr-4 text-gray-700 rounded md:bg-transparent md:p-0 dark:text-gray-700 ">
-                  Home
-                </li>
-                <li className="block cursor-pointer my-2 py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:text-gray-800 md:dark:hover:bg-transparent">
-                  Tasks
-                </li>
-                {isAuthenticated ? (
-                  <li className="block cursor-pointer my-2 py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:text-gray-800 md:dark:hover:bg-transparent">
-                    Profile
-                  </li>
-                ) : (
-                  ""
-                )}
-                {isAuthenticated ? (
-                  <button
-                    className="block cursor-pointer my-2 py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:text-gray-800 md:dark:hover:bg-transparent"
-                    disabled={showLoader}
-                    onClick={handleLogout}
-                  >
-                    SignOut
-                  </button>
-                ) : (
-                  <li
-                    onClick={() => {
-                      if (showCreatePost) {
-                        dispatch(setShowCreatePost(false));
-                      }
-                      dispatch(setShowSignInPage(true));
-                    }}
-                    className="block cursor-pointer my-2 py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 dark:text-gray-700 dark:hover:text-gray-800 md:dark:hover:bg-transparent"
-                  >
-                    SignIn
-                  </li>
-                )}
-              </ul>
-            </div>
-          </div>
-        </div>
+      <nav
+        className={`${
+          showMenu ? "left-0" : "left-[-300px]"
+        } absolute min-h-screen w-full border-r-4 border-gray-300 dark:bg-gray-200 p-4 duration-300 pt-20`}
+      >
+        <ul className="font-medium w-full gap-10 p-4 mt-4 border border-gray-100 rounded-lg dark:border-gray-300">
+          <li
+            onClick={() => {
+              dispatch(setShowCreatePost(false));
+              dispatch(setShowSignInPage(false));
+            }}
+            className="block cursor-pointer py-2 pl-3 pr-4 text-gray-700 rounded "
+          >
+            Home
+          </li>
+          <li
+            onClick={handleOpenCreatePost}
+            className="block cursor-pointer py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-300"
+          >
+            Create
+          </li>
+          {isAuthenticated && (
+            <li className="block cursor-pointer py-2 pl-3 pr-4 text-gray-400 rounded hover:bg-gray-300">
+              Profile
+            </li>
+          )}
+          {isAuthenticated ? (
+            <li
+              className="block cursor-pointer py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-300 "
+              onClick={handleLogout}
+            >
+              {showLoader ? <Loader /> : "SignOut"}
+            </li>
+          ) : (
+            <li
+              onClick={() => {
+                if (showCreatePost || showSignUpPage) {
+                  dispatch(setShowCreatePost(false));
+                  dispatch(setShowSignUpPage(false));
+                }
+                dispatch(setShowSignInPage(!showSignInPage));
+              }}
+              className="block cursor-pointer py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-300 "
+            >
+              SignIn
+            </li>
+          )}
+        </ul>
       </nav>
+      <div
+        className={`${
+          showCreatePost || showSignUpPage || showSignInPage
+            ? "left-[600px]"
+            : "left-0"
+        } absolute duration-300 h-screen flex items-center justify-center`}
+      >
+        {showCreatePost && <CreatePost />}
+        {showSignUpPage && <SignUp />}
+        {showSignInPage && <SignIn />}
+      </div>
     </>
   );
 };

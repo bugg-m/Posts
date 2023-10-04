@@ -10,6 +10,7 @@ const PostMain = () => {
   const showSignUpPage = useSelector((state: any) => state.showSignUpPage);
   const showCreatePost = useSelector((state: any) => state.showCreatePost);
   const refreshPostList = useSelector((state: any) => state.refreshPostList);
+  const showMenu = useSelector((state: any) => state.showMenu);
 
   useEffect(() => {
     getAllPost();
@@ -41,7 +42,11 @@ const PostMain = () => {
       } pt-20 min-h-screen bg-gray-50`}
     >
       <div className="flex p-5 justify-center items-center">
-        <div className="grid w-4/5 grid-cols-3 gap-20 py-5">
+        <div
+          className={` ${
+            showMenu ? "pl-[25%]" : ""
+          } grid px-10 grid-cols-3 gap-20 py-5 duration-300`}
+        >
           {postList?.map((item, index) => {
             return (
               <div key={index}>

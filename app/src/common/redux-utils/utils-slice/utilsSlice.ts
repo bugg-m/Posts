@@ -8,6 +8,7 @@ const initialState = {
   isAuthenticated: false,
   user: {},
   refreshPostList: false,
+  showMenu: false,
 };
 
 const utilsSlice = createSlice({
@@ -38,6 +39,9 @@ const utilsSlice = createSlice({
     setRefreshPostList: (state, action) => {
       state.refreshPostList = action.payload;
     },
+    setShowMenu: (state, action) => {
+      state.showMenu = action.payload;
+    },
   },
 });
 
@@ -50,5 +54,6 @@ export const {
   setShowSignInPage,
   setShowSignUpPage,
   setRefreshPostList,
+  setShowMenu,
 } = utilsSlice.actions;
 export default utilsSlice.reducer;
