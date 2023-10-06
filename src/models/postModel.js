@@ -9,8 +9,8 @@ const postSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: [true, "Please describe your Post"],
-    minLength: [30, "Description must be atleast 30 characters long"],
+    required: [true, "Please write something about your Post"],
+    minLength: [10, "Description must be atleast 10 characters long"],
   },
   image: {
     public_id: {

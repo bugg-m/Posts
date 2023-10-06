@@ -3,7 +3,6 @@ import {
   createPost,
   deletePost,
   getAllPost,
-  getPostDetails,
   getUserPosts,
   updatePost,
 } from "../controllers/postController.js";
@@ -12,11 +11,11 @@ import { isAuthenticated } from "../middlewares/auth.js";
 
 const postRouter = Router();
 
-postRouter.get("/getAllPost", getAllPost);
-postRouter.get("/getPostDetails/:id", getPostDetails);
-postRouter.get("/myPosts", isAuthenticated, getUserPosts);
+postRouter.get("/get_all_posts", getAllPost);
+postRouter.get("/get_post_details/:id", createPost);
+postRouter.get("/my_posts", isAuthenticated, getUserPosts);
 postRouter.post(
-  "/createPost",
+  "/create_post",
   isAuthenticated,
   imageUpload.single("image"),
   createPost

@@ -1,14 +1,14 @@
 import axios from "axios";
 import { baseUrl } from "../../pages/home";
 
-export const getAllPosts = async () => {
-  const url = `${baseUrl}/posts/getAllPost`;
+export const getAllPost = async () => {
+  const url = `${baseUrl}/posts/get_all_posts`;
   return await axios.get(url, { withCredentials: true }).then((response) => {
     return response.data;
   });
 };
 export const addPost = async (payload: any) => {
-  const url = `${baseUrl}/posts/createPost`;
+  const url = `${baseUrl}/posts/create_post`;
   return await axios
     .post(url, payload, {
       headers: { "Content-Type": "multipart/form-data" },

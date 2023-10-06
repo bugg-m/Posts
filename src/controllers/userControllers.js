@@ -1,6 +1,8 @@
 import { userModel } from "../../src/models/userModel.js";
 import bcrypt from "bcrypt";
 import { sendCookie } from "../../src/utils/features.js";
+import cloudinary from "cloudinary";
+import { getDataUri } from "../utils/dataUri.js";
 
 export const signIn = async (req, res, next) => {
   try {
@@ -37,13 +39,25 @@ export const signOut = (req, res, next) => {
 export const signUp = async (req, res, next) => {
   try {
     const { name, email, password, role } = req.body;
+    const file = req.file;
+    const fileUri = getDataUri(file);
+    const fileCloud = cloudinary.v2.uploader.upload(fileUri.content);
     let user = await userModel.findOne({ email });
     if (user)
       return res
         .status(400)
         .json({ success: false, message: "User already exists" });
     const hashedPass = await bcrypt.hash(password, 10);
-    user = await userModel.create({ name, email, password: hashedPass, role });
+    user = await userModel.create({
+      name,
+      email,
+      password: hashedPass,
+      role,
+      avatar: {
+        public_id: (await fileCloud).public_id,
+        url: (await fileCloud).secure_url,
+      },
+    });
     sendCookie(user, res, "Registered successfully", 201);
   } catch (err) {
     next(err);

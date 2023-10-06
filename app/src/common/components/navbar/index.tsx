@@ -12,10 +12,12 @@ import {
 } from "../../redux-utils/utils-slice/utilsSlice";
 import SignIn from "../sign-in";
 import SignUp from "../register-page";
-import Loader from "../loader";
+import Li from "../../constants/menu-li";
 
 export const Navbar = () => {
-  const showSignInPage = useSelector((state: any) => state.showSignInPage);
+  const showSignInPage: boolean = useSelector(
+    (state: any) => state.showSignInPage
+  );
   const showSignUpPage = useSelector((state: any) => state.showSignUpPage);
   const showCreatePost = useSelector((state: any) => state.showCreatePost);
   const showLoader = useSelector((state: any) => state.showLoader);
@@ -38,12 +40,10 @@ export const Navbar = () => {
   };
 
   const handleOpenCreatePost = () => {
-    if (showSignInPage || showSignUpPage) {
-      dispatch(setShowSignUpPage(false));
-      dispatch(setShowSignInPage(false));
-    }
     if (isAuthenticated) {
       dispatch(setShowCreatePost(true));
+      dispatch(setShowSignInPage(false));
+      dispatch(setShowSignUpPage(false));
     } else {
       toast.error("Sign in first");
     }
@@ -52,60 +52,81 @@ export const Navbar = () => {
   return (
     <>
       <nav
-        className={`${
-          showMenu ? "left-0" : "left-[-300px]"
-        } absolute min-h-screen w-full border-r-4 border-gray-300 dark:bg-gray-200 p-4 duration-300 pt-20`}
+        className={`${showMenu ? "left-0" : "left-[-300px]"}  ${
+          showCreatePost || showSignUpPage || showSignInPage
+            ? "border-gray-800"
+            : "border-gray-800"
+        } absolute min-h-screen w-full border-r-4 dark:bg-gray-900 p-4 duration-300 pt-20`}
       >
-        <ul className="font-medium w-full gap-10 p-4 mt-4 border border-gray-100 rounded-lg dark:border-gray-300">
-          <li
-            onClick={() => {
+        <ul className="font-medium w-full h-80 gap-10 p-4 mt-20 border border-gray-100 bg-gray-800 rounded-lg">
+          <Li
+            handleEvent={() => {
               dispatch(setShowCreatePost(false));
               dispatch(setShowSignInPage(false));
             }}
-            className="block cursor-pointer py-2 pl-3 pr-4 text-gray-700 rounded "
-          >
-            Home
-          </li>
-          <li
-            onClick={handleOpenCreatePost}
-            className="block cursor-pointer py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-300"
-          >
-            Create
-          </li>
+            name="Home"
+            className=""
+            hidden={false}
+          />
+
+          <Li
+            handleEvent={handleOpenCreatePost}
+            hidden={false}
+            className=""
+            name="Post"
+          />
+
           {isAuthenticated && (
-            <li className="block cursor-pointer py-2 pl-3 pr-4 text-gray-400 rounded hover:bg-gray-300">
-              Profile
-            </li>
+            <Li
+              hidden={false}
+              className=""
+              name="Profile"
+              handleEvent={() => console.log("profile")}
+            />
           )}
           {isAuthenticated ? (
-            <li
-              className="block cursor-pointer py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-300 "
-              onClick={handleLogout}
-            >
-              {showLoader ? <Loader /> : "SignOut"}
-            </li>
+            <Li
+              hidden={showLoader}
+              className=""
+              handleEvent={handleLogout}
+              name="SignOut"
+            />
           ) : (
-            <li
-              onClick={() => {
+            <Li
+              handleEvent={() => {
                 if (showCreatePost || showSignUpPage) {
                   dispatch(setShowCreatePost(false));
                   dispatch(setShowSignUpPage(false));
                 }
-                dispatch(setShowSignInPage(!showSignInPage));
+                dispatch(setShowSignInPage(true));
               }}
-              className="block cursor-pointer py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-300 "
-            >
-              SignIn
-            </li>
+              className=""
+              name="SignIn"
+              hidden={false}
+            />
           )}
         </ul>
+        <div className="font-medium w-full p-4 mt-48 border border-gray-100 bg-gray-800 rounded-lg dark:border-gray-300">
+          <Li
+            handleEvent={() => {
+              if (showCreatePost || showSignUpPage) {
+                dispatch(setShowCreatePost(false));
+                dispatch(setShowSignUpPage(false));
+              }
+              dispatch(setShowSignInPage(true));
+            }}
+            className=""
+            name="Settings"
+            hidden={false}
+          />
+        </div>
       </nav>
       <div
         className={`${
           showCreatePost || showSignUpPage || showSignInPage
-            ? "left-[600px]"
+            ? "left-full"
             : "left-0"
-        } absolute duration-300 h-screen flex items-center justify-center`}
+        } absolute duration-300 h-screen -z-10 flex items-center justify-center`}
       >
         {showCreatePost && <CreatePost />}
         {showSignUpPage && <SignUp />}

@@ -6,7 +6,7 @@ const PostListItems = ({ item }: any) => {
   const resImage = cld.image(item.image.public_id);
 
   return (
-    <div className="flex flex-col gap-5 p-5 h-[500px] w-full items-center bg-gray-50 border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-300 dark:bg-gray-100 dark:hover:bg-gray-200">
+    <div className="flex flex-col gap-5 p-5 h-[400px] w-full items-center bg-gray-50 border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-300 dark:bg-gray-100 dark:hover:bg-gray-200">
       <div className="w-full flex justify-between">
         <div className="gap-2 flex justify-between">
           <div>Avatar</div>
@@ -14,9 +14,9 @@ const PostListItems = ({ item }: any) => {
         </div>
         <div>...</div>
       </div>
-      <div className="flex justify-center items-center w-full h-1/2">
+      <div className="flex justify-center items-center bg-white w-full rounded">
         <AdvancedImage
-          className="object-cover w-fit rounded border border-gray-300"
+          className="object-fill w-full h-48 rounded border border-gray-300"
           cldImg={resImage}
           alt="Image"
         />

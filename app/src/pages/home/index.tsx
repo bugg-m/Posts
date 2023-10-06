@@ -24,9 +24,9 @@ const Home = () => {
       dispatch(setShowLoader(false));
       authenticateUser()
         .then((res) => {
-          const { success, message } = res;
+          const { success, user, message } = res;
           if (success) {
-            dispatch(setUser(res.user));
+            dispatch(setUser(user));
             dispatch(setIsAuthenticated(true));
             dispatch(setShowLoader(false));
             toast.success(message);

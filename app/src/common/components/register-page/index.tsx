@@ -1,15 +1,19 @@
 import { useState } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
-import { baseUrl } from "../../../pages/home";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setIsAuthenticated,
+  setShowCreatePost,
   setShowLoader,
+  setShowSignInPage,
   setShowSignUpPage,
+  setUser,
 } from "../../redux-utils/utils-slice/utilsSlice";
-import { CgClose } from "react-icons/cg";
-import Loader from "../loader";
+import { MdDoubleArrow } from "react-icons/md";
+import Label from "../../constants/label";
+import Input from "../../constants/input-bar";
+import { sign_up } from "../../apis/userServices";
+import InputFile from "../../constants/file-input-bar";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -20,29 +24,45 @@ const SignUp = () => {
     flag: false,
   });
   const [password, setPassword] = useState("");
+  const [avatar, setAvatar] = useState("");
   const dispatch = useDispatch();
   const showLoader = useSelector((state: any) => state.showLoader);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     dispatch(setShowLoader(false));
+    const formData = new FormData();
+    formData.append("avatar", "avatar");
+    const payload = { name, email, password, role, avatar };
     try {
-      const { data } = await axios.post(
-        `${baseUrl}/users/sign_up`,
-        { name, email, password, role },
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-      toast.success(data.message);
-      dispatch(setIsAuthenticated(true));
-      dispatch(setShowSignUpPage(false));
-      dispatch(setShowLoader(false));
+      sign_up(payload)
+        .then((res) => {
+          const { success, user, message } = res;
+          if (success) {
+            toast.success(message);
+            dispatch(setUser(user));
+            dispatch(setIsAuthenticated(true));
+            dispatch(setShowSignUpPage(true));
+          } else {
+            toast.error(message);
+            dispatch(setShowSignUpPage(false));
+            dispatch(setUser([]));
+            dispatch(setIsAuthenticated(false));
+          }
+          dispatch(setShowLoader(false));
+        })
+        .catch((err: string) => {
+          toast.success(err);
+          dispatch(setShowLoader(false));
+          dispatch(setShowSignUpPage(false));
+          dispatch(setIsAuthenticated(false));
+          dispatch(setUser([]));
+        });
     } catch (error: any) {
       toast.error(error.response.data.message);
       dispatch(setIsAuthenticated(false));
       dispatch(setShowSignUpPage(true));
+      dispatch(setUser([]));
       dispatch(setShowLoader(false));
     }
   };
@@ -96,77 +116,62 @@ const SignUp = () => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="p-6 h-3/4 mb-20 max-w-xl dark:bg-gray-800 border rounded-md dark:border-gray-700 space-y-4 md:space-y-6 sm:p-8"
+      className="p-10 min-w-[500px] relative pt-36 min-h-screen bg-gray-300 border-r-4 border-gray-400"
     >
-      <div className="flex pt-5 justify-between">
-        <div className="text-lg font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-          Create new Account
-        </div>
-        <div
-          onClick={() => {
-            resetForm();
-            dispatch(setShowSignUpPage(false));
-          }}
-          className="text-xl text-white"
-        >
-          <CgClose />
-        </div>
+      <div
+        onClick={() => {
+          resetForm();
+          dispatch(setShowSignUpPage(false));
+        }}
+        className="text-2xl text-gray-700 cursor-pointer pt-2 absolute top-20 right-2"
+      >
+        <MdDoubleArrow />
+      </div>
+      <div className="text-lg h-16 font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+        Create new Account
       </div>
       <form
+        encType="multipart/form-data"
         className="space-y-4 md:space-y-6"
         method="POST"
         onSubmit={handleSubmit}
       >
         <div className="flex justify-center items-center gap-10">
           <div className="h-20">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Your Name
-            </label>
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            <Label title="Your Name" className="" />
+            <Input
+              className=""
               type="text"
               name="name"
-              minLength={3}
-              maxLength={40}
               placeholder="Enter your name"
               value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
+              handleEvent={(e) => setName(e.target.value)}
               required
             />
           </div>
           <div className="h-20">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Your email
-            </label>
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            <Label className="" title="Your email" />
+            <Input
+              className=""
               type="email"
               name="email"
-              minLength={20}
-              maxLength={60}
               placeholder="Enter your email"
               value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
+              handleEvent={(e) => setEmail(e.target.value)}
               required
             />
           </div>
         </div>
         <div className="flex justify-center items-center gap-10">
           <div className="h-32">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Password
-            </label>
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            <Label className="" title="Password" />
+            <Input
+              className=""
               type="password"
               name="password"
               placeholder="Enter your password"
               value={password}
-              onChange={handlePassword}
+              handleEvent={handlePassword}
               required
             />
             {error.message ? (
@@ -180,18 +185,29 @@ const SignUp = () => {
             ) : null}
           </div>
           <div className="h-32">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Role
-            </label>
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            <Label className="" title="Role" />
+            <Input
+              className=""
               type="text"
               name="role"
               placeholder="Enter your password"
               value={role}
-              onChange={(e) => {
-                setRole(e.target.value);
-              }}
+              handleEvent={(e) => setRole(e.target.value)}
+              required={false}
+            />
+          </div>
+        </div>
+        <div>
+          <div className="h-32">
+            <Label className="" title="Profile" />
+            <InputFile
+              className=""
+              type="file"
+              name="avatar"
+              placeholder="Enter your password"
+              value={avatar}
+              handleEvent={(e: any) => setAvatar(e.target.files[0])}
+              required={false}
             />
           </div>
         </div>
@@ -215,17 +231,25 @@ const SignUp = () => {
 
         <div className="flex justify-center items-center w-full gap-5">
           <button
+            disabled={showLoader}
             type="submit"
             className="h-10 border border-gray-700 text-white bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           >
-            {showLoader ? <Loader /> : "Register"}
+            Register
           </button>
         </div>
         <p className="text-sm font-light text-gray-500 dark:text-gray-400">
           Already have an account?{" "}
-          <li className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+          <button
+            onClick={() => {
+              dispatch(setShowSignInPage(true));
+              dispatch(setShowSignUpPage(false));
+              dispatch(setShowCreatePost(false));
+            }}
+            className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+          >
             Log-In Here
-          </li>
+          </button>
         </p>
       </form>
     </div>

@@ -1,55 +1,59 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { CgClose } from "react-icons/cg";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setIsAuthenticated,
-  setShowCreatePost,
   setShowLoader,
   setShowSignInPage,
+  setShowCreatePost,
   setShowSignUpPage,
+  setUser,
 } from "../../redux-utils/utils-slice/utilsSlice";
-import Loader from "../loader";
 import { sign_in } from "../../apis/userServices";
+import { TiArrowBackOutline } from "react-icons/ti";
+import Input from "../../constants/input-bar";
+import Label from "../../constants/label";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const showLoader = useSelector((state: any) => state.showLoader);
-  const showSignIpPage = useSelector((state: any) => state.showSignIpPage);
-  const showCreatePost = useSelector((state: any) => state.showCreatePost);
   const dispatch = useDispatch();
-  const handleSign_In = async (e: any) => {
+
+  const handleSign_In = (e: any) => {
     const payload = { email, password };
     e.preventDefault();
     dispatch(setShowLoader(true));
     try {
       sign_in(payload)
         .then((res) => {
-          const { success, message } = res;
+          const { success, user, message } = res;
           if (success) {
             toast.success(message);
             dispatch(setIsAuthenticated(true));
             dispatch(setShowSignInPage(false));
-            dispatch(setShowLoader(false));
+            dispatch(setUser(user));
             resetForm();
           } else {
             toast.error(message);
             dispatch(setIsAuthenticated(false));
+            dispatch(setUser([]));
             dispatch(setShowSignInPage(true));
-            dispatch(setShowLoader(true));
           }
+          dispatch(setShowLoader(false));
         })
         .catch((err) => {
           toast.error(err);
           dispatch(setIsAuthenticated(false));
           dispatch(setShowSignInPage(true));
-          dispatch(setShowLoader(true));
+          dispatch(setUser([]));
+          dispatch(setShowLoader(false));
         });
     } catch (err: any) {
       toast.error(err.response.data.message);
       dispatch(setIsAuthenticated(false));
       dispatch(setShowSignInPage(true));
+      dispatch(setUser([]));
       dispatch(setShowLoader(false));
     }
   };
@@ -62,49 +66,46 @@ const SignIn = () => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="p-6 w-96 dark:bg-gray-800 border rounded-md dark:border-gray-700 space-y-4 md:space-y-6 sm:p-8"
+      className="p-10 min-w-[500px] relative pt-36 min-h-screen bg-gray-300 border-r-4 border-gray-400"
     >
-      <div className="flex justify-between">
-        <div className="text-lg font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-          Sign In
-        </div>
-        <div
-          onClick={() => dispatch(setShowSignInPage(false))}
-          className="text-xl text-white"
-        >
-          <CgClose />
-        </div>
+      <div
+        onClick={() => dispatch(setShowSignInPage(false))}
+        className="text-2xl text-gray-700 cursor-pointer pt-2 absolute top-20 right-2"
+      >
+        <TiArrowBackOutline />
       </div>
-      <form className="space-y-4 md:space-y-6" onSubmit={handleSign_In}>
+
+      <div className="text-lg h-20 font-semibold leading-tight tracking-tight text-gray-700">
+        Sign in to your account
+      </div>
+
+      <form
+        encType="multipart/form-data"
+        method="POST"
+        onSubmit={handleSign_In}
+        className="space-y-4 md:space-y-6"
+      >
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Email
-          </label>
-          <input
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          <Label title="Email" className="" />
+          <Input
+            className=""
             type="email"
             name="email"
             placeholder="Enter your email"
             value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
+            handleEvent={(e) => setEmail(e.target.value)}
             required
           />
         </div>
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Password
-          </label>
-          <input
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          <Label title="Password" className="" />
+          <Input
+            className=""
             type="password"
             name="password"
             placeholder="Enter your password"
             value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
+            handleEvent={(e) => setPassword(e.target.value)}
             required
           />
         </div>
@@ -133,26 +134,26 @@ const SignIn = () => {
         </div>
         <div className="flex justify-center items-center w-full gap-5">
           <button
+            disabled={showLoader}
             type="submit"
             className="h-10 border border-gray-700 text-white bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           >
-            {showLoader ? <Loader /> : "Sign In"}
+            Sign In
           </button>
         </div>
         <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-          Don’t have an account yet?{" "}
-          <li
+          Don’t have an account yet?
+          <button
             onClick={() => {
-              if (showCreatePost || showSignIpPage) {
-                dispatch(setShowCreatePost(false));
-                dispatch(setShowSignInPage(false));
-              }
+              dispatch(setShowSignInPage(false));
               dispatch(setShowSignUpPage(true));
+              dispatch(setShowCreatePost(false));
             }}
+            value="signup"
             className="font-medium text-primary-600 hover:underline dark:text-primary-500"
           >
             Sign-Up
-          </li>
+          </button>
         </p>
       </form>
     </div>

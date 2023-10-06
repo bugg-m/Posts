@@ -1,5 +1,6 @@
 import axios from "axios";
 import { baseUrl } from "../../pages/home";
+import { signInProps, signUpProps } from "../types/types";
 
 export const authenticateUser = async () => {
   const url = `${baseUrl}/users/profile`;
@@ -10,6 +11,17 @@ export const authenticateUser = async () => {
 
 export const sign_in = async (payload: signInProps) => {
   const url = `${baseUrl}/users/sign_in`;
+  return await axios
+    .post(url, payload, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
+export const sign_up = async (payload: signUpProps) => {
+  const url = `${baseUrl}/users/sign_up`;
   return await axios
     .post(url, payload, {
       headers: { "Content-Type": "application/json" },

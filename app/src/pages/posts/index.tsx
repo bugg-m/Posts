@@ -1,8 +1,10 @@
+import { CgMenu } from "react-icons/cg";
 import { useEffect, useState } from "react";
-import { getAllPosts } from "../../common/apis/postServices";
+import { getAllPost } from "../../common/apis/postServices";
 import PostListItems from "./post-list-items";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { setShowMenu } from "../../common/redux-utils/utils-slice/utilsSlice";
 
 const PostMain = () => {
   const [postList, setPostList] = useState([]);
@@ -11,14 +13,15 @@ const PostMain = () => {
   const showCreatePost = useSelector((state: any) => state.showCreatePost);
   const refreshPostList = useSelector((state: any) => state.refreshPostList);
   const showMenu = useSelector((state: any) => state.showMenu);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getAllPost();
+    getAllPosts();
   }, [refreshPostList]);
 
-  const getAllPost = () => {
+  const getAllPosts = () => {
     try {
-      getAllPosts()
+      getAllPost()
         .then((res: any) => {
           const { success, postData } = res;
           if (success) {
@@ -39,14 +42,22 @@ const PostMain = () => {
     <div
       className={`w-full ${
         showSignInPage || showCreatePost || showSignUpPage ? "opacity-10" : ""
-      } pt-20 min-h-screen bg-gray-50`}
+      } pt-20 min-h-screen bg-gray-700`}
     >
       <div className="flex p-5 justify-center items-center">
         <div
           className={` ${
-            showMenu ? "pl-[25%]" : ""
-          } grid px-10 grid-cols-3 gap-20 py-5 duration-300`}
+            showMenu ? "pl-[25%] grid-cols-3" : "grid-cols-4"
+          } grid px-16 gap-10 py-5 duration-300`}
         >
+          <CgMenu
+            className={`fixed ${
+              showMenu ? "left-[15%] text-gray-200" : "left-5 text-white"
+            } cursor-pointer text-4xl z-50 top-24 rounded-md duration-300`}
+            onClick={() => {
+              dispatch(setShowMenu(!showMenu));
+            }}
+          />
           {postList?.map((item, index) => {
             return (
               <div key={index}>

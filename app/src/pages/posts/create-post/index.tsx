@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { CgClose } from "react-icons/cg";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setRefreshPostList,
@@ -8,11 +7,15 @@ import {
 } from "../../../common/redux-utils/utils-slice/utilsSlice";
 import toast from "react-hot-toast";
 import { addPost } from "../../../common/apis/postServices";
-import Loader from "../../../common/components/loader";
+import { TiArrowBackOutline } from "react-icons/ti";
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
+  const [error, setError] = useState({
+    message: "",
+    flag: false,
+  });
   const [description, setDescription] = useState("");
   const dispatch = useDispatch();
   const refreshPostList = useSelector((state: any) => state.refreshPostList);
@@ -21,7 +24,7 @@ const CreatePost = () => {
   const handleAddPost = (e: any) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("image", "newImage");
+    formData.append("image", "image");
     const payload = { title, description, image };
     dispatch(setShowLoader(true));
     try {
@@ -56,21 +59,34 @@ const CreatePost = () => {
     setDescription("");
   };
 
+  const handleDescription = (value: string) => {
+    let new_pass = value;
+    setDescription(new_pass);
+    setError({ message: "Password is weak!", flag: true });
+
+    if (new_pass.length < 10) {
+      setError({
+        message: "Please describe your post in about 10 characters!",
+        flag: true,
+      });
+    } else {
+      setError({ message: "", flag: false });
+    }
+  };
+
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="p-10 min-w-[400px] dark:bg-gray-800 border rounded-lg dark:border-gray-700"
+      className="p-10 min-w-[500px] relative pt-36 min-h-screen bg-gray-300 border-r-4 border-gray-400"
     >
-      <div className="flex justify-between">
-        <div className="text-lg font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-          CREATE
-        </div>
-        <div
-          onClick={() => dispatch(setShowCreatePost(false))}
-          className="text-xl text-white"
-        >
-          <CgClose />
-        </div>
+      <div
+        onClick={() => dispatch(setShowCreatePost(false))}
+        className="text-2xl text-gray-700 cursor-pointer pt-2 absolute top-20 right-2"
+      >
+        <TiArrowBackOutline />
+      </div>
+      <div className="text-lg h-20 font-semibold leading-tight tracking-tight text-gray-700">
+        Create your post
       </div>
       <form
         className="space-y-4 md:space-y-6"
@@ -79,13 +95,14 @@ const CreatePost = () => {
         onSubmit={handleAddPost}
       >
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          <label className="block mb-2 text-sm font-mediumtext-gray-700">
             Title
           </label>
           <input
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-100 border border-gray-300 text-gray-700 rounded-lg block w-full p-2.5 placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
             type="text"
             name="title"
+            minLength={4}
             placeholder="Add title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -93,24 +110,34 @@ const CreatePost = () => {
           />
         </div>
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          <label className="block mb-2 text-sm font-medium text-gray-700">
             Description
           </label>
           <textarea
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-100 border border-gray-300 text-gray-700 rounded-lg block w-full p-2.5 placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
             name="description"
             placeholder="Add description"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            minLength={30}
+            onChange={(e) => handleDescription(e.target.value)}
             required
           />
+          {error.message ? (
+            <span
+              className={`${
+                error.flag ? "text-red-600" : "text-green-600"
+              } text-[10px]`}
+            >
+              {error.message}
+            </span>
+          ) : null}
         </div>
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          <label className="block mb-2 text-sm font-medium text-gray-700">
             Add Image
           </label>
           <input
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-100 border text-gray-700 border-gray-300 rounded-lg block w-full p-2.5 placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
             name="image"
             type="file"
             placeholder="Add image"
@@ -125,15 +152,16 @@ const CreatePost = () => {
               dispatch(setShowCreatePost(false));
               resetForm();
             }}
-            className="h-10 border bg-white border-gray-700 text-grey-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+            className="h-10 w-24 border bg-white border-gray-700 text-grey-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           >
             Cancel
           </button>
           <button
+            disabled={showLoader || error.flag}
             type="submit"
-            className="h-10 border border-gray-700 text-white bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+            className="h-10 w-24 border border-gray-700 text-white bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           >
-            {showLoader ? <Loader /> : "Post"}
+            Post
           </button>
         </div>
       </form>
