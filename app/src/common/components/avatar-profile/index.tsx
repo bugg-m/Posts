@@ -3,6 +3,7 @@ import { Cloudinary } from "@cloudinary/url-gen/index";
 import { useSelector } from "react-redux";
 import { FaCircleUser } from "react-icons/fa6";
 import { useState } from "react";
+import { DiveMouseEvent, DivHoverText } from "../../constants/div";
 
 const AvatarProfile = () => {
   const [showName, setShowName] = useState(false);
@@ -13,36 +14,37 @@ const AvatarProfile = () => {
 
   if (!isAuthenticated) {
     return (
-      <div
+      <DiveMouseEvent
         onMouseOver={() => setShowName(true)}
         onMouseOut={() => setShowName(false)}
-        className="w-10 h-10 cursor-pointer relative flex justify-center items-center text-gray-700 rounded-full border border-gray-300 text-5xl"
+        className="text-5xl"
       >
         {showName ? (
-          <div className="absolute -bottom-7 p-1 bg-black/80 text-gray-50 rounded-md  text-xs">
+          <DivHoverText bottom={7} right={0} className="">
             Profile
-          </div>
+          </DivHoverText>
         ) : null}
         <FaCircleUser />
-      </div>
+      </DiveMouseEvent>
     );
   }
   return (
-    <div
+    <DiveMouseEvent
+      className=""
       onMouseOver={() => setShowName(true)}
       onMouseOut={() => setShowName(false)}
     >
       {showName ? (
-        <div className="absolute min-w-[100px] right-3 flex justify-center items-center -bottom-3 p-1 bg-black/80 text-gray-50 rounded-md  text-xs">
+        <DivHoverText right={3} className="" bottom={3}>
           {user.name}
-        </div>
+        </DivHoverText>
       ) : null}
       <AdvancedImage
         className="object-fill w-10 h-10 cursor-pointer rounded-full border border-gray-300"
         cldImg={resImage}
         alt=""
       />
-    </div>
+    </DiveMouseEvent>
   );
 };
 

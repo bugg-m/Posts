@@ -11,7 +11,7 @@ import {
 } from "../../redux-utils/utils-slice/utilsSlice";
 import { sign_in } from "../../apis/userServices";
 import { TiArrowBackOutline } from "react-icons/ti";
-import Input from "../../constants/input-bar";
+import { Input } from "../../constants/input-bar";
 import Label from "../../constants/label";
 
 const SignIn = () => {

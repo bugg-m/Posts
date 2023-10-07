@@ -13,6 +13,7 @@ import {
 import SignIn from "../sign-in";
 import SignUp from "../register-page";
 import Li from "../../constants/menu-li";
+import { Div, DivAbsolute, DivFlex, Ul } from "../../constants/div";
 
 export const Navbar = () => {
   const showSignInPage: boolean = useSelector(
@@ -51,14 +52,14 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav
+      <DivAbsolute
         className={`${showMenu ? "left-0" : "left-[-300px]"}  ${
           showCreatePost || showSignUpPage || showSignInPage
             ? "border-gray-800"
             : "border-gray-800"
-        } absolute min-h-screen w-full border-r-4 dark:bg-gray-900 p-4 duration-300 pt-20`}
+        } absolute duration-300 min-h-screen w-full border-r-4 dark:bg-gray-900 p-4 pt-20`}
       >
-        <ul className="font-medium w-full h-80 gap-10 p-4 mt-20 border border-gray-100 bg-gray-800 rounded-lg">
+        <Ul className="">
           <Li
             handleEvent={() => {
               dispatch(setShowCreatePost(false));
@@ -105,8 +106,8 @@ export const Navbar = () => {
               hidden={false}
             />
           )}
-        </ul>
-        <div className="font-medium w-full p-4 mt-48 border border-gray-100 bg-gray-800 rounded-lg dark:border-gray-300">
+        </Ul>
+        <Div className="font-medium w-full p-4 mt-48 border border-gray-100 bg-gray-800 rounded-lg dark:border-gray-300">
           <Li
             handleEvent={() => {
               if (showCreatePost || showSignUpPage) {
@@ -119,19 +120,20 @@ export const Navbar = () => {
             name="Settings"
             hidden={false}
           />
-        </div>
-      </nav>
-      <div
+        </Div>
+      </DivAbsolute>
+      <DivFlex
+        justify="center"
         className={`${
           showCreatePost || showSignUpPage || showSignInPage
             ? "left-full"
             : "left-0"
-        } absolute duration-300 h-screen -z-10 flex items-center justify-center`}
+        } absolute duration-300 h-screen -z-10`}
       >
         {showCreatePost && <CreatePost />}
         {showSignUpPage && <SignUp />}
         {showSignInPage && <SignIn />}
-      </div>
+      </DivFlex>
     </>
   );
 };

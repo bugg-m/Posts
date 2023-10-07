@@ -11,9 +11,8 @@ import {
 } from "../../redux-utils/utils-slice/utilsSlice";
 import { MdDoubleArrow } from "react-icons/md";
 import Label from "../../constants/label";
-import Input from "../../constants/input-bar";
+import { Input, InputFile } from "../../constants/input-bar";
 import { sign_up } from "../../apis/userServices";
-import InputFile from "../../constants/file-input-bar";
 
 const SignUp = () => {
   const [name, setName] = useState("");

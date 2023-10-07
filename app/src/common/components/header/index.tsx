@@ -3,11 +3,10 @@ import { FaBlog } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import InputBar from "../input-bar";
 import AvatarProfile from "../avatar-profile";
-import DivSpaceBetween from "../../constants/div-justify-between";
-import DivFullStart, { DivCustomStart } from "../../constants/div-full-start";
-import DivFlex from "../../constants/div-flex";
+import { DivFlex, Div } from "../../constants/div";
 import { Logo } from "../../constants/label";
 import { CustomBorder } from "../../constants/custom-border";
+import TextField from "../../constants/text-header";
 
 const Header = () => {
   const showMenu = useSelector((state: any) => state.showMenu);
@@ -16,12 +15,15 @@ const Header = () => {
   const showCreatePost = useSelector((state: any) => state.showCreatePost);
 
   return (
-    <DivFullStart className="h-16 border-b-2 border-gray-800 dark:bg-gray-900">
-      <DivFlex className="bg-gray-900 z-10">
-        <DivCustomStart className="w-[300px] pl-10">
+    <DivFlex
+      justify="start"
+      className="h-16 w-full border-b-2 border-gray-800 dark:bg-gray-900"
+    >
+      <DivFlex justify="center" className="bg-gray-900 z-10">
+        <DivFlex justify="start" className="w-[300px] pl-10">
           <FaBlog className="h-8 mx-3 text-3xl animate-bounce text-gray-300 logo-icon cursor-pointer" />
           <Logo title="Posts" className="" />
-        </DivCustomStart>
+        </DivFlex>
         <CustomBorder
           className="h-16"
           width="4"
@@ -30,41 +32,41 @@ const Header = () => {
           side="r"
         />
       </DivFlex>
-      <DivSpaceBetween className="w-full px-5">
-        <DivFlex className="text-gray-300 text-2xl">
-          <div
-            className={`${
-              showMenu ? "left-[20%]" : "left-0"
-            } absolute duration-300 flex gap-2 justify-center items-center`}
+      <DivFlex justify="between" className="w-full px-5">
+        <DivFlex justify="center" className="text-gray-300 text-2xl justi">
+          <DivFlex
+            justify="center"
+            className={`${showMenu ? "left-[20%]" : "left-0"} duration-300`}
           >
             <BiSolidRightArrow />
-            <span className="text-gray-200">Menu</span>
-          </div>
-          <div
+            <TextField className="">Menu</TextField>
+          </DivFlex>
+          <DivFlex
+            justify="center"
             className={`${
               showSignInPage || showCreatePost || showSignUpPage
                 ? "left-[27%]"
                 : "left-0"
-            } duration-500 absolute text-gray-300 flex gap-2 text-xl justify-center items-center`}
+            } text-gray-300 text-xl duration-500`}
           >
             <BiSolidRightArrow />
-            <span className="text-gray-200">
+            <TextField className="text-gray-200">
               {showCreatePost && "Create Post"}
               {showSignInPage && "Sign In"}
               {showSignUpPage && "Sign Up"}
-            </span>
-          </div>
+            </TextField>
+          </DivFlex>
         </DivFlex>
-        <DivSpaceBetween className="mr-5 gap-5">
-          <div>
+        <DivFlex justify="between" className="mr-5 gap-5">
+          <Div className="">
             <InputBar />
-          </div>
-          <div>
+          </Div>
+          <Div className="">
             <AvatarProfile />
-          </div>
-        </DivSpaceBetween>
-      </DivSpaceBetween>
-    </DivFullStart>
+          </Div>
+        </DivFlex>
+      </DivFlex>
+    </DivFlex>
   );
 };
 

@@ -30,6 +30,7 @@ export type inputProps = {
   value: string;
   required: boolean;
 };
+
 export type inputFileProps = {
   className: string;
   handleEvent: ChangeEventHandler<HTMLInputElement>;
@@ -43,11 +44,45 @@ export type inputFileProps = {
 export type divProps = {
   className: string;
   children: React.ReactNode;
+  justify:
+    | "center"
+    | "end"
+    | "start"
+    | "between"
+    | "around"
+    | "evenly"
+    | "stretch"
+    | "normal";
 };
+
+export type divHoverProps = {
+  className: string;
+  children: React.ReactNode;
+  bottom: number;
+  right: number;
+};
+
+export type divAbsoluteProps = {
+  className: string;
+  children: React.ReactNode;
+};
+
 export type borderProps = {
   className: string;
   width: string;
   side: "r" | "b" | "t" | "l" | "x" | "y";
   color: string;
-  intensity: 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
+  intensity: 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950;
+};
+
+export type divBaseProps = {
+  className: string;
+  children: React.ReactNode;
+};
+
+export type divMOverOutProps = {
+  className: string;
+  children: React.ReactNode;
+  onMouseOver: MouseEventHandler<HTMLDivElement>;
+  onMouseOut: MouseEventHandler<HTMLDivElement>;
 };
