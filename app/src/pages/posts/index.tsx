@@ -5,6 +5,7 @@ import PostListItems from "./post-list-items";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { setShowMenu } from "../../common/redux-utils/utils-slice/utilsSlice";
+import { Div, DivFlex } from "../../common/constants/div";
 
 const PostMain = () => {
   const [postList, setPostList] = useState([]);
@@ -39,13 +40,15 @@ const PostMain = () => {
   };
 
   return (
-    <div
+    <Div
       className={`w-full ${
-        showSignInPage || showCreatePost || showSignUpPage ? "opacity-10" : ""
+        showSignInPage || showCreatePost || showSignUpPage
+          ? "opacity-95 blur-sm"
+          : ""
       } pt-20 min-h-screen bg-gray-700`}
     >
-      <div className="flex p-5 justify-center items-center">
-        <div
+      <DivFlex justify="center" className="p-5">
+        <Div
           className={` ${
             showMenu ? "pl-[25%] grid-cols-3" : "grid-cols-4"
           } grid px-16 gap-10 py-5 duration-300`}
@@ -60,14 +63,14 @@ const PostMain = () => {
           />
           {postList?.map((item, index) => {
             return (
-              <div key={index}>
+              <Div key={index}>
                 <PostListItems item={item} />
-              </div>
+              </Div>
             );
           })}
-        </div>
-      </div>
-    </div>
+        </Div>
+      </DivFlex>
+    </Div>
   );
 };
 

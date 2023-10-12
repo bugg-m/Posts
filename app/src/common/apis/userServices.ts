@@ -31,3 +31,9 @@ export const sign_up = async (payload: signUpProps) => {
       return response.data;
     });
 };
+export const sign_out = async () => {
+  const url = `${baseUrl}/users/sign_out`;
+  return await axios.get(url, { withCredentials: true }).then((response) => {
+    return response.data;
+  });
+};

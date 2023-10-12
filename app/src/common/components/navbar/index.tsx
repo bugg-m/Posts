@@ -1,6 +1,4 @@
-import axios from "axios";
 import { toast } from "react-hot-toast";
-import { baseUrl } from "../../../pages/home";
 import { useDispatch, useSelector } from "react-redux";
 import CreatePost from "../../../pages/posts/create-post";
 import {
@@ -14,6 +12,7 @@ import SignIn from "../sign-in";
 import SignUp from "../register-page";
 import Li from "../../constants/menu-li";
 import { Div, DivAbsolute, DivFlex, Ul } from "../../constants/div";
+import { sign_out } from "../../apis/userServices";
 
 export const Navbar = () => {
   const showSignInPage: boolean = useSelector(
@@ -29,12 +28,28 @@ export const Navbar = () => {
   const handleLogout = async () => {
     dispatch(setShowLoader(true));
     try {
-      await axios.get(`${baseUrl}/users/sign_out`, { withCredentials: true });
-      toast.success("Logged Out Successfully");
-      dispatch(setIsAuthenticated(false));
-      dispatch(setShowLoader(false));
+      sign_out()
+        .then((res) => {
+          const { success, message } = res;
+          if (success) {
+            toast.success(message);
+            dispatch(setIsAuthenticated(false));
+            dispatch(setShowCreatePost(false));
+            dispatch(setShowSignInPage(false));
+            dispatch(setShowSignUpPage(false));
+          } else {
+            toast.success(message);
+            dispatch(setIsAuthenticated(true));
+          }
+          dispatch(setShowLoader(false));
+        })
+        .catch((err) => {
+          toast.error(err?.response?.data?.message);
+          dispatch(setIsAuthenticated(true));
+          dispatch(setShowLoader(false));
+        });
     } catch (err: any) {
-      toast.error(err?.response.data.message);
+      toast.error(err?.response?.data?.message);
       dispatch(setIsAuthenticated(true));
       dispatch(setShowLoader(false));
     }
@@ -53,45 +68,31 @@ export const Navbar = () => {
   return (
     <>
       <DivAbsolute
-        className={`${showMenu ? "left-0" : "left-[-300px]"}  ${
-          showCreatePost || showSignUpPage || showSignInPage
-            ? "border-gray-800"
-            : "border-gray-800"
-        } absolute duration-300 min-h-screen w-full border-r-4 dark:bg-gray-900 p-4 pt-20`}
+        className={`${
+          showMenu ? "left-0" : "left-[-300px]"
+        } absolute duration-300 min-h-screen w-full border-gray-800 border-r-4 dark:bg-gray-900 p-4 pt-20`}
       >
-        <Ul className="">
+        <Ul>
           <Li
             handleEvent={() => {
               dispatch(setShowCreatePost(false));
               dispatch(setShowSignInPage(false));
             }}
             name="Home"
-            className=""
             hidden={false}
           />
 
-          <Li
-            handleEvent={handleOpenCreatePost}
-            hidden={false}
-            className=""
-            name="Post"
-          />
+          <Li handleEvent={handleOpenCreatePost} hidden={false} name="Post" />
 
           {isAuthenticated && (
             <Li
               hidden={false}
-              className=""
               name="Profile"
               handleEvent={() => console.log("profile")}
             />
           )}
           {isAuthenticated ? (
-            <Li
-              hidden={showLoader}
-              className=""
-              handleEvent={handleLogout}
-              name="SignOut"
-            />
+            <Li hidden={showLoader} handleEvent={handleLogout} name="SignOut" />
           ) : (
             <Li
               handleEvent={() => {
@@ -101,7 +102,6 @@ export const Navbar = () => {
                 }
                 dispatch(setShowSignInPage(true));
               }}
-              className=""
               name="SignIn"
               hidden={false}
             />
@@ -116,7 +116,6 @@ export const Navbar = () => {
               }
               dispatch(setShowSignInPage(true));
             }}
-            className=""
             name="Settings"
             hidden={false}
           />

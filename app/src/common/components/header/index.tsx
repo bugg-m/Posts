@@ -1,7 +1,7 @@
 import { BiSolidRightArrow } from "react-icons/bi";
 import { FaBlog } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import InputBar from "../input-bar";
+// import InputBar from "../input-bar";
 import AvatarProfile from "../avatar-profile";
 import { DivFlex, Div } from "../../constants/div";
 import { Logo } from "../../constants/label";
@@ -22,7 +22,7 @@ const Header = () => {
       <DivFlex justify="center" className="bg-gray-900 z-10">
         <DivFlex justify="start" className="w-[300px] pl-10">
           <FaBlog className="h-8 mx-3 text-3xl animate-bounce text-gray-300 logo-icon cursor-pointer" />
-          <Logo title="Posts" className="" />
+          <Logo title="Posts" />
         </DivFlex>
         <CustomBorder
           className="h-16"
@@ -33,13 +33,15 @@ const Header = () => {
         />
       </DivFlex>
       <DivFlex justify="between" className="w-full px-5">
-        <DivFlex justify="center" className="text-gray-300 text-2xl justi">
+        <DivFlex justify="center" className="text-gray-300 gap-1 text-2xl">
           <DivFlex
             justify="center"
-            className={`${showMenu ? "left-[20%]" : "left-0"} duration-300`}
+            className={`${
+              showMenu ? "left-[20%]" : "left-0"
+            } absolute gap-2 duration-300`}
           >
             <BiSolidRightArrow />
-            <TextField className="">Menu</TextField>
+            <TextField>Menu</TextField>
           </DivFlex>
           <DivFlex
             justify="center"
@@ -47,7 +49,7 @@ const Header = () => {
               showSignInPage || showCreatePost || showSignUpPage
                 ? "left-[27%]"
                 : "left-0"
-            } text-gray-300 text-xl duration-500`}
+            } absolute gap-2 text-gray-300 text-xl duration-500`}
           >
             <BiSolidRightArrow />
             <TextField className="text-gray-200">
@@ -58,10 +60,10 @@ const Header = () => {
           </DivFlex>
         </DivFlex>
         <DivFlex justify="between" className="mr-5 gap-5">
-          <Div className="">
+          {/* <Div>
             <InputBar />
-          </Div>
-          <Div className="">
+          </Div> */}
+          <Div>
             <AvatarProfile />
           </Div>
         </DivFlex>

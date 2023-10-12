@@ -1,7 +1,6 @@
 import PostMain from "../posts";
 import toast, { Toaster } from "react-hot-toast";
 import { Suspense, useEffect } from "react";
-import Loader from "../../common/components/loader";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setIsAuthenticated,
@@ -9,6 +8,7 @@ import {
   setUser,
 } from "../../common/redux-utils/utils-slice/utilsSlice";
 import { authenticateUser } from "../../common/apis/userServices";
+import { Div } from "../../common/constants/div";
 export const baseUrl = "http://localhost:4000";
 
 const Home = () => {
@@ -51,17 +51,12 @@ const Home = () => {
   };
 
   return (
-    <div className={`${showLoader ? "opacity-60 bg-gray-600" : ""} relative`}>
-      {showLoader && (
-        <div className="absolute w-full h-screen left-0 top-16 flex items-center justify-center ">
-          <Loader />
-        </div>
-      )}
+    <Div className={`${showLoader ? "opacity-60 bg-gray-800" : ""} relative`}>
       <Suspense fallback="">
         <PostMain />
         <Toaster />
       </Suspense>
-    </div>
+    </Div>
   );
 };
 

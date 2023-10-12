@@ -1,49 +1,32 @@
-import { ChangeEventHandler, MouseEventHandler } from "react";
+import React from "react";
 
 export type signInProps = {
   email: string;
   password: string;
 };
-export type signUpProps = {
-  email: string;
-  password: string;
+export type signUpProps = signInProps & {
   avatar: string;
   role: string;
 };
 export type labelProps = {
-  className: string;
+  className?: string;
   title: string;
 };
 
 export type liProps = {
-  className: string;
-  handleEvent: MouseEventHandler<HTMLLIElement>;
+  className?: string;
+  handleEvent: React.MouseEventHandler<HTMLLIElement>;
   name: string;
   hidden: boolean;
 };
-export type inputProps = {
-  className: string;
-  handleEvent: ChangeEventHandler<HTMLInputElement>;
+export type checkboxProps = {
+  className?: string;
   name: string;
-  placeholder: string;
-  type: string;
-  value: string;
-  required: boolean;
+  type?: string;
+  id?: string;
 };
 
-export type inputFileProps = {
-  className: string;
-  handleEvent: ChangeEventHandler<HTMLInputElement>;
-  name: string;
-  placeholder: string;
-  type: string;
-  value: string;
-  required: boolean;
-};
-
-export type divProps = {
-  className: string;
-  children: React.ReactNode;
+export type divProps = React.ComponentPropsWithoutRef<"div"> & {
   justify:
     | "center"
     | "end"
@@ -55,34 +38,35 @@ export type divProps = {
     | "normal";
 };
 
-export type divHoverProps = {
-  className: string;
-  children: React.ReactNode;
+export type divHoverProps = React.ComponentPropsWithoutRef<"div"> & {
   bottom: number;
   right: number;
 };
 
-export type divAbsoluteProps = {
-  className: string;
-  children: React.ReactNode;
-};
-
 export type borderProps = {
-  className: string;
+  className?: string;
   width: string;
   side: "r" | "b" | "t" | "l" | "x" | "y";
   color: string;
   intensity: 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950;
 };
 
-export type divBaseProps = {
-  className: string;
-  children: React.ReactNode;
+export type divSwipeProps = React.ComponentPropsWithoutRef<"div"> & {
+  handleEvent: React.MouseEventHandler<HTMLDivElement>;
 };
 
-export type divMOverOutProps = {
-  className: string;
+export type divMOverOutProps = React.ComponentPropsWithoutRef<"div"> & {
+  onMouseOver: React.MouseEventHandler<HTMLDivElement>;
+  onMouseOut: React.MouseEventHandler<HTMLDivElement>;
+};
+
+export type formProps = {
+  className?: string;
+  encType:
+    | "application/x-www-form-urlencoded"
+    | "multipart/form-data"
+    | "text/plain	";
+  method: "POST" | "PUT";
+  // handleSubmit: any;
   children: React.ReactNode;
-  onMouseOver: MouseEventHandler<HTMLDivElement>;
-  onMouseOut: MouseEventHandler<HTMLDivElement>;
 };

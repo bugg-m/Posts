@@ -11,12 +11,15 @@ import {
 } from "../../redux-utils/utils-slice/utilsSlice";
 import { MdDoubleArrow } from "react-icons/md";
 import Label from "../../constants/label";
-import { Input, InputFile } from "../../constants/input-bar";
+import { CheckBox, Input, InputFile } from "../../constants/input-bar";
 import { sign_up } from "../../apis/userServices";
+import { Div, DivFlex, DivSwipe } from "../../constants/div";
+import TextField from "../../constants/text-header";
+import Button from "../../constants/button";
 
 const SignUp = () => {
-  const [name, setName] = useState("");
-  const [role, setRole] = useState("user");
+  const [name, setName] = useState<string>("");
+  const [role, setRole] = useState<string>("user");
   const [email, setEmail] = useState("");
   const [error, setError] = useState({
     message: "",
@@ -50,8 +53,8 @@ const SignUp = () => {
           }
           dispatch(setShowLoader(false));
         })
-        .catch((err: string) => {
-          toast.success(err);
+        .catch((err) => {
+          toast.success(err?.response?.data?.message);
           dispatch(setShowLoader(false));
           dispatch(setShowSignUpPage(false));
           dispatch(setIsAuthenticated(false));
@@ -66,7 +69,7 @@ const SignUp = () => {
     }
   };
 
-  const handlePassword = (e: any) => {
+  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     let new_pass = e.target.value;
     setPassword(new_pass);
     setError({ message: "Password is weak!", flag: true });
@@ -113,42 +116,43 @@ const SignUp = () => {
   };
 
   return (
-    <div
-      onClick={(e) => e.stopPropagation()}
+    <DivSwipe
+      handleEvent={(e) => e.stopPropagation()}
       className="p-10 min-w-[500px] relative pt-36 min-h-screen bg-gray-300 border-r-4 border-gray-400"
     >
-      <div
-        onClick={() => {
+      <DivSwipe
+        handleEvent={() => {
           resetForm();
           dispatch(setShowSignUpPage(false));
         }}
         className="text-2xl text-gray-700 cursor-pointer pt-2 absolute top-20 right-2"
       >
         <MdDoubleArrow />
-      </div>
-      <div className="text-lg h-16 font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+      </DivSwipe>
+      <TextField className="text-lg h-16 font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
         Create new Account
-      </div>
+      </TextField>
       <form
         encType="multipart/form-data"
         className="space-y-4 md:space-y-6"
         method="POST"
         onSubmit={handleSubmit}
       >
-        <div className="flex justify-center items-center gap-10">
-          <div className="h-20">
+        <DivFlex justify="center" className="gap-10">
+          <Div className="h-20">
             <Label title="Your Name" className="" />
             <Input
-              className=""
               type="text"
               name="name"
               placeholder="Enter your name"
               value={name}
-              handleEvent={(e) => setName(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setName(e.target.value)
+              }
               required
             />
-          </div>
-          <div className="h-20">
+          </Div>
+          <Div className="h-20">
             <Label className="" title="Your email" />
             <Input
               className=""
@@ -156,48 +160,49 @@ const SignUp = () => {
               name="email"
               placeholder="Enter your email"
               value={email}
-              handleEvent={(e) => setEmail(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setEmail(e.target.value)
+              }
               required
             />
-          </div>
-        </div>
-        <div className="flex justify-center items-center gap-10">
-          <div className="h-32">
+          </Div>
+        </DivFlex>
+        <DivFlex justify="center" className="gap-10">
+          <Div className="h-32">
             <Label className="" title="Password" />
             <Input
-              className=""
               type="password"
               name="password"
               placeholder="Enter your password"
               value={password}
-              handleEvent={handlePassword}
+              onChange={handlePassword}
               required
             />
             {error.message ? (
-              <span
+              <TextField
                 className={`${
                   error.flag ? "text-red-600" : "text-green-600"
                 } text-[10px]`}
               >
                 {error.message}
-              </span>
+              </TextField>
             ) : null}
-          </div>
-          <div className="h-32">
-            <Label className="" title="Role" />
+          </Div>
+          <Div className="h-32">
+            <Label title="Role" />
             <Input
-              className=""
               type="text"
               name="role"
               placeholder="Enter your password"
               value={role}
-              handleEvent={(e) => setRole(e.target.value)}
-              required={false}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setRole(e.target.value)
+              }
             />
-          </div>
-        </div>
-        <div>
-          <div className="h-32">
+          </Div>
+        </DivFlex>
+        <Div>
+          <Div className="h-32">
             <Label className="" title="Profile" />
             <InputFile
               className=""
@@ -205,41 +210,38 @@ const SignUp = () => {
               name="avatar"
               placeholder="Enter your password"
               value={avatar}
-              handleEvent={(e: any) => setAvatar(e.target.files[0])}
-              required={false}
+              onChange={(e: any) => setAvatar(e.target.files[0])}
             />
-          </div>
-        </div>
-        <div className="flex items-center justify-between">
-          <div className="flex items-start">
-            <div className="flex items-center h-5">
-              <input
+          </Div>
+        </Div>
+        <DivFlex justify="center" className="gap-10">
+          <Div className="flex items-start">
+            <Div className="flex items-center h-5">
+              <CheckBox
+                name="rememberMe"
                 id="remember"
                 aria-describedby="remember"
                 type="checkbox"
-                className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
               />
-            </div>
-            <div className="ml-3 text-sm">
-              <label className="text-gray-500 dark:text-gray-300">
-                Remember me
-              </label>
-            </div>
-          </div>
-        </div>
+            </Div>
+            <Div className="ml-3 text-sm">
+              <Label
+                title=" Remember me"
+                className="text-gray-500 dark:text-gray-300"
+              />
+            </Div>
+          </Div>
+        </DivFlex>
 
-        <div className="flex justify-center items-center w-full gap-5">
-          <button
-            disabled={showLoader}
-            type="submit"
-            className="h-10 border border-gray-700 text-white bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-          >
+        <DivFlex justify="center" className=" w-full gap-5">
+          <Button disabled={showLoader} type="submit">
             Register
-          </button>
-        </div>
-        <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+          </Button>
+        </DivFlex>
+        <TextField className="text-sm font-light text-gray-500 dark:text-gray-400">
           Already have an account?{" "}
-          <button
+          <Button
+            type="button"
             onClick={() => {
               dispatch(setShowSignInPage(true));
               dispatch(setShowSignUpPage(false));
@@ -248,10 +250,10 @@ const SignUp = () => {
             className="font-medium text-primary-600 hover:underline dark:text-primary-500"
           >
             Log-In Here
-          </button>
-        </p>
+          </Button>
+        </TextField>
       </form>
-    </div>
+    </DivSwipe>
   );
 };
 

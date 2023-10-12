@@ -6,44 +6,43 @@ import { useState } from "react";
 import { DiveMouseEvent, DivHoverText } from "../../constants/div";
 
 const AvatarProfile = () => {
-  const [showName, setShowName] = useState(false);
+  const [showName, setShowName] = useState<boolean>(false);
   const user = useSelector((state: any) => state.user);
   const isAuthenticated = useSelector((state: any) => state.isAuthenticated);
   const cld = new Cloudinary({ cloud: { cloudName: "dgskifwyj" } });
   const resImage = cld.image(user?.avatar?.public_id);
 
-  if (!isAuthenticated) {
+  if (isAuthenticated && user?.avatar?.public_id) {
     return (
       <DiveMouseEvent
         onMouseOver={() => setShowName(true)}
         onMouseOut={() => setShowName(false)}
-        className="text-5xl"
       >
         {showName ? (
-          <DivHoverText bottom={7} right={0} className="">
-            Profile
+          <DivHoverText right={3} bottom={7}>
+            {user.name}
           </DivHoverText>
         ) : null}
-        <FaCircleUser />
+        <AdvancedImage
+          className="object-fill w-10 h-10 cursor-pointer rounded-full border border-gray-300"
+          cldImg={resImage}
+        />
       </DiveMouseEvent>
     );
   }
+
   return (
     <DiveMouseEvent
-      className=""
       onMouseOver={() => setShowName(true)}
       onMouseOut={() => setShowName(false)}
+      className="text-5xl"
     >
       {showName ? (
-        <DivHoverText right={3} className="" bottom={3}>
-          {user.name}
+        <DivHoverText bottom={7} right={0}>
+          {isAuthenticated ? user.name : "Profile"}
         </DivHoverText>
       ) : null}
-      <AdvancedImage
-        className="object-fill w-10 h-10 cursor-pointer rounded-full border border-gray-300"
-        cldImg={resImage}
-        alt=""
-      />
+      <FaCircleUser />
     </DiveMouseEvent>
   );
 };

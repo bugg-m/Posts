@@ -3,23 +3,24 @@ import { Navbar } from "./common/components/navbar";
 import utilsStore from "./common/redux-utils/utils-store/utilsStore";
 import { Provider } from "react-redux";
 import Header from "./common/components/header";
+import { Div } from "./common/constants/div";
 
 const Layout = () => {
   return (
     <Provider store={utilsStore}>
-      <div className="min-w-full flex relative">
-        <div className="fixed w-1/5 z-50">
+      <Div className="min-w-full flex relative">
+        <Div className="fixed w-1/5 z-50">
           <Navbar />
-        </div>
-        <div className=" w-full">
-          <div className="fixed top-0 z-50 w-full">
+        </Div>
+        <Div className="w-full">
+          <Div className="fixed top-0 z-50 w-full">
             <Header />
-          </div>
-          <div>
+          </Div>
+          <Div>
             <Home />
-          </div>
-        </div>
-      </div>
+          </Div>
+        </Div>
+      </Div>
     </Provider>
   );
 };

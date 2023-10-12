@@ -11,12 +11,15 @@ import {
 } from "../../redux-utils/utils-slice/utilsSlice";
 import { sign_in } from "../../apis/userServices";
 import { TiArrowBackOutline } from "react-icons/ti";
-import { Input } from "../../constants/input-bar";
+import { CheckBox, Input } from "../../constants/input-bar";
 import Label from "../../constants/label";
+import { Div, DivFlex } from "../../constants/div";
+import TextField from "../../constants/text-header";
+import Button, { TextButton } from "../../constants/button";
 
 const SignIn = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const showLoader = useSelector((state: any) => state.showLoader);
   const dispatch = useDispatch();
 
@@ -43,14 +46,14 @@ const SignIn = () => {
           dispatch(setShowLoader(false));
         })
         .catch((err) => {
-          toast.error(err);
+          toast.error(err?.response?.data?.message);
           dispatch(setIsAuthenticated(false));
           dispatch(setShowSignInPage(true));
           dispatch(setUser([]));
           dispatch(setShowLoader(false));
         });
     } catch (err: any) {
-      toast.error(err.response.data.message);
+      toast.error(err?.response?.data?.message);
       dispatch(setIsAuthenticated(false));
       dispatch(setShowSignInPage(true));
       dispatch(setUser([]));
@@ -64,28 +67,28 @@ const SignIn = () => {
   };
 
   return (
-    <div
+    <Div
       onClick={(e) => e.stopPropagation()}
       className="p-10 min-w-[500px] relative pt-36 min-h-screen bg-gray-300 border-r-4 border-gray-400"
     >
-      <div
+      <Div
         onClick={() => dispatch(setShowSignInPage(false))}
         className="text-2xl text-gray-700 cursor-pointer pt-2 absolute top-20 right-2"
       >
         <TiArrowBackOutline />
-      </div>
+      </Div>
 
-      <div className="text-lg h-20 font-semibold leading-tight tracking-tight text-gray-700">
+      <Div className="text-lg h-16 font-semibold leading-tight tracking-tight text-gray-700">
         Sign in to your account
-      </div>
+      </Div>
 
       <form
         encType="multipart/form-data"
         method="POST"
         onSubmit={handleSign_In}
-        className="space-y-4 md:space-y-6"
+        className="space-y-4 md:space-y-6 mb-5"
       >
-        <div>
+        <Div>
           <Label title="Email" className="" />
           <Input
             className=""
@@ -93,11 +96,11 @@ const SignIn = () => {
             name="email"
             placeholder="Enter your email"
             value={email}
-            handleEvent={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
-        </div>
-        <div>
+        </Div>
+        <Div>
           <Label title="Password" className="" />
           <Input
             className=""
@@ -105,58 +108,48 @@ const SignIn = () => {
             name="password"
             placeholder="Enter your password"
             value={password}
-            handleEvent={(e) => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </div>
-        <div className="flex items-center justify-between">
-          <div className="flex items-start">
-            <div className="flex items-center h-5">
-              <input
+        </Div>
+        <DivFlex justify="between">
+          <Div className="flex items-start">
+            <Div className="flex items-center h-5">
+              <CheckBox
                 id="remember"
                 aria-describedby="remember"
                 type="checkbox"
                 className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
               />
-            </div>
-            <div className="ml-3 text-sm">
-              <label className="text-gray-500 dark:text-gray-300">
-                Remember me
-              </label>
-            </div>
-          </div>
-          <a
-            href="#"
-            className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
-          >
+            </Div>
+            <Div className="ml-3 text-sm">
+              <Label title="Remember me" className="text-gray-700" />
+            </Div>
+          </Div>
+          <TextField className="text-sm font-medium text-gray-700 hover:underline dark:text-primary-500">
             Forgot password?
-          </a>
-        </div>
-        <div className="flex justify-center items-center w-full gap-5">
-          <button
-            disabled={showLoader}
-            type="submit"
-            className="h-10 border border-gray-700 text-white bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-          >
+          </TextField>
+        </DivFlex>
+        <DivFlex justify="center" className="w-full">
+          <Button disabled={showLoader} type="submit">
             Sign In
-          </button>
-        </div>
-        <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-          Don’t have an account yet?
-          <button
-            onClick={() => {
-              dispatch(setShowSignInPage(false));
-              dispatch(setShowSignUpPage(true));
-              dispatch(setShowCreatePost(false));
-            }}
-            value="signup"
-            className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-          >
-            Sign-Up
-          </button>
-        </p>
+          </Button>
+        </DivFlex>
       </form>
-    </div>
+      <TextField className="text-sm font-light text-gray-700">
+        Don’t have an account yet?
+        <TextButton
+          onClick={() => {
+            dispatch(setShowSignInPage(false));
+            dispatch(setShowSignUpPage(true));
+            dispatch(setShowCreatePost(false));
+          }}
+          value="signup"
+        >
+          Sign-Up
+        </TextButton>
+      </TextField>
+    </Div>
   );
 };
 
