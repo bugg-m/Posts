@@ -5,6 +5,7 @@ import {
   setIsAuthenticated,
   setShowCreatePost,
   setShowLoader,
+  setShowProfilePage,
   setShowSignInPage,
   setShowSignUpPage,
 } from "../../redux-utils/utils-slice/utilsSlice";
@@ -60,6 +61,7 @@ export const Navbar = () => {
       dispatch(setShowCreatePost(true));
       dispatch(setShowSignInPage(false));
       dispatch(setShowSignUpPage(false));
+      dispatch(setShowProfilePage(false));
     } else {
       toast.error("Sign in first");
     }
@@ -70,30 +72,43 @@ export const Navbar = () => {
       <DivAbsolute
         className={`${
           showMenu ? "left-0" : "left-[-300px]"
-        } absolute duration-300 min-h-screen w-full border-gray-800 border-r-4 dark:bg-gray-900 p-4 pt-20`}
+        } absolute duration-300 w-full border-gray-800 border-r-4 dark:bg-gray-900 p-4 pt-20`}
       >
-        <Ul>
-          <Li
-            handleEvent={() => {
-              dispatch(setShowCreatePost(false));
-              dispatch(setShowSignInPage(false));
-            }}
-            name="Home"
-            hidden={false}
-          />
-
-          <Li handleEvent={handleOpenCreatePost} hidden={false} name="Post" />
-
-          {isAuthenticated && (
+        <DivFlex justify="between" className="flex-col text-xl min-h-[85vh]">
+          <Ul>
             <Li
+              handleEvent={() => {
+                dispatch(setShowCreatePost(false));
+                dispatch(setShowProfilePage(false));
+                dispatch(setShowSignInPage(false));
+              }}
+              name="Home"
               hidden={false}
-              name="Profile"
-              handleEvent={() => console.log("profile")}
             />
-          )}
-          {isAuthenticated ? (
-            <Li hidden={showLoader} handleEvent={handleLogout} name="SignOut" />
-          ) : (
+
+            <Li handleEvent={handleOpenCreatePost} hidden={false} name="Post" />
+
+            {isAuthenticated ? (
+              <Li
+                hidden={showLoader}
+                handleEvent={handleLogout}
+                name="SignOut"
+              />
+            ) : (
+              <Li
+                handleEvent={() => {
+                  if (showCreatePost || showSignUpPage) {
+                    dispatch(setShowCreatePost(false));
+                    dispatch(setShowSignUpPage(false));
+                  }
+                  dispatch(setShowSignInPage(true));
+                }}
+                name="SignIn"
+                hidden={false}
+              />
+            )}
+          </Ul>
+          <Div className="font-medium w-full p-4 border border-gray-100 bg-gray-800 rounded-lg dark:border-gray-300">
             <Li
               handleEvent={() => {
                 if (showCreatePost || showSignUpPage) {
@@ -102,24 +117,11 @@ export const Navbar = () => {
                 }
                 dispatch(setShowSignInPage(true));
               }}
-              name="SignIn"
+              name="Settings"
               hidden={false}
             />
-          )}
-        </Ul>
-        <Div className="font-medium w-full p-4 mt-48 border border-gray-100 bg-gray-800 rounded-lg dark:border-gray-300">
-          <Li
-            handleEvent={() => {
-              if (showCreatePost || showSignUpPage) {
-                dispatch(setShowCreatePost(false));
-                dispatch(setShowSignUpPage(false));
-              }
-              dispatch(setShowSignInPage(true));
-            }}
-            name="Settings"
-            hidden={false}
-          />
-        </Div>
+          </Div>
+        </DivFlex>
       </DivAbsolute>
       <DivFlex
         justify="center"

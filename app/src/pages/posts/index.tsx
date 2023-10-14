@@ -4,7 +4,10 @@ import { getAllPost } from "../../common/apis/postServices";
 import PostListItems from "./post-list-items";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { setShowMenu } from "../../common/redux-utils/utils-slice/utilsSlice";
+import {
+  setShowMenu,
+  setShowOptionBar,
+} from "../../common/redux-utils/utils-slice/utilsSlice";
 import { Div, DivFlex } from "../../common/constants/div";
 
 const PostMain = () => {
@@ -13,6 +16,7 @@ const PostMain = () => {
   const showSignUpPage = useSelector((state: any) => state.showSignUpPage);
   const showCreatePost = useSelector((state: any) => state.showCreatePost);
   const refreshPostList = useSelector((state: any) => state.refreshPostList);
+  const showProfilePage = useSelector((state: any) => state.showProfilePage);
   const showMenu = useSelector((state: any) => state.showMenu);
   const dispatch = useDispatch();
 
@@ -41,9 +45,10 @@ const PostMain = () => {
 
   return (
     <Div
+      onClick={() => dispatch(setShowOptionBar(false))}
       className={`w-full ${
-        showSignInPage || showCreatePost || showSignUpPage
-          ? "opacity-95 blur-sm"
+        showSignInPage || showCreatePost || showSignUpPage || showProfilePage
+          ? "opacity-95 blur-sm disabled"
           : ""
       } pt-20 min-h-screen bg-gray-700`}
     >

@@ -1,7 +1,6 @@
 import { divSwipeProps } from "../../types/types";
 import { divProps } from "../../types/types";
 import { divMOverOutProps } from "../../types/types";
-import { divHoverProps } from "../../types/types";
 
 export const Div = ({
   className,
@@ -19,11 +18,14 @@ export const DivFlex = ({
   className,
   children,
   justify,
+  items,
   ...props
 }: divProps) => {
   return (
     <div
-      className={`flex justify-${justify} items-center  ${className}`}
+      className={`flex justify-${justify} items-${
+        items ? items : "center"
+      }  ${className}`}
       {...props}
     >
       {children}
@@ -47,7 +49,6 @@ export const DivAbsolute = ({
 export const DivSwipe = ({
   className,
   children,
-
   handleEvent,
   ...props
 }: divSwipeProps) => {
@@ -70,7 +71,7 @@ export const Ul = ({
   return (
     <ul
       {...props}
-      className={`${className} font-medium w-full h-80 gap-10 p-4 mt-20 border border-gray-100 bg-gray-800 rounded-lg`}
+      className={`${className} font-medium w-full gap-10 p-4 mt-20 border border-gray-100 bg-gray-800 rounded-lg`}
     >
       {children}
     </ul>
@@ -80,14 +81,12 @@ export const Ul = ({
 export const DivHoverText = ({
   children,
   className,
-  right,
-  bottom,
   ...props
-}: divHoverProps) => {
+}: React.ComponentPropsWithoutRef<"div">) => {
   return (
     <div
       {...props}
-      className={`absolute min-w-[100px] right-${right} flex justify-center items-center -bottom-${bottom} p-1 bg-black/80 text-gray-50 rounded-md  text-xs ${className}`}
+      className={`absolute min-w-[100px] flex justify-center items-center p-1 bg-black/80 text-gray-50 rounded-md  text-xs ${className}`}
     >
       {children}
     </div>
@@ -106,7 +105,7 @@ export const DiveMouseEvent = ({
       {...props}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
-      className={`${className} w-10 h-10 cursor-pointer relative flex justify-center items-center text-gray-700 rounded-full border border-gray-300`}
+      className={`${className} w-10 h-10 bg-white cursor-pointer relative flex justify-center items-center text-gray-700 rounded-full border border-green-700`}
     >
       {children}
     </div>

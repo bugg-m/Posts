@@ -75,6 +75,18 @@ export const myProfile = (req, res, next) => {
     next(err);
   }
 };
+export const userProfile = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const userDetails = await userModel.findById({ _id: id });
+    res.status(200).json({
+      success: true,
+      userDetails,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const getAllUserData = async (req, res, next) => {
   try {

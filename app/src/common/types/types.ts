@@ -17,7 +17,7 @@ export type liProps = {
   className?: string;
   handleEvent: React.MouseEventHandler<HTMLLIElement>;
   name: string;
-  hidden: boolean;
+  hidden?: boolean;
 };
 export type checkboxProps = {
   className?: string;
@@ -36,11 +36,15 @@ export type divProps = React.ComponentPropsWithoutRef<"div"> & {
     | "evenly"
     | "stretch"
     | "normal";
-};
-
-export type divHoverProps = React.ComponentPropsWithoutRef<"div"> & {
-  bottom: number;
-  right: number;
+  items?:
+    | "center"
+    | "end"
+    | "start"
+    | "between"
+    | "around"
+    | "evenly"
+    | "stretch"
+    | "normal";
 };
 
 export type borderProps = {
@@ -52,7 +56,7 @@ export type borderProps = {
 };
 
 export type divSwipeProps = React.ComponentPropsWithoutRef<"div"> & {
-  handleEvent: React.MouseEventHandler<HTMLDivElement>;
+  handleEvent?: React.MouseEventHandler<HTMLDivElement>;
 };
 
 export type divMOverOutProps = React.ComponentPropsWithoutRef<"div"> & {

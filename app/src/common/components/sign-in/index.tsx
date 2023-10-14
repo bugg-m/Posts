@@ -5,12 +5,11 @@ import {
   setIsAuthenticated,
   setShowLoader,
   setShowSignInPage,
-  setShowCreatePost,
   setShowSignUpPage,
   setUser,
 } from "../../redux-utils/utils-slice/utilsSlice";
 import { sign_in } from "../../apis/userServices";
-import { TiArrowBackOutline } from "react-icons/ti";
+import { IoArrowUndo } from "react-icons/io5";
 import { CheckBox, Input } from "../../constants/input-bar";
 import Label from "../../constants/label";
 import { Div, DivFlex } from "../../constants/div";
@@ -75,7 +74,7 @@ const SignIn = () => {
         onClick={() => dispatch(setShowSignInPage(false))}
         className="text-2xl text-gray-700 cursor-pointer pt-2 absolute top-20 right-2"
       >
-        <TiArrowBackOutline />
+        <IoArrowUndo />
       </Div>
 
       <Div className="text-lg h-16 font-semibold leading-tight tracking-tight text-gray-700">
@@ -142,7 +141,6 @@ const SignIn = () => {
           onClick={() => {
             dispatch(setShowSignInPage(false));
             dispatch(setShowSignUpPage(true));
-            dispatch(setShowCreatePost(false));
           }}
           value="signup"
         >

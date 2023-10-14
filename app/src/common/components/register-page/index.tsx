@@ -9,7 +9,7 @@ import {
   setShowSignUpPage,
   setUser,
 } from "../../redux-utils/utils-slice/utilsSlice";
-import { MdDoubleArrow } from "react-icons/md";
+import { IoArrowUndo } from "react-icons/io5";
 import Label from "../../constants/label";
 import { CheckBox, Input, InputFile } from "../../constants/input-bar";
 import { sign_up } from "../../apis/userServices";
@@ -127,7 +127,7 @@ const SignUp = () => {
         }}
         className="text-2xl text-gray-700 cursor-pointer pt-2 absolute top-20 right-2"
       >
-        <MdDoubleArrow />
+        <IoArrowUndo />
       </DivSwipe>
       <TextField className="text-lg h-16 font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
         Create new Account

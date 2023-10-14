@@ -7,7 +7,7 @@ import {
 } from "../../../common/redux-utils/utils-slice/utilsSlice";
 import toast from "react-hot-toast";
 import { addPost } from "../../../common/apis/postServices";
-import { TiArrowBackOutline } from "react-icons/ti";
+import { IoArrowUndo } from "react-icons/io5";
 import { Div, DivFlex } from "../../../common/constants/div";
 import TextField from "../../../common/constants/text-header";
 import Label from "../../../common/constants/label";
@@ -92,10 +92,10 @@ const CreatePost = () => {
         onClick={() => dispatch(setShowCreatePost(false))}
         className="text-2xl text-gray-700 cursor-pointer pt-2 absolute top-20 right-2"
       >
-        <TiArrowBackOutline />
+        <IoArrowUndo />
       </Div>
       <Div className="text-lg h-16 font-semibold leading-tight tracking-tight text-gray-700">
-        Create your post
+        Create post
       </Div>
       <form
         className="space-y-4 md:space-y-6"

@@ -8,6 +8,12 @@ export const authenticateUser = async () => {
     return response.data;
   });
 };
+export const userProfile = async (id: string) => {
+  const url = `${baseUrl}/users/user_details/${id}`;
+  return await axios.get(url, { withCredentials: true }).then((response) => {
+    return response.data;
+  });
+};
 
 export const sign_in = async (payload: signInProps) => {
   const url = `${baseUrl}/users/sign_in`;

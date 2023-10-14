@@ -9,6 +9,8 @@ const initialState = {
   user: {},
   refreshPostList: false,
   showMenu: false,
+  showOptionBar: false,
+  showProfilePage: false,
 };
 
 const utilsSlice = createSlice({
@@ -42,6 +44,12 @@ const utilsSlice = createSlice({
     setShowMenu: (state, action) => {
       state.showMenu = action.payload;
     },
+    setShowOptionBar: (state, action) => {
+      state.showOptionBar = action.payload;
+    },
+    setShowProfilePage: (state, action) => {
+      state.showProfilePage = action.payload;
+    },
   },
 });
 
@@ -55,5 +63,7 @@ export const {
   setShowSignUpPage,
   setRefreshPostList,
   setShowMenu,
+  setShowOptionBar,
+  setShowProfilePage,
 } = utilsSlice.actions;
 export default utilsSlice.reducer;
