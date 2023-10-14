@@ -11,7 +11,7 @@ import {
 } from "../../redux-utils/utils-slice/utilsSlice";
 import { IoArrowUndo } from "react-icons/io5";
 import Label from "../../constants/label";
-import { CheckBox, Input, InputFile } from "../../constants/input-bar";
+import { CheckBox, Input } from "../../constants/input-bar";
 import { sign_up } from "../../apis/userServices";
 import { Div, DivFlex, DivSwipe } from "../../constants/div";
 import TextField from "../../constants/text-header";
@@ -204,7 +204,7 @@ const SignUp = () => {
         <Div>
           <Div className="h-32">
             <Label className="" title="Profile" />
-            <InputFile
+            <Input
               className=""
               type="file"
               name="avatar"

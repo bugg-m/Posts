@@ -11,11 +11,7 @@ import { IoArrowUndo } from "react-icons/io5";
 import { Div, DivFlex } from "../../../common/constants/div";
 import TextField from "../../../common/constants/text-header";
 import Label from "../../../common/constants/label";
-import {
-  Input,
-  InputFile,
-  TextArea,
-} from "../../../common/constants/input-bar";
+import { Input, TextArea } from "../../../common/constants/input-bar";
 import Button from "../../../common/constants/button";
 
 const CreatePost = () => {
@@ -153,7 +149,7 @@ const CreatePost = () => {
             title="Add Image"
           />
 
-          <InputFile
+          <Input
             className="bg-gray-100 border text-gray-700 border-gray-300 rounded-lg block w-full p-2.5 placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
             name="image"
             type="file"
