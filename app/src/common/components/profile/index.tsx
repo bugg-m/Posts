@@ -27,12 +27,12 @@ const Profile = () => {
       <DivFlex justify="normal" className="flex-col gap-5">
         <DivFlex
           justify="center"
-          className="w-40 h-40 rounded-full border-4 border-green-700 font-semibold leading-tight tracking-tight text-gray-700"
+          className=" rounded-full border-2 border-green-700 font-semibold leading-tight tracking-tight text-gray-700"
         >
           <Div>
             {user?.avatar?.public_id ? (
               <AdvancedImage
-                className="object-fill w-40 h-40 cursor-pointer rounded-full"
+                className="w-40 h-40 cursor-pointer rounded-full"
                 cldImg={avatar}
               />
             ) : (
