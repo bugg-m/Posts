@@ -120,15 +120,15 @@ const SignUp = () => {
       handleEvent={(e) => e.stopPropagation()}
       className="p-10 min-w-[500px] relative pt-36 min-h-screen bg-gray-300 border-r-4 border-gray-400"
     >
-      <DivSwipe
-        handleEvent={() => {
+      <Div
+        onClick={() => {
           resetForm();
           dispatch(setShowSignUpPage(false));
         }}
         className="text-2xl text-gray-700 cursor-pointer pt-2 absolute top-20 right-2"
       >
         <IoArrowUndo />
-      </DivSwipe>
+      </Div>
       <TextField className="text-lg h-16 font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
         Create new Account
       </TextField>
@@ -209,7 +209,6 @@ const SignUp = () => {
               type="file"
               name="avatar"
               placeholder="Enter your password"
-              value={avatar}
               onChange={(e: any) => setAvatar(e.target.files[0])}
             />
           </Div>
