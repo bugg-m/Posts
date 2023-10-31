@@ -34,7 +34,7 @@ const SignUp = () => {
     e.preventDefault();
     dispatch(setShowLoader(false));
     const formData = new FormData();
-    formData.append("avatar", "avatar");
+    formData.append("avatar", "file");
     const payload = { name, email, password, role, avatar };
     try {
       sign_up(payload)
@@ -44,10 +44,10 @@ const SignUp = () => {
             toast.success(message);
             dispatch(setUser(user));
             dispatch(setIsAuthenticated(true));
-            dispatch(setShowSignUpPage(true));
+            dispatch(setShowSignUpPage(false));
           } else {
             toast.error(message);
-            dispatch(setShowSignUpPage(false));
+            dispatch(setShowSignUpPage(true));
             dispatch(setUser([]));
             dispatch(setIsAuthenticated(false));
           }
@@ -56,12 +56,14 @@ const SignUp = () => {
         .catch((err) => {
           toast.success(err?.response?.data?.message);
           dispatch(setShowLoader(false));
-          dispatch(setShowSignUpPage(false));
+          dispatch(setShowSignUpPage(true));
           dispatch(setIsAuthenticated(false));
           dispatch(setUser([]));
         });
     } catch (error: any) {
-      toast.error(error.response.data.message);
+      // toast.error(error);
+      console.log("error: " + error);
+
       dispatch(setIsAuthenticated(false));
       dispatch(setShowSignUpPage(true));
       dispatch(setUser([]));
@@ -140,7 +142,7 @@ const SignUp = () => {
       >
         <DivFlex justify="center" className="gap-10">
           <Div className="h-20">
-            <Label title="Your Name" className="" />
+            <Label title="Your Name" />
             <Input
               type="text"
               name="name"
@@ -153,9 +155,8 @@ const SignUp = () => {
             />
           </Div>
           <Div className="h-20">
-            <Label className="" title="Your email" />
+            <Label title="Your email" />
             <Input
-              className=""
               type="email"
               name="email"
               placeholder="Enter your email"
@@ -169,7 +170,7 @@ const SignUp = () => {
         </DivFlex>
         <DivFlex justify="center" className="gap-10">
           <Div className="h-32">
-            <Label className="" title="Password" />
+            <Label title="Password" />
             <Input
               type="password"
               name="password"
@@ -203,9 +204,8 @@ const SignUp = () => {
         </DivFlex>
         <Div>
           <Div className="h-32">
-            <Label className="" title="Profile" />
+            <Label title="Profile" />
             <Input
-              className=""
               type="file"
               name="avatar"
               placeholder="Enter your password"

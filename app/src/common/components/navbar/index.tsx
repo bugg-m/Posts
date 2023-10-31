@@ -19,11 +19,20 @@ export const Navbar = () => {
   const showSignInPage: boolean = useSelector(
     (state: any) => state.showSignInPage
   );
-  const showSignUpPage = useSelector((state: any) => state.showSignUpPage);
-  const showCreatePost = useSelector((state: any) => state.showCreatePost);
-  const showLoader = useSelector((state: any) => state.showLoader);
-  const showMenu = useSelector((state: any) => state.showMenu);
-  const isAuthenticated = useSelector((state: any) => state.isAuthenticated);
+  const showSignUpPage: boolean = useSelector(
+    (state: any) => state.showSignUpPage
+  );
+  const showCreatePost: boolean = useSelector(
+    (state: any) => state.showCreatePost
+  );
+  const showProfilePage: boolean = useSelector(
+    (state: any) => state.showProfilePage
+  );
+  const showLoader: boolean = useSelector((state: any) => state.showLoader);
+  const showMenu: boolean = useSelector((state: any) => state.showMenu);
+  const isAuthenticated: boolean = useSelector(
+    (state: any) => state.isAuthenticated
+  );
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
@@ -108,17 +117,26 @@ export const Navbar = () => {
               />
             )}
           </Ul>
-          <Div className="font-medium w-full p-4 border border-gray-100 bg-gray-800 rounded-lg dark:border-gray-300">
+          <Div
+            aria-disabled
+            className="font-medium w-full p-4 border border-gray-100 bg-gray-800 rounded-lg dark:border-gray-300"
+          >
             <Li
               handleEvent={() => {
-                if (showCreatePost || showSignUpPage) {
+                if (
+                  showCreatePost ||
+                  showSignUpPage ||
+                  showProfilePage ||
+                  showSignInPage
+                ) {
                   dispatch(setShowCreatePost(false));
                   dispatch(setShowSignUpPage(false));
+                  dispatch(setShowSignInPage(false));
+                  dispatch(setShowProfilePage(false));
                 }
-                dispatch(setShowSignInPage(true));
+                window.alert("Settings page is under development");
               }}
               name="Settings"
-              hidden={false}
             />
           </Div>
         </DivFlex>

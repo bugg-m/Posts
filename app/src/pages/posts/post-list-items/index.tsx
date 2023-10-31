@@ -7,9 +7,17 @@ import { userProfile } from "../../../common/apis/userServices";
 import toast from "react-hot-toast";
 import { FaCircleUser } from "react-icons/fa6";
 import { SlOptionsVertical } from "react-icons/sl";
+import { GoHeart } from "react-icons/go";
+import { FcLike } from "react-icons/fc";
+import { FiSend } from "react-icons/fi";
+import { PiChatCircle } from "react-icons/pi";
 import OptionBar from "../option-menu";
 import { useDispatch, useSelector } from "react-redux";
-import { setShowOptionBar } from "../../../common/redux-utils/utils-slice/utilsSlice";
+import {
+  setLikePost,
+  setShowOptionBar,
+  setTotalLikes,
+} from "../../../common/redux-utils/utils-slice/utilsSlice";
 
 const PostListItems = ({ item }: any) => {
   const [userName, setUserName] = useState("");
@@ -17,10 +25,14 @@ const PostListItems = ({ item }: any) => {
   const [avatar, setAvatar] = useState<CloudinaryImage | undefined>();
   const cloudinary = new Cloudinary({ cloud: { cloudName: "dgskifwyj" } });
   const resImage = cloudinary.image(item.image.public_id);
-  const showOptionBar = useSelector((state: any) => state.showOptionBar);
+  const showOptionBar: boolean = useSelector(
+    (state: any) => state.showOptionBar
+  );
+  const likePost: boolean = useSelector((state: any) => state.likePost);
+  const totalLikes: number = useSelector((state: any) => state.totalLikes);
   const dispatch = useDispatch();
   useEffect(() => {
-    getUsersDetails(item.user);
+    getUsersDetails(item.owner);
   }, []);
 
   const getUsersDetails = (id: string) => {
@@ -49,7 +61,7 @@ const PostListItems = ({ item }: any) => {
     <DivFlex
       onClick={(e) => e.stopPropagation()}
       justify="normal"
-      className="flex-col gap-5 p-5 h-[400px] w-full bg-gray-50 border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-300 dark:bg-gray-100 dark:hover:bg-gray-200"
+      className="flex-col gap-5 p-5 min-h-[500px] w-full bg-gray-50 border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-300 dark:bg-gray-100 dark:hover:bg-gray-200"
     >
       <DivFlex justify="between" className="w-full">
         <DivFlex justify="between" className="gap-2">
@@ -87,7 +99,73 @@ const PostListItems = ({ item }: any) => {
           alt="Image"
         />
       </DivFlex>
-      <DivFlex justify="start" className="w-full">
+      <DivFlex justify="between" className="gap-10">
+        <DivFlex
+          justify="center"
+          onClick={() =>
+            likePost && postId === item.id
+              ? dispatch(setLikePost(false))
+              : dispatch(setLikePost(true))
+          }
+          className="text-2xl flex-col"
+        >
+          {likePost ? (
+            <Div onClick={() => dispatch(setTotalLikes(totalLikes + 1))}>
+              <FcLike />
+            </Div>
+          ) : (
+            <Div
+              className="hover:text-red-500 text-gray-700 font-normal"
+              onClick={() =>
+                totalLikes > 0 && dispatch(setTotalLikes(totalLikes - 1))
+              }
+            >
+              <GoHeart />
+            </Div>
+          )}
+          <Div className="text-xs">{item.likes}</Div>
+        </DivFlex>
+
+        <DivFlex
+          justify="center"
+          onClick={() =>
+            likePost && postId === item.id
+              ? dispatch(setLikePost(false))
+              : dispatch(setLikePost(true))
+          }
+          className="text-2xl flex-col"
+        >
+          <Div
+            className="hover:text-red-500 text-gray-700 -rotate-90"
+            onClick={() =>
+              totalLikes > 0 && dispatch(setTotalLikes(totalLikes - 1))
+            }
+          >
+            <PiChatCircle />
+          </Div>
+          <Div className="text-xs">{item.likes}</Div>
+        </DivFlex>
+        <DivFlex
+          justify="center"
+          onClick={() =>
+            likePost && postId === item.id
+              ? dispatch(setLikePost(false))
+              : dispatch(setLikePost(true))
+          }
+          className="text-xl flex-col"
+        >
+          <Div
+            className="hover:text-red-500 text-gray-700"
+            onClick={() =>
+              totalLikes > 0 && dispatch(setTotalLikes(totalLikes - 1))
+            }
+          >
+            <FiSend />
+          </Div>
+          <Div className="text-xs">{item.likes}</Div>
+        </DivFlex>
+      </DivFlex>
+      <DivFlex justify="center" className="w-full">
         <DivFlex justify="between" className="flex-col leading-normal">
           <TextField className="mb-2 text-2xl font-bold tracking-tight text-gray-700">
             {CapitalizeFirstLetter(item.title)}

@@ -26,19 +26,34 @@ const postSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  likes: {
-    type: Number,
-    default: 0,
-  },
-  comments: {
-    type: Number,
-    default: 0,
-  },
-  shared: {
-    type: Number,
-    default: 0,
-  },
-  user: {
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "UserData",
+    },
+  ],
+  comments: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "UserData",
+      },
+      comment: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
+
+  shared: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "UserData",
+      },
+    },
+  ],
+  owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserData",
     required: true,

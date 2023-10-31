@@ -12,7 +12,11 @@ cloudinary.v2.config({
 });
 
 server.listen(4000, () => {
-  console.log(
-    `Server listening on port http://localhost:${PORT} in ${process.env.NODE_ENV} mode`
-  );
+  try {
+    console.log(
+      `Server listening on port http://localhost:${PORT} in ${process.env.NODE_ENV} mode`
+    );
+  } catch (error) {
+    console.log(error);
+  }
 });

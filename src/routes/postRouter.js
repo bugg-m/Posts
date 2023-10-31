@@ -4,6 +4,8 @@ import {
   deletePost,
   getAllPost,
   getUserPosts,
+  likePost,
+  commentPost,
   updatePost,
 } from "../controllers/postController.js";
 import { imageUpload } from "../middlewares/image-upload.middleware.js";
@@ -21,5 +23,7 @@ postRouter.post(
   createPost
 );
 postRouter.route("/:id").put(updatePost).delete(deletePost);
+postRouter.put("/like/:id", likePost);
+postRouter.put("/comment/:id", commentPost);
 
 export default postRouter;

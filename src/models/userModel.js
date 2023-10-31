@@ -37,6 +37,12 @@ const userSchema = new mongoose.Schema({
       required: true,
     },
   },
+  posts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "PostData",
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,
