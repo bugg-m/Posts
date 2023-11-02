@@ -72,7 +72,7 @@ const Header = () => {
       <DivFlex
         justify="center"
         className={`${
-          showProfilePage ? "right-16" : "right-0"
+          showProfilePage ? "right-16" : "-right-20 hidden"
         } absolute w-1/4 h-screen duration-500 -z-10`}
       >
         {showProfilePage && <Profile />}

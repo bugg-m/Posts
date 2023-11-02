@@ -13,26 +13,24 @@ import { FiSend } from "react-icons/fi";
 import { PiChatCircle } from "react-icons/pi";
 import OptionBar from "../option-menu";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setLikePost,
-  setShowOptionBar,
-  setTotalLikes,
-} from "../../../common/redux-utils/utils-slice/utilsSlice";
+import { setShowOptionBar } from "../../../common/redux-utils/utils-slice/utilsSlice";
+import { likePost } from "../../../common/apis/postServices";
 
 const PostListItems = ({ item }: any) => {
   const [userName, setUserName] = useState("");
-  const [postId, setPostId] = useState(null);
+  const [postId, setPostId] = useState("");
+  const [postLikes, setPostLikes] = useState<string[]>([]);
   const [avatar, setAvatar] = useState<CloudinaryImage | undefined>();
   const cloudinary = new Cloudinary({ cloud: { cloudName: "dgskifwyj" } });
   const resImage = cloudinary.image(item.image.public_id);
   const showOptionBar: boolean = useSelector(
     (state: any) => state.showOptionBar
   );
-  const likePost: boolean = useSelector((state: any) => state.likePost);
-  const totalLikes: number = useSelector((state: any) => state.totalLikes);
+
   const dispatch = useDispatch();
   useEffect(() => {
     getUsersDetails(item.owner);
+    setLikes(item._id);
   }, []);
 
   const getUsersDetails = (id: string) => {
@@ -54,6 +52,45 @@ const PostListItems = ({ item }: any) => {
         });
     } catch (error: any) {
       toast.error(error.message);
+    }
+  };
+
+  const likeThisPost = (id: string) => {
+    try {
+      likePost(id)
+        .then((res: any) => {
+          const { success, message, likes } = res;
+          if (success) {
+            toast.success(message);
+            setPostLikes(likes);
+          } else {
+            toast.error(message);
+          }
+        })
+        .catch((err: any) => {
+          toast.error(err?.response?.data?.message);
+        });
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
+  const setLikes = (id: string) => {
+    try {
+      likePost(id)
+        .then((res: any) => {
+          const { success, likes } = res;
+          if (success) {
+            setPostLikes(likes);
+          } else {
+            console.log(res.message);
+          }
+        })
+        .catch((err: any) => {
+          console.log(err?.response?.data?.message);
+        });
+    } catch (error: any) {
+      console.log(error?.response?.data?.message);
     }
   };
 
@@ -79,13 +116,13 @@ const PostListItems = ({ item }: any) => {
         </DivFlex>
         <Div
           onClick={() => {
-            setPostId(item.id);
+            setPostId(item._id);
             dispatch(setShowOptionBar(true));
           }}
           className="cursor-pointer relative"
         >
           <SlOptionsVertical />
-          {showOptionBar && postId === item.id && (
+          {showOptionBar && postId === item._id && (
             <Div className="absolute -top-14 right-5">
               <OptionBar setPostId={setPostId} />
             </Div>
@@ -102,67 +139,35 @@ const PostListItems = ({ item }: any) => {
       <DivFlex justify="between" className="gap-10">
         <DivFlex
           justify="center"
-          onClick={() =>
-            likePost && postId === item.id
-              ? dispatch(setLikePost(false))
-              : dispatch(setLikePost(true))
-          }
+          onClick={() => {
+            setPostId(item._id);
+            likeThisPost(item._id);
+          }}
           className="text-2xl flex-col"
         >
-          {likePost ? (
-            <Div onClick={() => dispatch(setTotalLikes(totalLikes + 1))}>
+          {postLikes.includes(item.owner) ? (
+            <Div>
               <FcLike />
             </Div>
           ) : (
-            <Div
-              className="hover:text-red-500 text-gray-700 font-normal"
-              onClick={() =>
-                totalLikes > 0 && dispatch(setTotalLikes(totalLikes - 1))
-              }
-            >
+            <Div className="hover:text-red-500 text-gray-700  font-normal">
               <GoHeart />
             </Div>
           )}
-          <Div className="text-xs">{item.likes}</Div>
+          <Div className="text-xs">{postLikes.length}</Div>
         </DivFlex>
 
-        <DivFlex
-          justify="center"
-          onClick={() =>
-            likePost && postId === item.id
-              ? dispatch(setLikePost(false))
-              : dispatch(setLikePost(true))
-          }
-          className="text-2xl flex-col"
-        >
-          <Div
-            className="hover:text-red-500 text-gray-700 -rotate-90"
-            onClick={() =>
-              totalLikes > 0 && dispatch(setTotalLikes(totalLikes - 1))
-            }
-          >
+        <DivFlex justify="center" className="text-2xl flex-col">
+          <Div className="hover:text-red-500 text-gray-700 -rotate-90">
             <PiChatCircle />
           </Div>
-          <Div className="text-xs">{item.likes}</Div>
+          <Div className="text-xs">23</Div>
         </DivFlex>
-        <DivFlex
-          justify="center"
-          onClick={() =>
-            likePost && postId === item.id
-              ? dispatch(setLikePost(false))
-              : dispatch(setLikePost(true))
-          }
-          className="text-xl flex-col"
-        >
-          <Div
-            className="hover:text-red-500 text-gray-700"
-            onClick={() =>
-              totalLikes > 0 && dispatch(setTotalLikes(totalLikes - 1))
-            }
-          >
+        <DivFlex justify="center" className="text-xl flex-col">
+          <Div className="hover:text-red-500 text-gray-700">
             <FiSend />
           </Div>
-          <Div className="text-xs">{item.likes}</Div>
+          <Div className="text-xs">12</Div>
         </DivFlex>
       </DivFlex>
       <DivFlex justify="center" className="w-full">

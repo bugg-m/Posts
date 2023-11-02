@@ -51,7 +51,9 @@ const Home = () => {
   };
 
   return (
-    <Div className={`${showLoader ? "opacity-60 bg-gray-800" : ""} relative`}>
+    <Div
+      className={`${showLoader ? "opacity-95 blur-sm disabled " : ""} relative`}
+    >
       <Suspense fallback="">
         <PostMain />
         <Toaster />

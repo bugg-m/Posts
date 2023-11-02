@@ -119,21 +119,30 @@ export const deletePost = async (req, res, next) => {
 };
 export const likePost = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const postData = await postModel.findById({ id });
-    if (!postData)
+    const post = await postModel.findById(req.params.id);
+    if (!post)
       return res
         .status(404)
         .json({ success: false, message: "Something went wrong" });
-    const { likes } = req.body;
-    const postLikes = {};
-    await postModel.findByIdAndUpdate(id, {
-      $set: { likes },
-    });
-    res.status(200).json({
-      success: true,
-      likes,
-    });
+
+    if (post.likes.includes(req.user._id)) {
+      const userId = post.likes.indexOf(req.user._id);
+      post.likes.splice(userId, 1);
+      await post.save();
+      return res.status(200).json({
+        success: true,
+        message: "Post Unliked",
+        likes: post.likes,
+      });
+    } else {
+      post.likes.push(req.user._id);
+      await post.save();
+      return res.status(200).json({
+        success: true,
+        message: "Post Liked",
+        likes: post.likes,
+      });
+    }
   } catch (error) {
     next(error);
   }

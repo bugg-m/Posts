@@ -18,6 +18,12 @@ export const addPost = async (payload: any) => {
       return response.data;
     });
 };
+export const likePost = async (id: string) => {
+  const url = `${baseUrl}/posts/like/${id}`;
+  return await axios.get(url, { withCredentials: true }).then((response) => {
+    return response.data;
+  });
+};
 
 // useEffect(() => {
 //   axios

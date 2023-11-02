@@ -11,8 +11,6 @@ const initialState = {
   showMenu: false,
   showOptionBar: false,
   showProfilePage: false,
-  likePost: false,
-  totalLikes: 0,
 };
 
 const utilsSlice = createSlice({
@@ -52,12 +50,6 @@ const utilsSlice = createSlice({
     setShowProfilePage: (state, action) => {
       state.showProfilePage = action.payload;
     },
-    setLikePost: (state, action) => {
-      state.likePost = action.payload;
-    },
-    setTotalLikes: (state, action) => {
-      state.totalLikes = action.payload;
-    },
   },
 });
 
@@ -73,7 +65,5 @@ export const {
   setShowMenu,
   setShowOptionBar,
   setShowProfilePage,
-  setTotalLikes,
-  setLikePost,
 } = utilsSlice.actions;
 export default utilsSlice.reducer;

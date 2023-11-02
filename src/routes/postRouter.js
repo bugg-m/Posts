@@ -23,7 +23,7 @@ postRouter.post(
   createPost
 );
 postRouter.route("/:id").put(updatePost).delete(deletePost);
-postRouter.put("/like/:id", likePost);
+postRouter.get("/like/:id", isAuthenticated, likePost);
 postRouter.put("/comment/:id", commentPost);
 
 export default postRouter;

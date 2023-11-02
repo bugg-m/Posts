@@ -61,9 +61,7 @@ const SignUp = () => {
           dispatch(setUser([]));
         });
     } catch (error: any) {
-      // toast.error(error);
-      console.log("error: " + error);
-
+      toast.error(error?.response?.data?.message);
       dispatch(setIsAuthenticated(false));
       dispatch(setShowSignUpPage(true));
       dispatch(setUser([]));
