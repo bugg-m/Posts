@@ -9,7 +9,9 @@ export const CustomBorder = ({
 }: borderProps) => {
   return (
     <div
-      className={`border-${side}-${width} border-${color}-${intensity}  ${className}`}
+      className={`border-${side}-${width} border-${color}-${intensity}  ${
+        className ? className : ""
+      }`}
     ></div>
   );
 };

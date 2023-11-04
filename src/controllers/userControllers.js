@@ -105,3 +105,53 @@ export const getAllUserData = async (req, res, next) => {
     next(err);
   }
 };
+
+export const followUser = async (req, res, next) => {
+  try {
+    const userToFollow = await userModel.findById(req.params.id);
+    const userThatFollows = await userModel.findById(req.user._id);
+    console.log(
+      "userToFollow: " + userToFollow,
+      "userThatFollows: " + userThatFollows
+    );
+    if (!userToFollow)
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+
+    if (userThatFollows?.followings?.includes(userToFollow._id)) {
+      const indexOfFollowing = userThatFollows?.followings?.indexOf(
+        userToFollow._id
+      );
+      const indexOfFollower = userToFollow?.followers?.indexOf(
+        userThatFollows._id
+      );
+
+      userThatFollows?.followings?.splice(indexOfFollowing, 1);
+      userToFollow?.followers?.splice(indexOfFollower, 1);
+
+      await userToFollow?.save();
+      await userThatFollows?.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "User Unfollowed",
+        likes: userThatFollows?.followings,
+      });
+    } else {
+      userThatFollows?.followings?.push(userToFollow._id);
+      userToFollow?.followers?.push(userThatFollows._id);
+
+      await userToFollow?.save();
+      await userThatFollows?.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "User followed",
+        likes: userThatFollows?.followings,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};

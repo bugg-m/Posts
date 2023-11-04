@@ -49,7 +49,7 @@ export type divProps = React.ComponentPropsWithoutRef<"div"> & {
 
 export type borderProps = {
   className?: string;
-  width: string;
+  width: 0 | 2 | 4 | 8;
   side: "r" | "b" | "t" | "l" | "x" | "y";
   color: string;
   intensity: 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950;
@@ -73,4 +73,18 @@ export type formProps = {
   method: "POST" | "PUT";
   // handleSubmit: any;
   children: React.ReactNode;
+};
+
+export type PostItems = {
+  title: string;
+  description: string;
+  comments: string[];
+  likes: string[];
+  owner: string;
+  shared: string[];
+  _id: string;
+  image: {
+    public_id: string;
+    url: string;
+  };
 };

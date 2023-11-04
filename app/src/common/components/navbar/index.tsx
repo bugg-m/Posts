@@ -80,7 +80,7 @@ export const Navbar = () => {
     <>
       <DivAbsolute
         className={`${
-          showMenu ? "left-0" : "left-[-300px]"
+          showMenu ? "left-0 " : "left-[-300px]"
         } absolute duration-300 w-full border-gray-800 border-r-4 dark:bg-gray-900 p-4 pt-20`}
       >
         <DivFlex justify="between" className="flex-col text-xl min-h-[85vh]">
@@ -117,10 +117,7 @@ export const Navbar = () => {
               />
             )}
           </Ul>
-          <Div
-            aria-disabled
-            className="font-medium w-full p-4 border border-gray-100 bg-gray-800 rounded-lg dark:border-gray-300"
-          >
+          <Div className="font-medium w-full p-4 border border-gray-100 bg-gray-800 rounded-lg dark:border-gray-300">
             <Li
               handleEvent={() => {
                 if (

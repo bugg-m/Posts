@@ -8,7 +8,7 @@ export const Div = ({
   ...props
 }: React.ComponentPropsWithoutRef<"div">) => {
   return (
-    <div {...props} className={`${className} `}>
+    <div {...props} className={`${className ? className : ""} `}>
       {children}
     </div>
   );
@@ -23,9 +23,9 @@ export const DivFlex = ({
 }: divProps) => {
   return (
     <div
-      className={`flex justify-${justify} items-${
-        items ? items : "center"
-      }  ${className}`}
+      className={`flex justify-${justify} items-${items ? items : "center"}  ${
+        className ? className : ""
+      }`}
       {...props}
     >
       {children}
@@ -40,7 +40,9 @@ export const DivAbsolute = ({
   return (
     <div
       {...props}
-      className={`${className}  absolute duration-300 min-h-screen w-full border-r-4 dark:bg-gray-900 p-4 pt-20`}
+      className={`${
+        className ? className : ""
+      }  absolute duration-300 min-h-screen w-full border-r-4 dark:bg-gray-900 p-4 pt-20`}
     >
       {children}
     </div>
@@ -56,7 +58,9 @@ export const DivSwipe = ({
     <div
       {...props}
       onClick={handleEvent}
-      className={`${className}  p-10 min-w-[500px] relative pt-36 min-h-screen bg-gray-300 border-r-4 border-gray-400`}
+      className={`${
+        className ? className : ""
+      }  p-10 min-w-[500px] relative pt-36 min-h-screen bg-gray-300 border-r-4 border-gray-400`}
     >
       {children}
     </div>
@@ -71,7 +75,9 @@ export const Ul = ({
   return (
     <ul
       {...props}
-      className={`${className} font-medium w-full gap-10 p-4 mt-20 border border-gray-100 bg-gray-800 rounded-lg`}
+      className={`${
+        className ? className : ""
+      } font-medium w-full gap-10 p-4 mt-20 border border-gray-100 bg-gray-800 rounded-lg`}
     >
       {children}
     </ul>
@@ -86,7 +92,9 @@ export const DivHoverText = ({
   return (
     <div
       {...props}
-      className={`absolute min-w-[100px] flex justify-center items-center p-1 bg-black/80 text-gray-50 rounded-md  text-xs ${className}`}
+      className={`absolute min-w-[100px] flex justify-center items-center p-1 bg-black/80 text-gray-50 rounded-md  text-xs ${
+        className ? className : ""
+      }`}
     >
       {children}
     </div>
@@ -105,7 +113,9 @@ export const DiveMouseEvent = ({
       {...props}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
-      className={`${className} w-10 h-10 bg-white cursor-pointer relative flex justify-center items-center text-gray-700 rounded-full border border-green-700`}
+      className={`${
+        className ? className : ""
+      } w-10 h-10 bg-white cursor-pointer relative flex justify-center items-center text-gray-700 rounded-full border border-green-700`}
     >
       {children}
     </div>

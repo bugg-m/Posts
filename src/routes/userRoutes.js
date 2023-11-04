@@ -6,6 +6,7 @@ import {
   myProfile,
   signUp,
   userProfile,
+  followUser,
 } from "../controllers/userControllers.js";
 import { isAuthenticated } from "../middlewares/auth.js";
 import { imageUpload } from "../middlewares/image-upload.middleware.js";
@@ -18,4 +19,5 @@ userRouter.get("/user_details/:id", userProfile);
 userRouter.post("/sign_up", imageUpload.single("avatar"), signUp);
 userRouter.get("/profile", isAuthenticated, myProfile);
 userRouter.get("/get_all_users", isAuthenticated, getAllUserData);
+userRouter.get("/follow_user/:id", isAuthenticated, followUser);
 export default userRouter;

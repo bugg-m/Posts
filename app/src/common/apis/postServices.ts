@@ -24,6 +24,18 @@ export const likePost = async (id: string) => {
     return response.data;
   });
 };
+export const getLikes = async (id: string) => {
+  const url = `${baseUrl}/posts/get_all_likes/${id}`;
+  return await axios.get(url, { withCredentials: true }).then((response) => {
+    return response.data;
+  });
+};
+export const getComments = async (id: string) => {
+  const url = `${baseUrl}/posts/get_all_comments/${id}`;
+  return await axios.get(url, { withCredentials: true }).then((response) => {
+    return response.data;
+  });
+};
 
 // useEffect(() => {
 //   axios

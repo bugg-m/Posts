@@ -12,22 +12,22 @@ import { FcLike } from "react-icons/fc";
 import { FiSend } from "react-icons/fi";
 import { PiChatCircle } from "react-icons/pi";
 import OptionBar from "../option-menu";
-import { useDispatch, useSelector } from "react-redux";
-import { setShowOptionBar } from "../../../common/redux-utils/utils-slice/utilsSlice";
-import { likePost } from "../../../common/apis/postServices";
+import { useSelector } from "react-redux";
+import { getLikes, likePost } from "../../../common/apis/postServices";
+import CommentsList from "../comment-lists";
 
 const PostListItems = ({ item }: any) => {
   const [userName, setUserName] = useState("");
-  const [postId, setPostId] = useState("");
+  const [showCommentBox, setShowCommentBox] = useState(false);
+  const [showOptionBar, setShowOptionBar] = useState(false);
   const [postLikes, setPostLikes] = useState<string[]>([]);
+  const [postComments, setPostComments] = useState<string[]>([]);
   const [avatar, setAvatar] = useState<CloudinaryImage | undefined>();
   const cloudinary = new Cloudinary({ cloud: { cloudName: "dgskifwyj" } });
   const resImage = cloudinary.image(item.image.public_id);
-  const showOptionBar: boolean = useSelector(
-    (state: any) => state.showOptionBar
-  );
 
-  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state: any) => state.isAuthenticated);
+
   useEffect(() => {
     getUsersDetails(item.owner);
     setLikes(item._id);
@@ -77,7 +77,7 @@ const PostListItems = ({ item }: any) => {
 
   const setLikes = (id: string) => {
     try {
-      likePost(id)
+      getLikes(id)
         .then((res: any) => {
           const { success, likes } = res;
           if (success) {
@@ -94,11 +94,19 @@ const PostListItems = ({ item }: any) => {
     }
   };
 
+  const openCommentBox = () => {
+    if (isAuthenticated) {
+      setShowCommentBox(true);
+    } else {
+      toast.error("Sign in First");
+    }
+  };
+
   return (
     <DivFlex
       onClick={(e) => e.stopPropagation()}
       justify="normal"
-      className="flex-col gap-5 p-5 min-h-[500px] w-full bg-gray-50 border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-300 dark:bg-gray-100 dark:hover:bg-gray-200"
+      className="flex-col relative gap-5 p-5 min-h-[500px] w-full bg-gray-50 border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-300 dark:bg-gray-100 dark:hover:bg-gray-200"
     >
       <DivFlex justify="between" className="w-full">
         <DivFlex justify="between" className="gap-2">
@@ -115,16 +123,13 @@ const PostListItems = ({ item }: any) => {
           <Div>{CapitalizeFirstLetter(userName)}</Div>
         </DivFlex>
         <Div
-          onClick={() => {
-            setPostId(item._id);
-            dispatch(setShowOptionBar(true));
-          }}
+          onClick={() => setShowOptionBar(!showOptionBar)}
           className="cursor-pointer relative"
         >
           <SlOptionsVertical />
-          {showOptionBar && postId === item._id && (
+          {showOptionBar && (
             <Div className="absolute -top-14 right-5">
-              <OptionBar setPostId={setPostId} />
+              <OptionBar setShowOptionBar={setShowOptionBar} />
             </Div>
           )}
         </Div>
@@ -139,13 +144,10 @@ const PostListItems = ({ item }: any) => {
       <DivFlex justify="between" className="gap-10">
         <DivFlex
           justify="center"
-          onClick={() => {
-            setPostId(item._id);
-            likeThisPost(item._id);
-          }}
+          onClick={() => likeThisPost(item._id)}
           className="text-2xl flex-col"
         >
-          {postLikes.includes(item.owner) ? (
+          {isAuthenticated && postLikes.includes(item.owner) ? (
             <Div>
               <FcLike />
             </Div>
@@ -154,14 +156,17 @@ const PostListItems = ({ item }: any) => {
               <GoHeart />
             </Div>
           )}
-          <Div className="text-xs">{postLikes.length}</Div>
+          <Div className="text-xs">{formatLength(postLikes?.length)}</Div>
         </DivFlex>
 
         <DivFlex justify="center" className="text-2xl flex-col">
-          <Div className="hover:text-red-500 text-gray-700 -rotate-90">
+          <Div
+            onClick={openCommentBox}
+            className="hover:text-red-500 text-gray-700 -rotate-90"
+          >
             <PiChatCircle />
           </Div>
-          <Div className="text-xs">23</Div>
+          <Div className="text-xs">{formatLength(postComments?.length)}</Div>
         </DivFlex>
         <DivFlex justify="center" className="text-xl flex-col">
           <Div className="hover:text-red-500 text-gray-700">
@@ -180,12 +185,43 @@ const PostListItems = ({ item }: any) => {
           </TextField>
         </DivFlex>
       </DivFlex>
+      <DivFlex
+        justify="normal"
+        className={`w-full py-4 z-40 absolute duration-500 text-gray-50 rounded-lg flex-col ${
+          showCommentBox ? "bottom-0 bg-slate-600 h-2/3" : "-bottom-0 h-0"
+        }`}
+      >
+        {showCommentBox && (
+          <>
+            <DivFlex justify="between" className="flex-col h-7 w-full">
+              <Div
+                onClick={() => setShowCommentBox(false)}
+                className="w-14 border-gray-300 border-t-4 rounded-lg cursor-pointer"
+              />
+              <Div className="w-4/5 border-gray-400 border-t-2 rounded-sm" />
+            </DivFlex>
+            <CommentsList
+              setPostComments={setPostComments}
+              item={item}
+              postComments={postComments}
+              setShowCommentBox={setShowCommentBox}
+              profileImage={avatar}
+            />
+          </>
+        )}
+      </DivFlex>
     </DivFlex>
   );
 };
 
 export const CapitalizeFirstLetter = (value: string) => {
   return value.charAt(0).toUpperCase() + value.slice(1);
+};
+export const formatLength = (value: number) => {
+  return value ? value : "0";
+};
+export const formatString = (value: string) => {
+  return value ? value : "";
 };
 
 export default PostListItems;

@@ -125,43 +125,71 @@ export const likePost = async (req, res, next) => {
         .status(404)
         .json({ success: false, message: "Something went wrong" });
 
-    if (post.likes.includes(req.user._id)) {
-      const userId = post.likes.indexOf(req.user._id);
-      post.likes.splice(userId, 1);
-      await post.save();
+    if (post?.likes?.includes(req.user._id)) {
+      const userId = post?.likes?.indexOf(req.user._id);
+      post?.likes?.splice(userId, 1);
+      await post?.save();
       return res.status(200).json({
         success: true,
         message: "Post Unliked",
-        likes: post.likes,
+        likes: post?.likes,
       });
     } else {
-      post.likes.push(req.user._id);
-      await post.save();
+      post?.likes?.push(req.user._id);
+      await post?.save();
       return res.status(200).json({
         success: true,
         message: "Post Liked",
-        likes: post.likes,
+        likes: post?.likes,
       });
     }
   } catch (error) {
     next(error);
   }
 };
-export const commentPost = async (req, res, next) => {
+export const getAllLikes = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const postData = await postModel.findById({ id });
-    if (!postData)
+    const post = await postModel.findById(req.params.id);
+    if (!post)
       return res
         .status(404)
         .json({ success: false, message: "Something went wrong" });
-    const { comments } = req.body;
-    await postModel.findByIdAndUpdate(id, {
-      $set: { comments },
-    });
-    res.status(200).json({
+
+    return res.status(200).json({
       success: true,
-      comments,
+      likes: post?.likes,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const commentPost = async (req, res, next) => {
+  try {
+    const post = await postModel.findById(req.params.id);
+    if (!post)
+      return res
+        .status(404)
+        .json({ success: false, message: "Something went wrong" });
+
+    return res.status(200).json({
+      success: true,
+      comments: post?.comments,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const addComments = async (req, res, next) => {
+  try {
+    const post = await postModel.findById(req.params.id);
+    if (!post)
+      return res
+        .status(404)
+        .json({ success: false, message: "Something went wrong" });
+
+    return res.status(200).json({
+      success: true,
+      comments: post?.comments,
     });
   } catch (error) {
     next(error);

@@ -26,7 +26,7 @@ const Header = () => {
           </DivFlex>
           <CustomBorder
             className="h-16"
-            width="4"
+            width={4}
             color="gray"
             intensity={800}
             side="r"
@@ -72,8 +72,8 @@ const Header = () => {
       <DivFlex
         justify="center"
         className={`${
-          showProfilePage ? "right-16" : "-right-20 hidden"
-        } absolute w-1/4 h-screen duration-500 -z-10`}
+          showProfilePage ? "right-16 w-1/4" : "-right-20 w-0"
+        } absolute h-screen duration-500 -z-10`}
       >
         {showProfilePage && <Profile />}
       </DivFlex>

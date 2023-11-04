@@ -19,6 +19,27 @@ export const Input = ({
     />
   );
 };
+export const CommenBox = ({
+  className,
+  placeholder,
+  type,
+  name,
+  value,
+  onChange,
+  ...props
+}: React.ComponentPropsWithoutRef<"input">) => {
+  return (
+    <input
+      className={`${className} bg-transparent h-5 w-full outline-none`}
+      name={name}
+      type={type}
+      value={value}
+      placeholder={placeholder}
+      onChange={onChange}
+      {...props}
+    />
+  );
+};
 
 export const CheckBox = ({
   className,

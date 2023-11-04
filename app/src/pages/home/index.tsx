@@ -9,7 +9,9 @@ import {
 } from "../../common/redux-utils/utils-slice/utilsSlice";
 import { authenticateUser } from "../../common/apis/userServices";
 import { Div } from "../../common/constants/div";
+import { Cloudinary } from "@cloudinary/url-gen/index";
 export const baseUrl = "http://localhost:4000";
+export const cloudinary = new Cloudinary({ cloud: { cloudName: "dgskifwyj" } });
 
 const Home = () => {
   const showLoader = useSelector((state: any) => state.showLoader);

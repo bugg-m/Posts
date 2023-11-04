@@ -34,7 +34,7 @@ const SignUp = () => {
     e.preventDefault();
     dispatch(setShowLoader(false));
     const formData = new FormData();
-    formData.append("avatar", "file");
+    formData.append("avatar", "avatar");
     const payload = { name, email, password, role, avatar };
     try {
       sign_up(payload)
