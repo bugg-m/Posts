@@ -6,31 +6,32 @@ import { FaCircleUser } from "react-icons/fa6";
 import { CapitalizeFirstLetter, formatString } from "../post-list-items";
 import { userProfile } from "../../../common/apis/userServices";
 import { cloudinary } from "../../home";
-import { getComments } from "../../../common/apis/postServices";
+import { addComments, getComments } from "../../../common/apis/postServices";
 import { CommenBox } from "../../../common/constants/input-bar";
+import { useDispatch, useSelector } from "react-redux";
+import Button from "../../../common/constants/button";
+import { setShowSignInPage } from "../../../common/redux-utils/utils-slice/utilsSlice";
 
-const CommentsList = ({
-  postComments,
-  setPostComments,
-  item,
-  profileImage,
-}: any) => {
+const CommentsList = ({ postComments, setPostComments, item }: any) => {
   const [avatar, setAvatar] = useState<CloudinaryImage | undefined>();
   const [userName, setUserName] = useState("");
   const [commentValue, setCommentValue] = useState("");
-
+  const isAuthenticated = useSelector((state: any) => state.isAuthenticated);
+  const user = useSelector((state: any) => state.user);
+  const dispatch = useDispatch();
+  const profileImage = cloudinary.image(user?.avatar?.public_id);
   useEffect(() => {
     getUserComments(item._id);
   }, []);
   const getUsersDetails = (id: string) => {
     try {
       userProfile(id)
-        .then(async (res: any) => {
+        .then((res: any) => {
           const { success, userDetails } = res;
           if (success) {
-            await setUserName(userDetails.name);
+            setUserName(userDetails.name);
             if (userDetails?.avatar?.public_id) {
-              await setAvatar(cloudinary.image(userDetails?.avatar?.public_id));
+              setAvatar(cloudinary.image(userDetails?.avatar?.public_id));
             }
           } else {
             console.log(res.message);
@@ -51,7 +52,7 @@ const CommentsList = ({
           const { success, comments } = res;
           if (success) {
             setPostComments(comments.comment);
-            comments?.user?.forEach(async (id: string) => getUsersDetails(id));
+            comments?.user?.forEach((id: string) => getUsersDetails(id));
           } else {
             console.log(res.message);
           }
@@ -64,60 +65,92 @@ const CommentsList = ({
     }
   };
 
-  const addComment = () => {};
+  const addComment = (e: any) => {
+    e.preventDefault();
+    try {
+      addComments({ id: item._id, comment: commentValue })
+        .then((res: any) => {
+          const { success, comments } = res;
+          if (success) {
+            setPostComments(comments.comment);
+            comments?.user?.forEach((id: string) => getUsersDetails(id));
+          } else {
+            console.log(res.message);
+          }
+        })
+        .catch((err: any) => {
+          console.log(err?.response?.data?.message);
+        });
+    } catch (error: any) {
+      console.log(error?.response?.data?.message);
+    }
+  };
 
   return (
-    <Div className="w-full h-full overflow-y-hidden mt-5 p-3 flex flex-col justify-between items-start">
+    <Div className="w-full h-full overflow-y-hidden mt-5 px-3 flex flex-col justify-between items-start">
       <Div>
-        {postComments?.map((comment: string, index: number) => (
-          <DivFlex key={index} justify="start" className="gap-2">
-            <DivFlex justify="between" className="gap-2">
-              {avatar ? (
-                <AdvancedImage
-                  className="object-fill w-7 h-7 cursor-pointer rounded-full border border-gray-300"
-                  cldImg={avatar}
-                />
-              ) : (
-                <Div className="w-7 h-7 text-5xl cursor-pointer relative flex justify-center items-center text-gray-700 rounded-full border border-gray-300">
-                  <FaCircleUser />
+        {postComments ? (
+          postComments?.map((comment: string, index: number) => (
+            <DivFlex key={index} justify="start" className="gap-2">
+              <DivFlex justify="between" className="gap-2">
+                {avatar ? (
+                  <AdvancedImage
+                    className="object-fill w-7 h-7 cursor-pointer rounded-full border border-gray-300"
+                    cldImg={avatar}
+                  />
+                ) : (
+                  <Div className="w-7 h-7 text-5xl cursor-pointer relative flex justify-center items-center text-gray-700 rounded-full border border-gray-300">
+                    <FaCircleUser />
+                  </Div>
+                )}
+              </DivFlex>
+              <Div>
+                <Div className="text-xs">
+                  {CapitalizeFirstLetter(userName ? userName : "User")}
                 </Div>
-              )}
-            </DivFlex>
-            <Div>
-              <Div className="text-xs">
-                {CapitalizeFirstLetter(userName ? userName : "User")}
+                <Div className="text-xs">{formatString(comment)}</Div>
               </Div>
-              <Div className="text-xs">{formatString(comment)}</Div>
-            </Div>
-          </DivFlex>
-        ))}
+            </DivFlex>
+          ))
+        ) : (
+          <Div className="pl-3">Add Comments...</Div>
+        )}
       </Div>
 
-      <DivFlex justify="center" className="gap-3">
-        <Div>
-          {profileImage ? (
-            <AdvancedImage
-              className="object-fill w-7 h-7 cursor-pointer rounded-full border border-gray-300"
-              cldImg={profileImage}
-            />
-          ) : (
-            <Div className="w-7 h-7 text-5xl cursor-pointer relative flex justify-center items-center text-gray-700 rounded-full border border-gray-300">
-              <FaCircleUser />
-            </Div>
-          )}
-        </Div>
-        <Div>
-          <form action="POST" onSubmit={addComment}>
-            <CommenBox
-              value={commentValue}
-              onChange={(e) => setCommentValue(e?.target?.value)}
-              placeholder={`Add a comment for ${CapitalizeFirstLetter(
-                userName ? userName : "User"
-              )}...`}
-            />
-          </form>
-        </Div>
-      </DivFlex>
+      {isAuthenticated ? (
+        <DivFlex justify="center" className="gap-3">
+          <Div>
+            {profileImage ? (
+              <AdvancedImage
+                className="object-fill w-7 h-7 cursor-pointer rounded-full border border-gray-300"
+                cldImg={profileImage}
+              />
+            ) : (
+              <Div className="w-7 h-7 text-5xl cursor-pointer relative flex justify-center items-center text-gray-700 rounded-full border border-gray-300">
+                <FaCircleUser />
+              </Div>
+            )}
+          </Div>
+          <Div>
+            <form action="POST" onSubmit={addComment}>
+              <CommenBox
+                value={commentValue}
+                onChange={(e) => setCommentValue(e?.target?.value)}
+                placeholder={`Add a comment for ${CapitalizeFirstLetter(
+                  userName ? userName : "User"
+                )}...`}
+              />
+              <button type="submit">Submit</button>
+            </form>
+          </Div>
+        </DivFlex>
+      ) : (
+        <DivFlex justify="center" className="w-full">
+          <Button onClick={() => dispatch(setShowSignInPage(true))}>
+            Log in to comment
+          </Button>
+        </DivFlex>
+      )}
     </Div>
   );
 };

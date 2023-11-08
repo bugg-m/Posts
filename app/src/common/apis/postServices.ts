@@ -36,6 +36,23 @@ export const getComments = async (id: string) => {
     return response.data;
   });
 };
+export const addComments = async ({
+  id,
+  comment,
+}: {
+  id: string;
+  comment: string;
+}) => {
+  const url = `${baseUrl}/posts/comment/${id}`;
+  return await axios
+    .post(url, comment, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
 
 // useEffect(() => {
 //   axios

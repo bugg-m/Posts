@@ -27,7 +27,6 @@ const PostListItems = ({ item }: any) => {
   const resImage = cloudinary.image(item.image.public_id);
 
   const isAuthenticated = useSelector((state: any) => state.isAuthenticated);
-
   useEffect(() => {
     getUsersDetails(item.owner);
     setLikes(item._id);
@@ -94,14 +93,6 @@ const PostListItems = ({ item }: any) => {
     }
   };
 
-  const openCommentBox = () => {
-    if (isAuthenticated) {
-      setShowCommentBox(true);
-    } else {
-      toast.error("Sign in First");
-    }
-  };
-
   return (
     <DivFlex
       onClick={(e) => e.stopPropagation()}
@@ -147,7 +138,7 @@ const PostListItems = ({ item }: any) => {
           onClick={() => likeThisPost(item._id)}
           className="text-2xl flex-col"
         >
-          {isAuthenticated && postLikes.includes(item.owner) ? (
+          {isAuthenticated && postLikes?.includes(item?.owner) ? (
             <Div>
               <FcLike />
             </Div>
@@ -161,7 +152,7 @@ const PostListItems = ({ item }: any) => {
 
         <DivFlex justify="center" className="text-2xl flex-col">
           <Div
-            onClick={openCommentBox}
+            onClick={() => setShowCommentBox(true)}
             className="hover:text-red-500 text-gray-700 -rotate-90"
           >
             <PiChatCircle />
@@ -187,25 +178,26 @@ const PostListItems = ({ item }: any) => {
       </DivFlex>
       <DivFlex
         justify="normal"
-        className={`w-full py-4 z-40 absolute duration-500 text-gray-50 rounded-lg flex-col ${
+        className={`w-full py-2 z-40 absolute duration-700 text-gray-50 rounded-lg flex-col ${
           showCommentBox ? "bottom-0 bg-slate-600 h-2/3" : "-bottom-0 h-0"
         }`}
       >
         {showCommentBox && (
           <>
-            <DivFlex justify="between" className="flex-col h-7 w-full">
-              <Div
+            <DivFlex justify="between" className="flex-col h-8 w-full">
+              <DivFlex
+                justify="center"
                 onClick={() => setShowCommentBox(false)}
-                className="w-14 border-gray-300 border-t-4 rounded-lg cursor-pointer"
-              />
+                className="w-1/2 h-5 cursor-pointer"
+              >
+                <Div className="w-14 border-gray-300 border-t-4 rounded-lg " />
+              </DivFlex>
               <Div className="w-4/5 border-gray-400 border-t-2 rounded-sm" />
             </DivFlex>
             <CommentsList
               setPostComments={setPostComments}
               item={item}
               postComments={postComments}
-              setShowCommentBox={setShowCommentBox}
-              profileImage={avatar}
             />
           </>
         )}

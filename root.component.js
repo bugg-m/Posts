@@ -15,10 +15,13 @@ const URL =
     : process.env.FRONTEND_URI_PRODUCTION;
 
 const server = express();
+
+// middlewares
 server.use(errorMiddleware);
 server.use(express.static("public"));
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
+// cors
 server.use(
   cors({
     origin: [URL],
@@ -27,7 +30,10 @@ server.use(
   })
 );
 server.use(cookieParser());
+// static path
 server.use(express.static("./server/dist"));
+// routes
 server.use("/users", userRouter);
 server.use("/posts", postRouter);
+
 export default server;

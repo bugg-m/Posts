@@ -117,6 +117,7 @@ export const deletePost = async (req, res, next) => {
     next(error);
   }
 };
+
 export const likePost = async (req, res, next) => {
   try {
     const post = await postModel.findById(req.params.id);
@@ -147,6 +148,7 @@ export const likePost = async (req, res, next) => {
     next(error);
   }
 };
+
 export const getAllLikes = async (req, res, next) => {
   try {
     const post = await postModel.findById(req.params.id);
@@ -163,6 +165,7 @@ export const getAllLikes = async (req, res, next) => {
     next(error);
   }
 };
+
 export const commentPost = async (req, res, next) => {
   try {
     const post = await postModel.findById(req.params.id);
@@ -179,17 +182,29 @@ export const commentPost = async (req, res, next) => {
     next(error);
   }
 };
+
+// TODO: To fix the req.body.comment undefined
 export const addComments = async (req, res, next) => {
   try {
     const post = await postModel.findById(req.params.id);
     if (!post)
-      return res
-        .status(404)
-        .json({ success: false, message: "Something went wrong" });
+      return res.status(404).json({
+        success: false,
+        message: "Something went wrong. Try again...",
+      });
+    console.log(req?.body?.comment);
+    const commentData = {
+      user: req.user._id,
+      comment: "req.body.comment",
+    };
 
+    post?.comments?.push(commentData);
+
+    await post.save();
     return res.status(200).json({
       success: true,
       comments: post?.comments,
+      message: "Comment added",
     });
   } catch (error) {
     next(error);

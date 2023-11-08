@@ -11,6 +11,7 @@ const initialState = {
   showMenu: false,
   showOptionBar: false,
   showProfilePage: false,
+  showCommentBox: false,
 };
 
 const utilsSlice = createSlice({
@@ -50,6 +51,9 @@ const utilsSlice = createSlice({
     setShowProfilePage: (state, action) => {
       state.showProfilePage = action.payload;
     },
+    setShowCommentBox: (state, action) => {
+      state.showCommentBox = action.payload;
+    },
   },
 });
 
@@ -65,5 +69,6 @@ export const {
   setShowMenu,
   setShowOptionBar,
   setShowProfilePage,
+  setShowCommentBox,
 } = utilsSlice.actions;
 export default utilsSlice.reducer;

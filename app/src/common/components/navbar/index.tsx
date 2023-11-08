@@ -141,10 +141,14 @@ export const Navbar = () => {
       <DivFlex
         justify="center"
         className={`${
-          showCreatePost || showSignUpPage || showSignInPage
-            ? "left-full"
+          showMenu
+            ? `${
+                showCreatePost || showSignUpPage || showSignInPage
+                  ? "left-full"
+                  : "left-0"
+              }`
             : "left-0"
-        } absolute duration-300 h-screen -z-10`}
+        } absolute duration-500 h-screen -z-10`}
       >
         {showCreatePost && <CreatePost />}
         {showSignUpPage && <SignUp />}

@@ -8,6 +8,7 @@ import {
   commentPost,
   updatePost,
   getAllLikes,
+  addComments,
 } from "../controllers/postController.js";
 import { imageUpload } from "../middlewares/image-upload.middleware.js";
 import { isAuthenticated } from "../middlewares/auth.js";
@@ -27,5 +28,6 @@ postRouter.route("/:id").put(updatePost).delete(deletePost);
 postRouter.get("/like/:id", isAuthenticated, likePost);
 postRouter.get("/get_all_likes/:id", getAllLikes);
 postRouter.get("/get_all_comments/:id", commentPost);
+postRouter.post("/comment/:id", isAuthenticated, addComments);
 
 export default postRouter;
