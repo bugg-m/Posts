@@ -140,13 +140,18 @@ const CommentsList = ({ postComments, setPostComments, item }: any) => {
                   userName ? userName : "User"
                 )}...`}
               />
-              <button type="submit">Submit</button>
+              <button type="submit" className="bg-blue-700">
+                Submit
+              </button>
             </form>
           </Div>
         </DivFlex>
       ) : (
         <DivFlex justify="center" className="w-full">
-          <Button onClick={() => dispatch(setShowSignInPage(true))}>
+          <Button
+            onClick={() => dispatch(setShowSignInPage(true))}
+            className="bg-blue-700"
+          >
             Log in to comment
           </Button>
         </DivFlex>

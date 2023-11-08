@@ -12,9 +12,13 @@ import { FcLike } from "react-icons/fc";
 import { FiSend } from "react-icons/fi";
 import { PiChatCircle } from "react-icons/pi";
 import OptionBar from "../option-menu";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getLikes, likePost } from "../../../common/apis/postServices";
 import CommentsList from "../comment-lists";
+import {
+  setShowProfilePage,
+  setUser,
+} from "../../../common/redux-utils/utils-slice/utilsSlice";
 
 const PostListItems = ({ item }: any) => {
   const [userName, setUserName] = useState("");
@@ -25,7 +29,7 @@ const PostListItems = ({ item }: any) => {
   const [avatar, setAvatar] = useState<CloudinaryImage | undefined>();
   const cloudinary = new Cloudinary({ cloud: { cloudName: "dgskifwyj" } });
   const resImage = cloudinary.image(item.image.public_id);
-
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector((state: any) => state.isAuthenticated);
   useEffect(() => {
     getUsersDetails(item.owner);
@@ -93,6 +97,27 @@ const PostListItems = ({ item }: any) => {
     }
   };
 
+  const openPostProfile = () => {
+    try {
+      userProfile(item.owner)
+        .then((res: any) => {
+          const { success, userDetails } = res;
+          if (success) {
+            dispatch(setUser(userDetails));
+            dispatch(setShowProfilePage(true));
+          } else {
+            toast.error(res.message);
+            dispatch(setUser([]));
+          }
+        })
+        .catch((err: any) => {
+          toast.error(err.message);
+        });
+    } catch (error: any) {
+      console.log(error?.response?.data?.message);
+    }
+  };
+
   return (
     <DivFlex
       onClick={(e) => e.stopPropagation()}
@@ -100,7 +125,7 @@ const PostListItems = ({ item }: any) => {
       className="flex-col relative gap-5 p-5 min-h-[500px] w-full bg-gray-50 border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-300 dark:bg-gray-100 dark:hover:bg-gray-200"
     >
       <DivFlex justify="between" className="w-full">
-        <DivFlex justify="between" className="gap-2">
+        <DivFlex onClick={openPostProfile} justify="between" className="gap-2">
           {avatar ? (
             <AdvancedImage
               className="object-fill w-10 h-10 cursor-pointer rounded-full border border-gray-300"
@@ -111,7 +136,9 @@ const PostListItems = ({ item }: any) => {
               <FaCircleUser />
             </Div>
           )}
-          <Div>{CapitalizeFirstLetter(userName)}</Div>
+          <Div className="cursor-pointer">
+            {CapitalizeFirstLetter(userName)}
+          </Div>
         </DivFlex>
         <Div
           onClick={() => setShowOptionBar(!showOptionBar)}
@@ -163,7 +190,7 @@ const PostListItems = ({ item }: any) => {
           <Div className="hover:text-red-500 text-gray-700">
             <FiSend />
           </Div>
-          <Div className="text-xs">12</Div>
+          <Div className="text-xs">0</Div>
         </DivFlex>
       </DivFlex>
       <DivFlex justify="center" className="w-full">

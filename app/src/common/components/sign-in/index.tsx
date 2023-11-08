@@ -130,7 +130,7 @@ const SignIn = () => {
           </TextField>
         </DivFlex>
         <DivFlex justify="center" className="w-full">
-          <Button disabled={showLoader} type="submit">
+          <Button disabled={showLoader} type="submit" className="bg-blue-700">
             Sign In
           </Button>
         </DivFlex>

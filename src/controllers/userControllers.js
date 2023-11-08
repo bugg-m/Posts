@@ -110,10 +110,6 @@ export const followUser = async (req, res, next) => {
   try {
     const userToFollow = await userModel.findById(req.params.id);
     const userThatFollows = await userModel.findById(req.user._id);
-    console.log(
-      "userToFollow: " + userToFollow,
-      "userThatFollows: " + userThatFollows
-    );
     if (!userToFollow)
       return res
         .status(404)

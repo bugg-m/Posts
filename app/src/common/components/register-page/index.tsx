@@ -231,7 +231,7 @@ const SignUp = () => {
         </DivFlex>
 
         <DivFlex justify="center" className=" w-full gap-5">
-          <Button disabled={showLoader} type="submit">
+          <Button disabled={showLoader} type="submit" className="bg-blue-700">
             Register
           </Button>
         </DivFlex>
@@ -244,7 +244,7 @@ const SignUp = () => {
               dispatch(setShowSignUpPage(false));
               dispatch(setShowCreatePost(false));
             }}
-            className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+            className="font-medium bg-blue-700 text-primary-600 hover:underline dark:text-primary-500"
           >
             Log-In Here
           </Button>

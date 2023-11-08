@@ -169,7 +169,11 @@ const CreatePost = () => {
           >
             Cancel
           </Button>
-          <Button disabled={showLoader || error.flag} type="submit">
+          <Button
+            disabled={showLoader || error.flag}
+            type="submit"
+            className="bg-blue-700"
+          >
             Post
           </Button>
         </DivFlex>
