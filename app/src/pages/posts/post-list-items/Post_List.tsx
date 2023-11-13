@@ -1,7 +1,7 @@
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary, CloudinaryImage } from "@cloudinary/url-gen";
-import { Div, DivFlex } from "../../../common/constants/div";
-import TextField from "../../../common/constants/text-header";
+import { Div, DivFlex } from "../../../common/constants/div/Div";
+import TextField from "../../../common/constants/text-header/Text_Title";
 import { useEffect, useState } from "react";
 import { userProfile } from "../../../common/apis/userServices";
 import toast from "react-hot-toast";
@@ -11,11 +11,12 @@ import { GoHeart } from "react-icons/go";
 import { FcLike } from "react-icons/fc";
 import { FiSend } from "react-icons/fi";
 import { PiChatCircle } from "react-icons/pi";
-import OptionBar from "../option-menu";
+import OptionBar from "../option-menu/Option_Bar";
 import { useDispatch, useSelector } from "react-redux";
 import { getLikes, likePost } from "../../../common/apis/postServices";
-import CommentsList from "../comment-lists";
+import CommentsList from "../comment-lists/Comment_Box";
 import {
+  setPostUserProfile,
   setShowProfilePage,
   setUser,
 } from "../../../common/redux-utils/utils-slice/utilsSlice";
@@ -103,7 +104,7 @@ const PostListItems = ({ item }: any) => {
         .then((res: any) => {
           const { success, userDetails } = res;
           if (success) {
-            dispatch(setUser(userDetails));
+            dispatch(setPostUserProfile(userDetails));
             dispatch(setShowProfilePage(true));
           } else {
             toast.error(res.message);
@@ -234,7 +235,7 @@ const PostListItems = ({ item }: any) => {
 };
 
 export const CapitalizeFirstLetter = (value: string) => {
-  return value.charAt(0).toUpperCase() + value.slice(1);
+  return value?.charAt(0)?.toUpperCase() + value?.slice(1);
 };
 export const formatLength = (value: number) => {
   return value ? value : "0";

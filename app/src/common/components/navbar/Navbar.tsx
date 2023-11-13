@@ -1,6 +1,6 @@
 import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import CreatePost from "../../../pages/posts/create-post";
+import CreatePost from "../../../pages/posts/create-post/Create_Post";
 import {
   setIsAuthenticated,
   setShowCreatePost,
@@ -11,8 +11,8 @@ import {
 } from "../../redux-utils/utils-slice/utilsSlice";
 import SignIn from "../sign-in";
 import SignUp from "../register-page";
-import Li from "../../constants/menu-li";
-import { Div, DivAbsolute, DivFlex, Ul } from "../../constants/div";
+import Li from "../../constants/menu-li/Menu_Li";
+import { Div, DivAbsolute, DivFlex, Ul } from "../../constants/div/Div";
 import { sign_out } from "../../apis/userServices";
 
 export const Navbar = () => {

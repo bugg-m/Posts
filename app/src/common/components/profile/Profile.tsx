@@ -1,14 +1,20 @@
 import { IoArrowRedo } from "react-icons/io5";
-import { Div, DivFlex } from "../../../common/constants/div";
-import { setShowProfilePage } from "../../redux-utils/utils-slice/utilsSlice";
+import { Div, DivFlex } from "../../constants/div/Div";
+import {
+  setPostUserProfile,
+  setShowProfilePage,
+} from "../../redux-utils/utils-slice/utilsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AdvancedImage } from "@cloudinary/react";
-import { CapitalizeFirstLetter } from "../../../pages/posts/post-list-items";
-import { cloudinary } from "../../../pages/home";
-import Button from "../../constants/button";
+import { CapitalizeFirstLetter } from "../../../pages/posts/post-list-items/Post_List";
+import { cloudinary } from "../../../pages/home/Home";
+import Button from "../../constants/button/Button";
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
-  const user = useSelector((state: any) => state.user);
+  const { t } = useTranslation();
+  const user = useSelector((state: any) => state.postUserProfile);
+  const isAuthenticated = useSelector((state: any) => state.isAuthenticated);
   const avatar = cloudinary.image(user?.avatar?.public_id);
   const dispatch = useDispatch();
 
@@ -18,7 +24,10 @@ const Profile = () => {
       className="p-2 w-full relative min-h-screen"
     >
       <Div
-        onClick={() => dispatch(setShowProfilePage(false))}
+        onClick={() => {
+          dispatch(setShowProfilePage(false));
+          dispatch(setPostUserProfile({}));
+        }}
         className="text-2xl text-gray-700 cursor-pointer mb-2"
       >
         <IoArrowRedo />
@@ -31,14 +40,14 @@ const Profile = () => {
               cldImg={avatar}
             />
             <DivFlex justify="center" className="text-xl mt-3">
-              {CapitalizeFirstLetter(user.name)}
+              {CapitalizeFirstLetter(user?.name)}
             </DivFlex>
           </DivFlex>
         </DivFlex>
         <DivFlex justify="center" className="gap-7 w-3/5 text-lg">
           <DivFlex justify="center" className="flex-col w-1/2">
             <Div className="text-2xl">{user?.posts?.length}</Div>
-            <Div className="">Posts</Div>
+            <Div className="">{t(`global.title`)}</Div>
           </DivFlex>
           <DivFlex justify="center" className="flex-col w-1/2">
             <Div className="text-2xl">{user?.followers?.length}</Div>
@@ -51,8 +60,21 @@ const Profile = () => {
         </DivFlex>
       </DivFlex>
       <DivFlex justify="center" className="w-full gap-5">
-        <Button className="bg-gray-700 w-1/2 rounded-xl">Edit Profile</Button>
-        <Button className="bg-gray-700 w-1/2 rounded-xl">Verify Profile</Button>
+        {isAuthenticated ? (
+          <>
+            <Button className="bg-gray-700 w-1/2 rounded-xl">
+              Edit Profile
+            </Button>
+            <Button className="bg-gray-700 w-1/2 rounded-xl">
+              Verify Profile
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button className="bg-gray-700 w-1/2 rounded-xl">Follow</Button>
+            <Button className="bg-gray-700 w-1/2 rounded-xl">Message</Button>
+          </>
+        )}
       </DivFlex>
     </Div>
   );

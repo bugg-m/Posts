@@ -8,11 +8,14 @@ import {
 import toast from "react-hot-toast";
 import { addPost } from "../../../common/apis/postServices";
 import { IoArrowUndo } from "react-icons/io5";
-import { Div, DivFlex } from "../../../common/constants/div";
-import TextField from "../../../common/constants/text-header";
-import Label from "../../../common/constants/label";
-import { Input, TextArea } from "../../../common/constants/input-bar";
-import Button from "../../../common/constants/button";
+import { Div, DivFlex } from "../../../common/constants/div/Div";
+import TextField from "../../../common/constants/text-header/Text_Title";
+import Label from "../../../common/constants/label/Label";
+import {
+  Input,
+  TextArea,
+} from "../../../common/constants/input-bar/Input_Box_Type";
+import Button from "../../../common/constants/button/Button";
 
 const CreatePost = () => {
   const [title, setTitle] = useState<string>("");

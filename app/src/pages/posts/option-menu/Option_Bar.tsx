@@ -1,5 +1,5 @@
-import { Div, Ul } from "../../../common/constants/div";
-import Li from "../../../common/constants/menu-li";
+import { Div, Ul } from "../../../common/constants/div/Div";
+import Li from "../../../common/constants/menu-li/Menu_Li";
 
 const OptionBar = (props: any) => {
   return (

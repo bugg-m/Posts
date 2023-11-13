@@ -3,11 +3,11 @@ import { FaBlog } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import InputBar from "../input-bar";
 import AvatarProfile from "../avatar-profile";
-import { DivFlex, Div } from "../../constants/div";
-import { Logo } from "../../constants/label";
-import { CustomBorder } from "../../constants/custom-border";
+import { DivFlex, Div } from "../../constants/div/Div";
+import { Logo } from "../../constants/label/Label";
+import { CustomBorder } from "../../constants/custom-border/Border";
 import Profile from "../profile";
-import TextField from "../../constants/text-header";
+import TextField from "../../constants/text-header/Text_Title";
 
 const Header = () => {
   const showMenu = useSelector((state: any) => state.showMenu);

@@ -1,15 +1,18 @@
 import { CloudinaryImage } from "@cloudinary/url-gen/index";
-import { Div, DivFlex } from "../../../common/constants/div";
+import { Div, DivFlex } from "../../../common/constants/div/Div";
 import { AdvancedImage } from "@cloudinary/react";
 import { useEffect, useState } from "react";
 import { FaCircleUser } from "react-icons/fa6";
-import { CapitalizeFirstLetter, formatString } from "../post-list-items";
+import {
+  CapitalizeFirstLetter,
+  formatString,
+} from "../post-list-items/Post_List";
 import { userProfile } from "../../../common/apis/userServices";
-import { cloudinary } from "../../home";
+import { cloudinary } from "../../home/Home";
 import { addComments, getComments } from "../../../common/apis/postServices";
-import { CommenBox } from "../../../common/constants/input-bar";
+import { CommenBox } from "../../../common/constants/input-bar/Input_Box_Type";
 import { useDispatch, useSelector } from "react-redux";
-import Button from "../../../common/constants/button";
+import Button from "../../../common/constants/button/Button";
 import { setShowSignInPage } from "../../../common/redux-utils/utils-slice/utilsSlice";
 
 const CommentsList = ({ postComments, setPostComments, item }: any) => {

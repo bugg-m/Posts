@@ -1,4 +1,4 @@
-import { Input } from "../../constants/input-bar";
+import { Input } from "../../constants/input-bar/Input_Box_Type";
 
 const InputBar = ({ value, setValue }: any) => {
   return (

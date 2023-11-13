@@ -10,12 +10,12 @@ import {
   setUser,
 } from "../../redux-utils/utils-slice/utilsSlice";
 import { IoArrowUndo } from "react-icons/io5";
-import Label from "../../constants/label";
-import { CheckBox, Input } from "../../constants/input-bar";
+import Label from "../../constants/label/Label";
+import { CheckBox, Input } from "../../constants/input-bar/Input_Box_Type";
 import { sign_up } from "../../apis/userServices";
-import { Div, DivFlex, DivSwipe } from "../../constants/div";
-import TextField from "../../constants/text-header";
-import Button from "../../constants/button";
+import { Div, DivFlex, DivSwipe } from "../../constants/div/Div";
+import TextField from "../../constants/text-header/Text_Title";
+import Button from "../../constants/button/Button";
 
 const SignUp = () => {
   const [name, setName] = useState<string>("");

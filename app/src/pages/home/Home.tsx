@@ -1,4 +1,4 @@
-import PostMain from "../posts";
+import PostMain from "../posts/Posts";
 import toast, { Toaster } from "react-hot-toast";
 import { Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,7 +8,7 @@ import {
   setUser,
 } from "../../common/redux-utils/utils-slice/utilsSlice";
 import { authenticateUser } from "../../common/apis/userServices";
-import { Div } from "../../common/constants/div";
+import { Div } from "../../common/constants/div/Div";
 import { Cloudinary } from "@cloudinary/url-gen/index";
 export const baseUrl = "http://localhost:4000";
 export const cloudinary = new Cloudinary({ cloud: { cloudName: "dgskifwyj" } });

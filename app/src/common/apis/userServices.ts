@@ -1,5 +1,5 @@
 import axios from "axios";
-import { baseUrl } from "../../pages/home";
+import { baseUrl } from "../../pages/home/Home";
 import { signInProps, signUpProps } from "../types/types";
 
 export const authenticateUser = async () => {

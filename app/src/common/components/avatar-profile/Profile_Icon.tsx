@@ -1,22 +1,22 @@
 import { AdvancedImage } from "@cloudinary/react";
-import { Cloudinary } from "@cloudinary/url-gen/index";
 import { useDispatch, useSelector } from "react-redux";
 import { FaCircleUser } from "react-icons/fa6";
 import { useState } from "react";
-import { DiveMouseEvent, DivHoverText } from "../../constants/div";
-import { CapitalizeFirstLetter } from "../../../pages/posts/post-list-items";
+import { DiveMouseEvent, DivHoverText } from "../../constants/div/Div";
+import { CapitalizeFirstLetter } from "../../../pages/posts/post-list-items/Post_List";
 import {
+  setPostUserProfile,
   setShowCreatePost,
   setShowProfilePage,
 } from "../../redux-utils/utils-slice/utilsSlice";
 import toast from "react-hot-toast";
+import { cloudinary } from "../../../pages/home/Home";
 
 const AvatarProfile = () => {
   const [showName, setShowName] = useState<boolean>(false);
   const user = useSelector((state: any) => state.user);
   const showCreatePost = useSelector((state: any) => state.showCreatePost);
   const isAuthenticated = useSelector((state: any) => state.isAuthenticated);
-  const cloudinary = new Cloudinary({ cloud: { cloudName: "dgskifwyj" } });
   const avatar = cloudinary.image(user?.avatar?.public_id);
   const dispatch = useDispatch();
 
@@ -25,6 +25,7 @@ const AvatarProfile = () => {
       dispatch(setShowCreatePost(false));
     }
     dispatch(setShowProfilePage(true));
+    dispatch(setPostUserProfile(user));
   };
 
   if (isAuthenticated && user?.avatar?.public_id) {
@@ -36,7 +37,7 @@ const AvatarProfile = () => {
       >
         {showName && (
           <DivHoverText className="-bottom-7">
-            {CapitalizeFirstLetter(user.name)}
+            {CapitalizeFirstLetter(user?.name)}
           </DivHoverText>
         )}
         <AdvancedImage
@@ -58,7 +59,7 @@ const AvatarProfile = () => {
     >
       {showName ? (
         <DivHoverText className="-bottom-7">
-          {isAuthenticated ? CapitalizeFirstLetter(user.name) : "Profile"}
+          {isAuthenticated ? CapitalizeFirstLetter(user?.name) : "Profile"}
         </DivHoverText>
       ) : null}
       <FaCircleUser />

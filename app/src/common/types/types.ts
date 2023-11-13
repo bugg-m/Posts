@@ -88,3 +88,31 @@ export type PostItems = {
     url: string;
   };
 };
+
+export type UserDetails = {
+  name: string;
+  email: string;
+  password: string;
+  role: string;
+  verifiedUser: {
+    id: String;
+    status: String;
+  };
+  avatar: {
+    public_id: {
+      type: String;
+      required: true;
+    };
+    url: {
+      type: String;
+      required: true;
+    };
+  };
+  posts: string[];
+  createdAt: Date;
+
+  followers: string[];
+  followings: string[];
+  ressetPasswordToken: String;
+  ressetPasswordExpire: String;
+};

@@ -1,14 +1,14 @@
 import { CgMenu } from "react-icons/cg";
 import { useEffect, useState } from "react";
 import { getAllPost } from "../../common/apis/postServices";
-import PostListItems from "./post-list-items";
+import PostListItems from "./post-list-items/Post_List";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import {
   setShowMenu,
   setShowOptionBar,
 } from "../../common/redux-utils/utils-slice/utilsSlice";
-import { Div, DivFlex } from "../../common/constants/div";
+import { Div, DivFlex } from "../../common/constants/div/Div";
 
 const PostMain = () => {
   const [postList, setPostList] = useState([]);

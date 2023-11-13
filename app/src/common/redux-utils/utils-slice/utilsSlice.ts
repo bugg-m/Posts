@@ -7,6 +7,7 @@ const initialState = {
   showLoader: false,
   isAuthenticated: false,
   user: {},
+  postUserProfile: {},
   refreshPostList: false,
   showMenu: false,
   showOptionBar: false,
@@ -39,6 +40,9 @@ const utilsSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
+    setPostUserProfile: (state, action) => {
+      state.postUserProfile = action.payload;
+    },
     setRefreshPostList: (state, action) => {
       state.refreshPostList = action.payload;
     },
@@ -70,5 +74,6 @@ export const {
   setShowOptionBar,
   setShowProfilePage,
   setShowCommentBox,
+  setPostUserProfile,
 } = utilsSlice.actions;
 export default utilsSlice.reducer;
