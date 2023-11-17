@@ -1,6 +1,6 @@
 import axios from "axios";
-import { baseUrl } from "../../pages/home/Home";
 import { signInProps, signUpProps } from "../types/types";
+import { baseUrl } from "../../env";
 
 export const authenticateUser = async () => {
   const url = `${baseUrl}/users/profile`;

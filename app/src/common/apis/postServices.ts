@@ -1,5 +1,5 @@
 import axios from "axios";
-import { baseUrl } from "../../pages/home/Home";
+import { baseUrl } from "../../env";
 
 export const getAllPost = async () => {
   const url = `${baseUrl}/posts/get_all_posts`;

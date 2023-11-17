@@ -8,12 +8,12 @@ import {
   formatString,
 } from "../post-list-items/Post_List";
 import { userProfile } from "../../../common/apis/userServices";
-import { cloudinary } from "../../home/Home";
 import { addComments, getComments } from "../../../common/apis/postServices";
 import { CommenBox } from "../../../common/constants/input-bar/Input_Box_Type";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../../../common/constants/button/Button";
 import { setShowSignInPage } from "../../../common/redux-utils/utils-slice/utilsSlice";
+import { cloudinary } from "../../../env";
 
 const CommentsList = ({ postComments, setPostComments, item }: any) => {
   const [avatar, setAvatar] = useState<CloudinaryImage | undefined>();

@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import io from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
+import { socket } from "../../env";
 
 const userName = uuidv4();
-
-const socket = io("http://localhost:4000");
 
 const ChatMain = () => {
   const [chat, setChat] = useState<any[]>([]);

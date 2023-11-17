@@ -7,19 +7,16 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { AdvancedImage } from "@cloudinary/react";
 import { CapitalizeFirstLetter } from "../../../pages/posts/post-list-items/Post_List";
-import { cloudinary } from "../../../pages/home/Home";
 import Button from "../../constants/button/Button";
 import { useState } from "react";
 import { follow_user } from "../../apis/userServices";
 import toast from "react-hot-toast";
-// import { useTranslation } from "react-i18next";
+import { cloudinary } from "../../../env";
 
 const Profile = () => {
   const [following, setFollowing] = useState<boolean>(false);
   const [followings, setFollowings] = useState<string[]>([]);
-  // const { t } = useTranslation();
   const postUserProfile = useSelector((state: any) => state.postUserProfile);
-  // const user = useSelector((state: any) => state.user);
   const userFlag = useSelector((state: any) => state.userFlag);
   const avatar = cloudinary.image(postUserProfile?.avatar?.public_id);
   const dispatch = useDispatch();

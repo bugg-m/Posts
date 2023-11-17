@@ -11,7 +11,7 @@ import {
   setUserFlag,
 } from "../../redux-utils/utils-slice/utilsSlice";
 import toast from "react-hot-toast";
-import { cloudinary } from "../../../pages/home/Home";
+import { cloudinary } from "../../../env";
 
 const AvatarProfile = () => {
   const [showName, setShowName] = useState<boolean>(false);
