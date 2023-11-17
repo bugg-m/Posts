@@ -1,4 +1,6 @@
 import express from "express";
+import http from "http"; // Import the HTTP module
+import { Server } from "socket.io"; // Import the Socket.IO module
 import postRouter from "./src/routes/postRouter.js";
 import userRouter from "./src/routes/userRoutes.js";
 import cookieParser from "cookie-parser";
@@ -14,26 +16,51 @@ const URL =
     ? process.env.FRONTEND_URI_DEVELOPMENT
     : process.env.FRONTEND_URI_PRODUCTION;
 
-const server = express();
+const app = express();
+const server = http.createServer(app); // Create an HTTP server instance
+const io = new Server(server, {
+  cors: {
+    origin: [URL], // Allow requests from your client's origin
+    methods: ["GET", "POST"],
+  },
+}); // Create a Socket.IO server instance
 
 // middlewares
-server.use(errorMiddleware);
-server.use(express.static("public"));
-server.use(express.json());
-server.use(express.urlencoded({ extended: false }));
+app.use(errorMiddleware);
+app.use(express.static("public"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 // cors
-server.use(
+app.use(
   cors({
     origin: [URL],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
-server.use(cookieParser());
-// static path
-server.use(express.static("./server/dist"));
-// routes
-server.use("/users", userRouter);
-server.use("/posts", postRouter);
 
-export default server;
+app.use(cookieParser());
+// static path
+app.use(express.static("./server/dist"));
+// routes
+app.use("/users", userRouter);
+app.use("/posts", postRouter);
+
+// Socket.IO connection handling
+io.on("connection", (socket) => {
+  console.log("A user connected");
+
+  // Handle chat messages
+  socket.on("chat", (msg) => {
+    // Broadcast the message to all connected clients
+    io.emit("chat", msg);
+  });
+
+  // Handle disconnections
+  socket.on("disconnect", () => {
+    console.log("User disconnected");
+  });
+});
+
+export { server }; // Export the modified server instance

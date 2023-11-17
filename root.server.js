@@ -1,6 +1,7 @@
-import server from "./root.component.js";
+import { server } from "./root.component.js";
 import { postDatabase } from "./src/database/postDB.js";
 import cloudinary from "cloudinary";
+
 const PORT = process.env.PORT || 4000;
 
 cloudinary.v2.config({
@@ -11,7 +12,7 @@ cloudinary.v2.config({
 
 postDatabase()
   .then(() => {
-    server.listen(4000, () => {
+    server.listen(PORT, () => {
       try {
         console.log(
           `Server listening on port http://localhost:${PORT} in ${process.env.NODE_ENV} mode`
