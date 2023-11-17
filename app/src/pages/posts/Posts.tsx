@@ -48,7 +48,7 @@ const PostMain = () => {
       onClick={() => dispatch(setShowOptionBar(false))}
       className={`w-full ${
         showSignInPage || showCreatePost || showSignUpPage || showProfilePage
-          ? "opacity-95 blur-sm disabled"
+          ? "opacity-95 blur-sm"
           : ""
       } pt-20 min-h-screen bg-gray-700`}
     >
@@ -61,7 +61,7 @@ const PostMain = () => {
           <CgMenu
             className={`fixed ${
               showMenu ? "left-[15%] text-gray-200" : "left-5 text-white"
-            } cursor-pointer text-4xl z-50 top-24 rounded-md duration-300`}
+            } cursor-pointer text-4xl z-50 top-24 rounded-md duration-500`}
             onClick={() => {
               dispatch(setShowMenu(!showMenu));
             }}

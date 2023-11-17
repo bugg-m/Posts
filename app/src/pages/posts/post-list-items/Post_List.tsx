@@ -19,12 +19,14 @@ import {
   setPostUserProfile,
   setShowProfilePage,
   setUser,
+  setUserFlag,
 } from "../../../common/redux-utils/utils-slice/utilsSlice";
 
 const PostListItems = ({ item }: any) => {
   const [userName, setUserName] = useState("");
   const [showCommentBox, setShowCommentBox] = useState(false);
   const [showOptionBar, setShowOptionBar] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [postLikes, setPostLikes] = useState<string[]>([]);
   const [postComments, setPostComments] = useState<string[]>([]);
   const [avatar, setAvatar] = useState<CloudinaryImage | undefined>();
@@ -32,10 +34,14 @@ const PostListItems = ({ item }: any) => {
   const resImage = cloudinary.image(item.image.public_id);
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state: any) => state.isAuthenticated);
+
   useEffect(() => {
     getUsersDetails(item.owner);
-    setLikes(item._id);
   }, []);
+
+  useEffect(() => {
+    setLikes(item._id);
+  }, [isLiked]);
 
   const getUsersDetails = (id: string) => {
     try {
@@ -63,10 +69,11 @@ const PostListItems = ({ item }: any) => {
     try {
       likePost(id)
         .then((res: any) => {
-          const { success, message, likes } = res;
+          const { success, message, likes, isLiked } = res;
           if (success) {
             toast.success(message);
             setPostLikes(likes);
+            setIsLiked(isLiked);
           } else {
             toast.error(message);
           }
@@ -86,6 +93,8 @@ const PostListItems = ({ item }: any) => {
           const { success, likes } = res;
           if (success) {
             setPostLikes(likes);
+            if (likes?.includes(item?.owner)) setIsLiked(true);
+            // else setIsLiked(false);
           } else {
             console.log(res.message);
           }
@@ -106,6 +115,7 @@ const PostListItems = ({ item }: any) => {
           if (success) {
             dispatch(setPostUserProfile(userDetails));
             dispatch(setShowProfilePage(true));
+            dispatch(setUserFlag(false));
           } else {
             toast.error(res.message);
             dispatch(setUser([]));
@@ -166,7 +176,7 @@ const PostListItems = ({ item }: any) => {
           onClick={() => likeThisPost(item._id)}
           className="text-2xl flex-col"
         >
-          {isAuthenticated && postLikes?.includes(item?.owner) ? (
+          {isLiked && isAuthenticated ? (
             <Div>
               <FcLike />
             </Div>

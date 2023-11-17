@@ -43,3 +43,9 @@ export const sign_out = async () => {
     return response.data;
   });
 };
+export const follow_user = async (id: string) => {
+  const url = `${baseUrl}/users/follow_user/${id}`;
+  return await axios.get(url, { withCredentials: true }).then((response) => {
+    return response.data;
+  });
+};

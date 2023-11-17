@@ -8,6 +8,7 @@ import {
   setPostUserProfile,
   setShowCreatePost,
   setShowProfilePage,
+  setUserFlag,
 } from "../../redux-utils/utils-slice/utilsSlice";
 import toast from "react-hot-toast";
 import { cloudinary } from "../../../pages/home/Home";
@@ -26,6 +27,7 @@ const AvatarProfile = () => {
     }
     dispatch(setShowProfilePage(true));
     dispatch(setPostUserProfile(user));
+    dispatch(setUserFlag(true));
   };
 
   if (isAuthenticated && user?.avatar?.public_id) {

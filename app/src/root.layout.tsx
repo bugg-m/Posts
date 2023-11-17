@@ -1,8 +1,8 @@
 import Home from "./pages/home/Home";
-import { Navbar } from "./common/components/navbar";
+import { Navbar } from "./common/components/navbar/Navbar";
 import utilsStore from "./common/redux-utils/utils-store/utilsStore";
 import { Provider } from "react-redux";
-import Header from "./common/components/header";
+import Header from "./common/components/header/Header";
 import { Div } from "./common/constants/div/Div";
 
 const Layout = () => {

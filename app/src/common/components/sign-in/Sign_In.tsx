@@ -15,15 +15,18 @@ import Label from "../../constants/label/Label";
 import { Div, DivFlex } from "../../constants/div/Div";
 import TextField from "../../constants/text-header/Text_Title";
 import Button, { TextButton } from "../../constants/button/Button";
+import { TbEyeClosed, TbEye } from "react-icons/tb";
 
 const SignIn = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
   const showLoader = useSelector((state: any) => state.showLoader);
   const dispatch = useDispatch();
 
   const handleSign_In = (e: any) => {
-    const payload = { email, password };
+    const payload = { email, password, rememberMe };
     e.preventDefault();
     dispatch(setShowLoader(true));
     try {
@@ -65,6 +68,8 @@ const SignIn = () => {
     setPassword("");
   };
 
+  console.log(rememberMe);
+
   return (
     <Div
       onClick={(e) => e.stopPropagation()}
@@ -88,9 +93,8 @@ const SignIn = () => {
         className="space-y-4 md:space-y-6 mb-5"
       >
         <Div>
-          <Label title="Email" className="" />
+          <Label title="Email" />
           <Input
-            className=""
             type="email"
             name="email"
             placeholder="Enter your email"
@@ -99,17 +103,22 @@ const SignIn = () => {
             required
           />
         </Div>
-        <Div>
-          <Label title="Password" className="" />
+        <Div className="relative">
+          <Label title="Password" />
           <Input
-            className=""
-            type="password"
+            type={showPassword ? "text" : "password"}
             name="password"
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          <Div
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute top-10 right-5 text-2xl text-gray-500"
+          >
+            {showPassword ? <TbEye /> : <TbEyeClosed />}
+          </Div>
         </Div>
         <DivFlex justify="between">
           <Div className="flex items-start">
@@ -118,6 +127,7 @@ const SignIn = () => {
                 id="remember"
                 aria-describedby="remember"
                 type="checkbox"
+                onClick={() => setRememberMe(true)}
                 className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
               />
             </Div>

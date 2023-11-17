@@ -6,7 +6,8 @@ import { getDataUri } from "../utils/dataUri.js";
 
 export const signIn = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, rememberMe } = req.body;
+    console.log("in func: " + rememberMe);
     const user = await userModel.findOne({ email }).select("+password");
     if (!user)
       return res.status(400).json({ success: false, message: "Invalid Email" });
@@ -16,7 +17,7 @@ export const signIn = async (req, res, next) => {
         success: false,
         message: "Invalid Password",
       });
-    sendCookie(user, res, `Welcome back, ${user.name}`, 200);
+    sendCookie(user, res, `Welcome back, ${user.name}`, 200, rememberMe);
   } catch (err) {
     next(err);
   }
@@ -132,7 +133,8 @@ export const followUser = async (req, res, next) => {
       return res.status(200).json({
         success: true,
         message: "User Unfollowed",
-        likes: userThatFollows?.followings,
+        followings: userThatFollows?.followings,
+        isFollowing: false,
       });
     } else {
       userThatFollows?.followings?.push(userToFollow._id);
@@ -144,7 +146,8 @@ export const followUser = async (req, res, next) => {
       return res.status(200).json({
         success: true,
         message: "User followed",
-        likes: userThatFollows?.followings,
+        followings: userThatFollows?.followings,
+        isFollowing: true,
       });
     }
   } catch (error) {

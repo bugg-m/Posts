@@ -8,6 +8,7 @@ const initialState = {
   isAuthenticated: false,
   user: {},
   postUserProfile: {},
+  userFlag: false,
   refreshPostList: false,
   showMenu: false,
   showOptionBar: false,
@@ -58,6 +59,9 @@ const utilsSlice = createSlice({
     setShowCommentBox: (state, action) => {
       state.showCommentBox = action.payload;
     },
+    setUserFlag: (state, action) => {
+      state.userFlag = action.payload;
+    },
   },
 });
 
@@ -75,5 +79,6 @@ export const {
   setShowProfilePage,
   setShowCommentBox,
   setPostUserProfile,
+  setUserFlag,
 } = utilsSlice.actions;
 export default utilsSlice.reducer;

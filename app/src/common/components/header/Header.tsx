@@ -1,12 +1,12 @@
 import { BiSolidRightArrow } from "react-icons/bi";
 import { FaBlog } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import InputBar from "../input-bar";
-import AvatarProfile from "../avatar-profile";
+import InputBar from "../input-bar/Input_Box";
+import AvatarProfile from "../avatar-profile/Profile_Icon";
 import { DivFlex, Div } from "../../constants/div/Div";
 import { Logo } from "../../constants/label/Label";
 import { CustomBorder } from "../../constants/custom-border/Border";
-import Profile from "../profile";
+import Profile from "../profile/Profile";
 import TextField from "../../constants/text-header/Text_Title";
 
 const Header = () => {

@@ -100,6 +100,7 @@ export const updatePost = async (req, res, next) => {
     next(error);
   }
 };
+
 export const deletePost = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -134,6 +135,7 @@ export const likePost = async (req, res, next) => {
         success: true,
         message: "Post Unliked",
         likes: post?.likes,
+        isLiked: false,
       });
     } else {
       post?.likes?.push(req.user._id);
@@ -142,6 +144,7 @@ export const likePost = async (req, res, next) => {
         success: true,
         message: "Post Liked",
         likes: post?.likes,
+        isLiked: true,
       });
     }
   } catch (error) {

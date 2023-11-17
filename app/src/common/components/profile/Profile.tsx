@@ -9,14 +9,41 @@ import { AdvancedImage } from "@cloudinary/react";
 import { CapitalizeFirstLetter } from "../../../pages/posts/post-list-items/Post_List";
 import { cloudinary } from "../../../pages/home/Home";
 import Button from "../../constants/button/Button";
-import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import { follow_user } from "../../apis/userServices";
+import toast from "react-hot-toast";
+// import { useTranslation } from "react-i18next";
 
 const Profile = () => {
-  const { t } = useTranslation();
-  const user = useSelector((state: any) => state.postUserProfile);
-  const isAuthenticated = useSelector((state: any) => state.isAuthenticated);
-  const avatar = cloudinary.image(user?.avatar?.public_id);
+  const [following, setFollowing] = useState<boolean>(false);
+  const [followings, setFollowings] = useState<string[]>([]);
+  // const { t } = useTranslation();
+  const postUserProfile = useSelector((state: any) => state.postUserProfile);
+  // const user = useSelector((state: any) => state.user);
+  const userFlag = useSelector((state: any) => state.userFlag);
+  const avatar = cloudinary.image(postUserProfile?.avatar?.public_id);
   const dispatch = useDispatch();
+
+  const followUser = (id: string) => {
+    try {
+      follow_user(id)
+        .then((res) => {
+          const { success, message, followings, isFollowing } = res;
+          if (success) {
+            toast.success(message);
+            setFollowing(isFollowing);
+            setFollowings(followings);
+          } else {
+            toast.error(message);
+          }
+        })
+        .catch((error) => {
+          toast.error(error?.response?.data?.message);
+        });
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
 
   return (
     <Div
@@ -40,27 +67,29 @@ const Profile = () => {
               cldImg={avatar}
             />
             <DivFlex justify="center" className="text-xl mt-3">
-              {CapitalizeFirstLetter(user?.name)}
+              {CapitalizeFirstLetter(postUserProfile?.name)}
             </DivFlex>
           </DivFlex>
         </DivFlex>
         <DivFlex justify="center" className="gap-7 w-3/5 text-lg">
           <DivFlex justify="center" className="flex-col w-1/2">
-            <Div className="text-2xl">{user?.posts?.length}</Div>
-            <Div className="">{t(`global.title`)}</Div>
+            <Div className="text-2xl">{postUserProfile?.posts?.length}</Div>
+            <Div className="">Posts</Div>
           </DivFlex>
           <DivFlex justify="center" className="flex-col w-1/2">
-            <Div className="text-2xl">{user?.followers?.length}</Div>
+            <Div className="text-2xl">{followings?.length}</Div>
             <Div className="">Followers</Div>
           </DivFlex>
           <DivFlex justify="center" className="flex-col w-1/2">
-            <Div className="text-2xl">{user?.followings?.length}</Div>
+            <Div className="text-2xl">
+              {postUserProfile?.followings?.length}
+            </Div>
             <Div className="">Following</Div>
           </DivFlex>
         </DivFlex>
       </DivFlex>
       <DivFlex justify="center" className="w-full gap-5">
-        {isAuthenticated ? (
+        {userFlag ? (
           <>
             <Button className="bg-gray-700 w-1/2 rounded-xl">
               Edit Profile
@@ -71,7 +100,12 @@ const Profile = () => {
           </>
         ) : (
           <>
-            <Button className="bg-gray-700 w-1/2 rounded-xl">Follow</Button>
+            <Button
+              onClick={() => followUser(postUserProfile._id)}
+              className="bg-gray-700 w-1/2 rounded-xl"
+            >
+              {following ? " Following" : "Follow"}
+            </Button>
             <Button className="bg-gray-700 w-1/2 rounded-xl">Message</Button>
           </>
         )}

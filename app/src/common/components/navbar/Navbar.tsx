@@ -9,8 +9,8 @@ import {
   setShowSignInPage,
   setShowSignUpPage,
 } from "../../redux-utils/utils-slice/utilsSlice";
-import SignIn from "../sign-in";
-import SignUp from "../register-page";
+import SignIn from "../sign-in/Sign_In";
+import SignUp from "../register-page/Register";
 import Li from "../../constants/menu-li/Menu_Li";
 import { Div, DivAbsolute, DivFlex, Ul } from "../../constants/div/Div";
 import { sign_out } from "../../apis/userServices";
@@ -131,7 +131,7 @@ export const Navbar = () => {
                   dispatch(setShowSignInPage(false));
                   dispatch(setShowProfilePage(false));
                 }
-                window.alert("Settings page is under development");
+                toast.error("Settings page is under development");
               }}
               name="Settings"
             />
