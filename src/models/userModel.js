@@ -60,6 +60,12 @@ const userSchema = new mongoose.Schema({
       ref: "UserData",
     },
   ],
+  chatList: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "UserData",
+    },
+  ],
   ressetPasswordToken: String,
   ressetPasswordExpire: String,
 });

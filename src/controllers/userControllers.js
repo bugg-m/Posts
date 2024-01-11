@@ -40,26 +40,31 @@ export const signOut = (req, res, next) => {
 export const signUp = async (req, res, next) => {
   try {
     const { name, email, password, role } = req.body;
-    const file = req.file;
-    const fileUri = getDataUri(file);
-    const fileCloud = cloudinary.v2.uploader.upload(fileUri.content);
-    let user = await userModel.findOne({ email });
-    if (user)
-      return res
-        .status(400)
-        .json({ success: false, message: "User already exists" });
-    const hashedPass = await bcrypt.hash(password, 10);
-    user = await userModel.create({
-      name,
-      email,
-      password: hashedPass,
-      role,
-      avatar: {
-        public_id: (await fileCloud).public_id,
-        url: (await fileCloud).secure_url,
-      },
-    });
-    sendCookie(user, res, "Registered successfully", 201);
+    const file = req?.file;
+    if (file) {
+      const fileUri = getDataUri(file);
+      const fileCloud = cloudinary.v2.uploader.upload(fileUri.content);
+      let user = await userModel.findOne({ email });
+      if (user)
+        return res
+          .status(400)
+          .json({ success: false, message: "User already exists" });
+      const hashedPass = await bcrypt.hash(password, 10);
+      user = await userModel.create({
+        name,
+        email,
+        password: hashedPass,
+        role,
+        avatar: {
+          public_id: (await fileCloud).public_id,
+          url: (await fileCloud).secure_url,
+        },
+      });
+      sendCookie(user, res, "Registered successfully", 201);
+    } else {
+      // Handle the case where req.file is undefined
+      res.status(400).json({ success: false, message: "File is missing" });
+    }
   } catch (err) {
     next(err);
   }
@@ -150,6 +155,56 @@ export const followUser = async (req, res, next) => {
         isFollowing: true,
       });
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const addChats = async (req, res, next) => {
+  try {
+    const toSendMessage = await userModel.findById(req.params.id);
+    const fromSendMessage = await userModel.findById(req.user._id);
+    if (!toSendMessage)
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+
+    if (fromSendMessage?.chatList?.includes(toSendMessage._id)) {
+      return res.status(200).json({
+        success: true,
+        message: "User already added",
+        chats: user?.chatList,
+      });
+    } else {
+      fromSendMessage?.chatList?.push(toSendMessage._id);
+      toSendMessage?.chatList?.push(fromSendMessage._id);
+
+      await toSendMessage?.save();
+      await fromSendMessage?.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "User added",
+        chats: user?.chatList,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getChatList = async (req, res, next) => {
+  try {
+    const user = await userModel.findById(req.user._id);
+    if (!user)
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+
+    res.status(200).json({
+      success: true,
+      chats: user?.chatList,
+    });
   } catch (error) {
     next(error);
   }

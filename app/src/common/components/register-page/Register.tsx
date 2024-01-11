@@ -15,7 +15,7 @@ import { CheckBox, Input } from "../../constants/input-bar/Input_Box_Type";
 import { sign_up } from "../../apis/userServices";
 import { Div, DivFlex, DivSwipe } from "../../constants/div/Div";
 import TextField from "../../constants/text-header/Text_Title";
-import Button from "../../constants/button/Button";
+import Button, { TextButton } from "../../constants/button/Button";
 
 const SignUp = () => {
   const [name, setName] = useState<string>("");
@@ -34,8 +34,13 @@ const SignUp = () => {
     e.preventDefault();
     dispatch(setShowLoader(false));
     const formData = new FormData();
-    formData.append("avatar", "avatar");
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("role", role);
+    formData.append("avatar", avatar); // Append the file directly, not the state
     const payload = { name, email, password, role, avatar };
+
     try {
       sign_up(payload)
         .then((res) => {
@@ -134,8 +139,9 @@ const SignUp = () => {
       </TextField>
       <form
         encType="multipart/form-data"
-        className="space-y-4 md:space-y-6"
+        className="space-y-4 md:space-y-6 mt-10"
         method="POST"
+        action="/sign_up"
         onSubmit={handleSubmit}
       >
         <DivFlex justify="center" className="gap-10">
@@ -211,22 +217,17 @@ const SignUp = () => {
             />
           </Div>
         </Div>
-        <DivFlex justify="center" className="gap-10">
-          <Div className="flex items-start">
-            <Div className="flex items-center h-5">
-              <CheckBox
-                name="rememberMe"
-                id="remember"
-                aria-describedby="remember"
-                type="checkbox"
-              />
-            </Div>
-            <Div className="ml-3 text-sm">
-              <Label
-                title=" Remember me"
-                className="text-gray-500 dark:text-gray-300"
-              />
-            </Div>
+        <DivFlex justify="start" className="gap-10">
+          <Div className="flex items-center h-5">
+            <CheckBox
+              id="remember"
+              aria-describedby="remember"
+              type="checkbox"
+              className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+            />
+          </Div>
+          <Div className="ml-3 text-sm">
+            <Label title="Remember me" className="text-gray-700" />
           </Div>
         </DivFlex>
 
@@ -235,20 +236,21 @@ const SignUp = () => {
             Register
           </Button>
         </DivFlex>
-        <TextField className="text-sm font-light text-gray-500 dark:text-gray-400">
-          Already have an account?{" "}
-          <Button
+        <DivFlex justify="normal" className="gap-3">
+          <TextField className="text-sm font-medium text-gray-700 ">
+            Already have an account?
+          </TextField>
+          <TextButton
             type="button"
             onClick={() => {
               dispatch(setShowSignInPage(true));
               dispatch(setShowSignUpPage(false));
               dispatch(setShowCreatePost(false));
             }}
-            className="font-medium bg-blue-700 text-primary-600 hover:underline dark:text-primary-500"
           >
             Log-In Here
-          </Button>
-        </TextField>
+          </TextButton>
+        </DivFlex>
       </form>
     </DivSwipe>
   );
