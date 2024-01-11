@@ -8,6 +8,7 @@ import { Logo } from "../../constants/label/Label";
 import { CustomBorder } from "../../constants/custom-border/Border";
 import Profile from "../profile/Profile";
 import TextField from "../../constants/text-header/Text_Title";
+import ChatMain from "../../../pages/Chat/ChatMain";
 
 const Header = () => {
   const showMenu = useSelector((state: any) => state.showMenu);
@@ -15,6 +16,7 @@ const Header = () => {
   const showSignUpPage = useSelector((state: any) => state.showSignUpPage);
   const showProfilePage = useSelector((state: any) => state.showProfilePage);
   const showCreatePost = useSelector((state: any) => state.showCreatePost);
+  const showChatPage = useSelector((state: any) => state.showChatPage);
 
   return (
     <>
@@ -72,10 +74,11 @@ const Header = () => {
       <DivFlex
         justify="center"
         className={`${
-          showProfilePage ? "w-[30%]" : "w-0"
+          showProfilePage || showChatPage ? "w-[30%]" : "w-0"
         } absolute right-0 bg-gray-300 border-l-4 border-gray-400 h-screen duration-700 -z-10`}
       >
         {showProfilePage && <Profile />}
+        {showChatPage && <ChatMain />}
       </DivFlex>
     </>
   );

@@ -8,12 +8,14 @@ const initialState = {
   isAuthenticated: false,
   user: {},
   postUserProfile: {},
+  chatList: {},
   userFlag: false,
   refreshPostList: false,
   showMenu: false,
   showOptionBar: false,
   showProfilePage: false,
   showCommentBox: false,
+  showChatPage: false,
 };
 
 const utilsSlice = createSlice({
@@ -41,6 +43,9 @@ const utilsSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
+    setChatList: (state, action) => {
+      state.user = action.payload;
+    },
     setPostUserProfile: (state, action) => {
       state.postUserProfile = action.payload;
     },
@@ -62,6 +67,9 @@ const utilsSlice = createSlice({
     setUserFlag: (state, action) => {
       state.userFlag = action.payload;
     },
+    setShowChatPage: (state, action) => {
+      state.showChatPage = action.payload;
+    },
   },
 });
 
@@ -80,5 +88,7 @@ export const {
   setShowCommentBox,
   setPostUserProfile,
   setUserFlag,
+  setChatList,
+  setShowChatPage,
 } = utilsSlice.actions;
 export default utilsSlice.reducer;

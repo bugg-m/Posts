@@ -1,6 +1,7 @@
 import { IoArrowRedo } from "react-icons/io5";
 import { Div, DivFlex } from "../../constants/div/Div";
 import {
+  setChatList,
   setPostUserProfile,
   setShowProfilePage,
 } from "../../redux-utils/utils-slice/utilsSlice";
@@ -9,7 +10,7 @@ import { AdvancedImage } from "@cloudinary/react";
 import { CapitalizeFirstLetter } from "../../../pages/posts/post-list-items/Post_List";
 import Button from "../../constants/button/Button";
 import { useState } from "react";
-import { follow_user } from "../../apis/userServices";
+import { add_chat, follow_user } from "../../apis/userServices";
 import toast from "react-hot-toast";
 import { cloudinary } from "../../../env";
 
@@ -30,6 +31,25 @@ const Profile = () => {
             toast.success(message);
             setFollowing(isFollowing);
             setFollowings(followings);
+          } else {
+            toast.error(message);
+          }
+        })
+        .catch((error) => {
+          toast.error(error?.response?.data?.message);
+        });
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+  const addChat = (id: string) => {
+    try {
+      add_chat(id)
+        .then((res) => {
+          const { success, message, chatList } = res;
+          if (success) {
+            toast.success(message);
+            dispatch(setChatList(chatList));
           } else {
             toast.error(message);
           }
@@ -103,7 +123,12 @@ const Profile = () => {
             >
               {following ? " Following" : "Follow"}
             </Button>
-            <Button className="bg-gray-700 w-1/2 rounded-xl">Message</Button>
+            <Button
+              onClick={() => addChat(postUserProfile._id)}
+              className="bg-gray-700 w-1/2 rounded-xl"
+            >
+              Message
+            </Button>
           </>
         )}
       </DivFlex>

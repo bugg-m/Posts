@@ -7,6 +7,8 @@ import {
   signUp,
   userProfile,
   followUser,
+  getChatList,
+  addChats,
 } from "../controllers/userControllers.js";
 import { isAuthenticated } from "../middlewares/auth.js";
 import { imageUpload } from "../middlewares/image-upload.middleware.js";
@@ -20,4 +22,6 @@ userRouter.post("/sign_up", imageUpload.single("avatar"), signUp);
 userRouter.get("/profile", isAuthenticated, myProfile);
 userRouter.get("/get_all_users", isAuthenticated, getAllUserData);
 userRouter.get("/follow_user/:id", isAuthenticated, followUser);
+userRouter.get("/get_chats", isAuthenticated, getChatList);
+userRouter.get("/add_chat/:id", isAuthenticated, addChats);
 export default userRouter;

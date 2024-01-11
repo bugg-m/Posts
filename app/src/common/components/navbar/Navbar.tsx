@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CreatePost from "../../../pages/posts/create-post/Create_Post";
 import {
   setIsAuthenticated,
+  setShowChatPage,
   setShowCreatePost,
   setShowLoader,
   setShowProfilePage,
@@ -65,9 +66,21 @@ export const Navbar = () => {
     }
   };
 
-  const handleOpenCreatePost = () => {
+  const openCreatePost = () => {
     if (isAuthenticated) {
       dispatch(setShowCreatePost(true));
+      dispatch(setShowSignInPage(false));
+      dispatch(setShowSignUpPage(false));
+      dispatch(setShowChatPage(false));
+      dispatch(setShowProfilePage(false));
+    } else {
+      toast.error("Sign in first");
+    }
+  };
+  const openChatBox = () => {
+    if (isAuthenticated) {
+      dispatch(setShowChatPage(true));
+      dispatch(setShowCreatePost(false));
       dispatch(setShowSignInPage(false));
       dispatch(setShowSignUpPage(false));
       dispatch(setShowProfilePage(false));
@@ -91,17 +104,17 @@ export const Navbar = () => {
                 dispatch(setShowProfilePage(false));
                 dispatch(setShowSignInPage(false));
               }}
-              name="Home"
-              hidden={false}
+              name="home"
             />
+            <Li handleEvent={openChatBox} name="chat" />
 
-            <Li handleEvent={handleOpenCreatePost} hidden={false} name="Post" />
+            <Li handleEvent={openCreatePost} name="post" />
 
             {isAuthenticated ? (
               <Li
                 hidden={showLoader}
                 handleEvent={handleLogout}
-                name="SignOut"
+                name="signOut"
               />
             ) : (
               <Li
@@ -112,8 +125,7 @@ export const Navbar = () => {
                   }
                   dispatch(setShowSignInPage(true));
                 }}
-                name="SignIn"
-                hidden={false}
+                name="signIn"
               />
             )}
           </Ul>
@@ -129,11 +141,12 @@ export const Navbar = () => {
                   dispatch(setShowCreatePost(false));
                   dispatch(setShowSignUpPage(false));
                   dispatch(setShowSignInPage(false));
+                  dispatch(setShowChatPage(false));
                   dispatch(setShowProfilePage(false));
                 }
                 toast.error("Settings page is under development");
               }}
-              name="Settings"
+              name="settings"
             />
           </Div>
         </DivFlex>

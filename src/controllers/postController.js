@@ -126,9 +126,10 @@ export const likePost = async (req, res, next) => {
       return res
         .status(404)
         .json({ success: false, message: "Something went wrong" });
+    console.log(req?.user?._id);
 
-    if (post?.likes?.includes(req.user._id)) {
-      const userId = post?.likes?.indexOf(req.user._id);
+    if (post?.likes?.includes(req.user?._id)) {
+      const userId = post?.likes?.indexOf(req.user?._id);
       post?.likes?.splice(userId, 1);
       await post?.save();
       return res.status(200).json({
