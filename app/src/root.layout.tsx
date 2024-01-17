@@ -4,6 +4,7 @@ import utilsStore from "./common/redux-utils/utils-store/utilsStore";
 import { Provider } from "react-redux";
 import Header from "./common/components/header/Header";
 import { Div } from "./common/constants/div/Div";
+import ChatMain from "./pages/Chat/chat";
 
 const Layout = () => {
   return (
@@ -17,7 +18,7 @@ const Layout = () => {
             <Header />
           </Div>
           <Div>
-            <Home />
+            <ChatMain />
           </Div>
         </Div>
       </Div>

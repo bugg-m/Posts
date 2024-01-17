@@ -135,7 +135,7 @@ const CommentsList = ({ postComments, setPostComments, item }: any) => {
             )}
           </Div>
           <Div>
-            <form action="POST" onSubmit={addComment}>
+            <form method="POST" onSubmit={addComment}>
               <CommenBox
                 value={commentValue}
                 onChange={(e) => setCommentValue(e?.target?.value)}
@@ -143,7 +143,11 @@ const CommentsList = ({ postComments, setPostComments, item }: any) => {
                   userName ? userName : "User"
                 )}...`}
               />
-              <button type="submit" className="bg-blue-700">
+              <button
+                type="submit"
+                className="bg-blue-700"
+                disabled={!commentValue}
+              >
                 Submit
               </button>
             </form>

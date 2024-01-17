@@ -1,5 +1,5 @@
 import express from "express";
-import http from "http"; // Import the HTTP module
+import { createServer } from "http"; // Import the HTTP module
 import { Server } from "socket.io"; // Import the Socket.IO module
 import postRouter from "./src/routes/postRouter.js";
 import userRouter from "./src/routes/userRoutes.js";
@@ -17,11 +17,12 @@ const URL =
     : process.env.FRONTEND_URI_PRODUCTION;
 
 const app = express();
-const server = http.createServer(app); // Create an HTTP server instance
+const server = createServer(app); // Create an HTTP server instance
 const io = new Server(server, {
   cors: {
     origin: [URL], // Allow requests from your client's origin
     methods: ["GET", "POST"],
+    credentials: true,
   },
 }); // Create a Socket.IO server instance
 
@@ -49,12 +50,11 @@ app.use("/posts", postRouter);
 
 // Socket.IO connection handling
 io.on("connection", (socket) => {
-  console.log("A user connected");
-
+  console.log(`A user connected, ${socket.id}`);
   // Handle chat messages
-  socket.on("chat", (msg) => {
-    // Broadcast the message to all connected clients
-    io.emit("chat", msg);
+  socket.on("chat", ({ name, message }) => {
+    console.log({ name, message });
+    io.to(name).emit("recieve_messages", message); // Broadcast the message to all connected clients
   });
 
   // Handle disconnections
@@ -63,4 +63,4 @@ io.on("connection", (socket) => {
   });
 });
 
-export { server }; // Export the modified server instance
+export default server; // Export the modified server instance

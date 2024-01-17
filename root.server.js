@@ -1,4 +1,4 @@
-import { server } from "./root.component.js";
+import server from "./root.component.js";
 import { postDatabase } from "./src/database/postDB.js";
 import cloudinary from "cloudinary";
 
