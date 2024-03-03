@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { socket } from "../../env";
 import { Div } from "../../common/constants/div/Div";
 import { setShowChatPage } from "../../common/redux-utils/utils-slice/utilsSlice";
@@ -10,45 +10,36 @@ type Chat = {
   message: string;
 };
 
-const ChatMain = () => {
+const ChatMain: React.FC = () => {
   const [chat, setChat] = useState<Chat[]>([]);
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const [login, setLogin] = useState(false);
   const dispatch = useDispatch();
 
-  const sendChat = (e: any) => {
+  const sendChat = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    socket.emit("chat", { name, message });
+    socket.emit("client_message", { name, message });
     setMessage("");
-    console.log(name, message);
   };
 
-  // useEffect(() => {
-  //   socket.on("connect", () => {
-  //     console.log(`connected`);
-  //   });
-  //   const handleChat = (payload: any) => {
-  //     setChat((prevChat) => [...prevChat, payload]);
-  //     console.log(payload);
-  //   };
-  //   socket.on("chat", handleChat);
-  // }, []);
-
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log(`connected`);
-    });
+    const handleConnect = () => {
+      console.log(`connected: ${socket.id}`);
+    };
+
     const handleChat = (payload: Chat) => {
       setChat((prevChat) => [...prevChat, payload]);
     };
 
-    socket.on("recieve_messages", handleChat);
+    socket.on("connect", handleConnect);
+    socket.on("server_message", handleChat);
 
     return () => {
-      socket.disconnect();
+      socket.off("connect", handleConnect);
+      socket.off("server_message", handleChat);
     };
-  }, [chat]);
+  }, []);
 
   return (
     <div className="w-full h-screen flex justify-center items-center gap-10 flex-col bg-slate-600">
@@ -75,7 +66,6 @@ const ChatMain = () => {
           </div>
 
           <form
-            action=""
             className="flex gap-3 justify-center items-center"
             onSubmit={sendChat}
           >
@@ -95,7 +85,6 @@ const ChatMain = () => {
       ) : (
         <div>
           <form
-            action=""
             className="flex gap-3 justify-center items-center"
             onSubmit={() => setLogin(true)}
           >
@@ -105,10 +94,7 @@ const ChatMain = () => {
               name="name"
               placeholder="add name"
               value={name}
-              onChange={(e) => {
-                e.preventDefault();
-                setName(e.target.value);
-              }}
+              onChange={(e) => setName(e.target.value)}
             />
             <button className="bg-slate-400 rounded p-2" type="submit">
               Login

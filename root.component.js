@@ -7,9 +7,7 @@ import cookieParser from "cookie-parser";
 import { errorMiddleware } from "./src/middlewares/error.js";
 import { config } from "dotenv";
 import cors from "cors";
-config({
-  path: "./.env",
-});
+config({ path: "./.env" });
 
 const URL =
   process.env.NODE_ENV === "Development"
@@ -40,7 +38,6 @@ app.use(
     credentials: true,
   })
 );
-
 app.use(cookieParser());
 // static path
 app.use(express.static("./server/dist"));
@@ -52,9 +49,9 @@ app.use("/posts", postRouter);
 io.on("connection", (socket) => {
   console.log(`A user connected, ${socket.id}`);
   // Handle chat messages
-  socket.on("chat", ({ name, message }) => {
-    console.log({ name, message });
-    io.to(name).emit("recieve_messages", message); // Broadcast the message to all connected clients
+  socket.on("client_message", (message) => {
+    console.log(message);
+    io.emit("server_message", message); // Broadcast the message to all connected clients
   });
 
   // Handle disconnections
